@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
-    <button class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded mb-4">Place your order</button>
+    <button onclick="placeOrder()" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded mb-4">Place your order</button>
 
     <hr class="my-4">
 
@@ -119,6 +119,18 @@
   </div>
 
   <script>
+    function placeOrder() {
+      const params = new URLSearchParams(window.location.search);
+      const method = params.get("method");
+
+      if (method === "cod") {
+        window.location.href = "order_confirmed_cod.html";
+      } else if (method === "upi") {
+        window.location.href = "upi_payment.html";
+      } else if (method === "netbanking") {
+        window.location.href = "order_confirmed_upi.html";
+      }
+    }
     const stateDistrictMap = {
 		"Andhra Pradesh": ["Alluri Sitarama Raju", "Anakapalli", "Anantapur", "Annamayya", "Bapatla", "Chittoor", "East Godavari", "Eluru", "Guntur", "Kadapa", "Kakinada", "Konaseema", "Krishna", "Kurnool", "Nandyal", "Nellore", "NTR", "Palnadu", "Parvathipuram Manyam", "Prakasam", "Sri Balaji (Tirupati)", "Sri Sathya Sai", "Srikakulam", "Visakhapatnam", "Vizianagaram"],
         "Arunachal Pradesh": ["Anjaw", "Changlang", "Dibang Valley", "East Kameng", "East Siang", "Kamle", "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Pakke-Kessang", "Papum Pare", "Shi Yomi", "Siang", "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"],
@@ -187,4 +199,5 @@
   </script>
 </body>
 </html>
+
 
