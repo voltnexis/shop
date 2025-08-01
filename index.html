@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltEdge USB Shop</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #000;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #232f3e;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ccc;
+    }
+    .brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .search-bar {
+      flex-grow: 1;
+      margin: 0 20px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .top-links {
+      margin-left: 20px;
+    }
+    .top-links a {
+      margin-left: 15px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: bold;
+    }
+    .description {
+      padding: 20px;
+      line-height: 1.6;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .Catchy specs {
+      padding: 20px;
+      line-height: 1.6;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    main {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 100px;
+    }
+    .product {
+	  line-height: 1.6;
+      max-width: 300px;
+      max-height: 200px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      border-radius: 70px;
+      padding: 70px;
+      text-align: center;
+      transition: transform 0.2s;
+      background-color: #fafafa;
+      cursor: pointer;
+      
+    }
+    .product:hover {
+      transform: scale(1.02);
+    }
+    .product img {
+      width: 320px;
+      height: 200px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    footer {
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      border-top: 1px solid #ccc;
+    }
+    .footer-section {
+      margin-bottom: 10px;
+    }
+    .footer-section h3 {
+      margin: 10px 0 5px;
+    }
+    .footer-section a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #0077cc;
+    }
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .search-bar {
+        margin: 10px 0;
+        width: 100%;
+      }
+      .top-links {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="#" class="brand" onclick="location.reload()">VoltEdge</a>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for USBs...">
+    </div>
+    <div class="top-links">
+      <a href="#">↩ Returns</a>
+      <a href="#">📦 Orders</a>
+      <a href="#">🛒 Cart</a>
+    </div>
+  </header>
+
+
+
+  <main>
+    <div class="product" onclick="window.location.href='usb-list.html';">
+      <img src="C:\Users\HP\Downloads\Gemini_Generated_Image_gpyr0pgpyr0pgpyr.png" alt="Live USB">
+      <h3>Live Linux USB</h3>
+    </div>
+    <div class="product" onclick="window.location.href='usb-list.html';">
+      <img src="C:\Users\HP\Downloads\Gemini_Generated_Image_nnamelnnamelnnam.png" alt="Bootable USB">
+      <h3>Bootable USB</h3>
+    </div>
+  </main>
+  <hr><hr>
+  <div class="description">
+  <h2>Welcome to VoltEdge Builds ⚡</h2>
+  <p>
+    At <strong>VoltEdge</strong>, we're passionate about technology and innovation — bringing you premium-quality tools and hardware for every tech journey. From OS rescue tools to power-packed custom PCs, we’ve got your back. 💻🛠️
+  </p>
+  
+  <h3>🔌 Bootable USB Drives — Your OS, Anywhere</h3>
+  <p>
+    Our <strong>plug-and-play bootable USBs</strong> come preloaded with clean, virus-free, and verified installers or live operating systems like <strong>Windows, Ubuntu, Kali Linux, Parrot OS, and more</strong>. Whether you need to reinstall your OS, recover lost systems, or explore new Linux environments — you're always one boot away from a solution. 🚀
+  </p>
+  <ul>
+    <li>💾 Available in 8GB, 16GB, 32GB, 64GB, and 128GB storage sizes</li>
+    <li>⚙️ Supports both <strong>Live Mode</strong> & <strong>Full Installation</strong> modes</li>
+    <li>⚡ USB 3.0 Speed — up to <strong>150MB/s</strong> for faster boot & install times</li>
+    <li>🔐 Built with official tools and latest ISO files — no corrupted media!</li>
+    <li>📦 Carefully tested, sealed, and delivered across India</li>
+  </ul>
+
+  <h3>🖥️ Custom PC Building — Power Meets Precision</h3>
+  <p>
+    Step into the world of high-performance with <strong>VoltEdge Custom PCs</strong>. Whether you're a gamer, developer, video editor, or enthusiast, we craft tailor-made rigs to suit your exact needs. Featuring blazing-fast NVMe SSDs, cutting-edge GPUs, and expert cable management — your dream PC starts here. 🔧🔥
+  </p>
+  <ul>
+    <li>🎮 Gaming | 🎥 Editing | 👨‍💻 Productivity | 🧪 Research</li>
+    <li>🧠 Built with future-proof parts and thermal efficiency</li>
+    <li>📞 Full support and upgrade consultations</li>
+    <li>🚚 Delivered right to your doorstep — ready to plug and play</li>
+  </ul>
+
+  <p>
+    ⚡ <strong>VoltEdge Builds</strong> isn't just a store — it's your personal tech partner. From fixing boot issues to building your ultimate machine, we make tech simple, reliable, and exciting.
+  </p>
+  <B><HR><hr></B>
+  <p>
+       📦 Delivery all over India | 💰 Easy returns | 🔄 Refresh regularly with the latest OS versions!
+    </p>
+    <p>
+       💡 Need help choosing? Contact us anytime — we’ll help you pick the perfect setup.
+    </p>
+  
+</div>
+
+  <footer>
+    <div class="footer-section">
+      <h3>Connect with us</h3>
+      📱 WhatsApp: 9947557025 | 📱 Telegram: 9946042794 | ☎️ Phone: (Coming soon)
+    </div>
+    <div class="footer-section">
+      <h3>Follow us</h3>
+      <a href="https://youtube.com/@voltedgebuilds?si=RZNaXDlvx_ItANN1" target="_blank">YouTube</a>
+      | <a href="#">Instagram</a> | <a href="#">Facebook (soon)</a>
+    </div>
+    <div class="footer-section">
+      <h3>Help</h3>
+      <a href="#">Returns</a> | <a href="#">Orders</a>
+    </div>
+  </footer>
+</body>
+</html>
+
