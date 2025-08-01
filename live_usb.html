@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bootable USBs - VoltEdge</title>
+  <style>
+	main {
+      background-color: #f2f6fc; /* light soft blue background */
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 100px;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f6fc;
+      color: #000;
+    }
+    header {
+      background-color: #232f3e;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-size: 1.5em;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+      cursor: pointer;
+    }
+    .top-links a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    .product {
+      background-color: #ffffff; /* soft white card */
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 20px 15px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .horizontal-product {
+      display: flex;
+      align-items: center;
+      gap: 90px;
+      text-align: left;
+    }
+    .horizontal-product img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+    .product-card {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .product-card img {
+      width: 150px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #eee;
+    }
+    .product img {
+      width: 150px;
+      height: 150px;
+      border-radius: 10px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+    .product-info {
+      flex-grow: 1;
+    }
+    .product-info h3 {
+      margin-top: 0;
+    }
+    .selectors {
+      margin: 10px 0;
+    }
+    select, .toggle {
+      padding: 6px;
+      margin-right: 10px;
+    }
+    .buttons {
+      margin-top: 10px;
+    }
+    .buttons button {
+      padding: 8px 15px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .buy {
+      background-color: #f08804;
+      color: white;
+    }
+    .cart {
+      background-color: #007185;
+      color: white;
+    }
+    footer {
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      border-top: 1px solid #ccc;
+    }
+    .footer-section {
+      margin-bottom: 10px;
+    }
+    .footer-section h3 {
+      margin: 10px 0 5px;
+    }
+    .footer-section a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #0077cc;
+    @media (max-width: 600px) {
+      .product-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .product-card img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="brand" href="index.html" onclick="location.href='index.html'">VoltEdge</a>
+    <div class="top-links">
+      <a href="#">↩ Returns</a>
+      <a href="#">📦 Orders</a>
+      <a href="#">🛒 Cart</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="product horizontal-product" onclick="window.location.href='kali-usb.html';">
+      <img src="C:\Users\HP\Downloads\kali.png" alt="Kali Linux USB">
+      <div class="product-info">
+        <h3>Kali Linux Bootable USB (Live + Install)</h3>
+        <p>
+          ⚡ Advanced Penetration Testing<br>
+          🐧 Includes Live & Installer Modes<br>
+          💾 USB 3.1 • Read Speed: 150MB/s<br>
+          🔒 Secure & Persistent Option Available
+        </p>
+      </div>
+    </div><hr>
+  
+    <div class="container">
+      <div class="product horizontal-product" onclick="window.location.href='parrot-usb.html';">
+        <img src="C:\Users\HP\Downloads\parrot.png" alt="Parrot OS USB">
+        <div class="product-info">
+          <h3>Parrot OS Bootable USB (Live + Install</h3>
+          <p>
+            👨‍💻for hackers and cyber security learners<br>
+            🐧 Includes Live & Installer Modes<br>
+            💾 USB 3.1 • Read Speed: 150MB/s<br>
+            🔒 Secure & Persistent Option Available<br>
+            * Comes with full toolkit and installer!
+          </p>
+        </div>
+      </div><hr>
+
+  </div>
+  <hr><hr><hr>
+  <h2>About Our Bootable USBs</h2>
+    <p>
+      Welcome to VoltEdge's USB Shop — your one-stop solution for all operating system needs. We offer plug-and-play <strong>Bootable USBs</strong> preloaded with clean, verified installers and live operating systems. Whether you're reinstalling Windows, exploring Linux distros like Ubuntu or Parrot OS, or troubleshooting a dead system, our drives save you time and effort.
+    </p>
+    <p>
+      Our products are tested for reliability and speed, with installation and live versions available. Choose from storage sizes ranging from 8GB to 128GB — including 2-in-1 live + install boot setups.
+    </p>
+    <p>
+      Every USB is created on-demand using industry tools, ensuring latest versions and error-free media. Easy returns and fast delivery across India.
+    </p>
+    <p>
+		<h2>Live(linux) USB :</h2><br>
+		&nbsp;&nbsp;&nbsp;&nbsp;💡 Top Features of VoltEdge Live USBs:
+		<ul>
+			<li>
+		&nbsp;&nbsp;&nbsp;⚡ Superfast Transfer Speeds:
+		<ul>
+			<li>USB 3.0 technology</li>
+			<li>our drives achieve speeds up to 150MB/s</li>
+			<li>ensuring fast booting</li>
+			<li>smooth performance</li>
+		</ul><br></li>
+		<li>
+		&nbsp;&nbsp;&nbsp;🖥️ Plug-and-Play OS:
+		<ul>
+			<li>Instantly boot into operating systems like Ubuntu, Parrot OS, or Kali Linux from any PC</li>
+			<li>No installation needed</li>
+		</ul><br></li>
+		<li>
+		&nbsp;&nbsp;&nbsp;🛠️ System Repair & Recovery:
+		<ul>
+			<li>Use them to fix corrupted systems</li>
+			<li>reset passwords</li>
+			<li>recover files from a dead OS</li>
+		</ul><br></li>
+		<li>
+		&nbsp;&nbsp;&nbsp;🔐 Safe and Isolated:
+		<ul>
+			<li>Run a secure OS session without affecting the internal drive</li>
+			<li>Perfect for privacy-conscious users</li>
+			<li>Perfect for ethical hackers</li>
+		</ul><br></li>
+		<li>
+		&nbsp;&nbsp;&nbsp;📦 Lightweight & Portable:
+		<ul>
+			<li>Carry your favorite OS in your pocket</li>
+			<li>ideal for developers</li>
+			<li>ideal for tech enthusiasts</li>
+			<li>ideal for students</li>
+		</ul><br></li>
+		</ul>
+		
+		&nbsp;&nbsp;&nbsp;&nbsp;💽 What’s Included:
+		<ul>
+			<li>✔️ Pre-configured Live OS with persistent storage (on supported models)</li>
+			<li>✔️ Tested for hardware compatibility</li>
+			<li>✔️ Fast bootloader setup for easy selection</li>
+		</ul>
+    </p>
+    <footer>
+    <div class="footer-section">
+      <h3>Connect with us</h3>
+      📱 WhatsApp: 9947557025 | 📱 Telegram: 9946042794 | ☎️ Phone: (Coming soon)
+    </div>
+    <div class="footer-section">
+      <h3>Follow us</h3>
+      <a href="https://youtube.com/@voltedgebuilds?si=RZNaXDlvx_ItANN1" target="_blank">YouTube</a>
+      | <a href="#">Instagram</a> | <a href="#">Facebook (soon)</a>
+    </div>
+    <div class="footer-section">
+      <h3>Help</h3>
+      <a href="#">Returns</a> | <a href="#">Orders</a>
+    </div>
+  </footer>
+
+</body>
+</html>
+
