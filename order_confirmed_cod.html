@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed - COD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md text-center">
+    <h1 class="text-2xl font-bold text-green-600 mb-2">Thank You for Your Order!</h1>
+    <p class="text-sm text-gray-600 mb-4">Your order has been placed successfully.</p>
+
+    <div class="text-left bg-gray-50 p-4 rounded shadow mb-4">
+      <p class="text-sm font-semibold">Order ID: <span id="orderId"></span></p>
+      <p class="text-sm mt-2">Estimated Delivery: <span id="deliveryDate"></span></p>
+    </div>
+
+    <div class="text-left bg-gray-100 p-4 rounded shadow mb-4">
+      <p class="font-semibold mb-2">Shipping Address:</p>
+      <div id="displayAddress" class="text-sm text-gray-700"></div>
+    </div>
+
+    <div class="text-left text-sm space-y-1 bg-gray-50 p-4 rounded shadow mb-4">
+      <div class="flex justify-between">
+        <span>Items</span>
+        <span id="itemPrice">₹0.00</span>
+      </div>
+      <div class="flex justify-between">
+        <span>Delivery</span>
+        <span>₹0.00</span>
+      </div>
+      <div class="flex justify-between">
+        <span>COD Fee</span>
+        <span>₹10.00</span>
+      </div>
+      <div class="flex justify-between font-bold border-t pt-2">
+        <span>Total</span>
+        <span id="totalPrice">₹0.00</span>
+      </div>
+    </div>
+
+    <a href="/" class="inline-block mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Continue Shopping</a>
+  </div>
+
+  <script>
+    // Unique order ID generator starting from 654356
+    const lastOrderId = parseInt(localStorage.getItem("lastOrderId") || "654355", 10) + 1;
+    localStorage.setItem("lastOrderId", lastOrderId);
+    document.getElementById("orderId").textContent = lastOrderId;
+
+    // Estimated delivery (simulate 5 days later)
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + 5);
+    document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
+
+    // Load and show shipping address from localStorage
+    const address = JSON.parse(localStorage.getItem("shippingAddress"));
+    if (address) {
+      document.getElementById("displayAddress").innerHTML = `
+        <div><strong>${address.fullname}</strong></div>
+        <div>${address.street}, ${address.city}</div>
+        <div>${address.district}, ${address.state} - ${address.pincode}</div>
+        <div>${address.phone}, ${address.email}</div>
+      `;
+    }
+
+    // Basic price logic
+    const itemCost = parseFloat(localStorage.getItem("itemCost")) || 0;
+    const codFee = 10;
+    document.getElementById("itemPrice").textContent = `₹${itemCost.toFixed(2)}`;
+    document.getElementById("totalPrice").textContent = `₹${(itemCost + codFee).toFixed(2)}`;
+  </script>
+</body>
+</html>
+
