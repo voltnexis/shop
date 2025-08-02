@@ -196,8 +196,49 @@
       localStorage.setItem('shippingAddress', JSON.stringify(data));
       alert('Address saved successfully!');
     });
+      function showSavedAddress(data) {
+      addressOverview.innerHTML = `
+        <div><strong>${data.fullname}</strong></div>
+        <div>${data.street}, ${data.city}</div>
+        <div>${data.district}, ${data.state} - ${data.pincode}</div>
+        <div>${data.phone}, ${data.email}</div>
+      `;
+      form.classList.add('hidden');
+      savedAddressDiv.classList.remove('hidden');
+    }
+
+    editAddressLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const saved = JSON.parse(sessionStorage.getItem('tempAddress'));
+      if (saved) {
+        fillFormWith(saved);
+      }
+      form.classList.remove('hidden');
+      savedAddressDiv.classList.add('hidden');
+    });
+
+    saveAddressButton.addEventListener('click', function () {
+      const data = getFormData();
+      sessionStorage.setItem('tempAddress', JSON.stringify(data));
+      showSavedAddress(data);
+    });
+
+    placeOrderButton.addEventListener('click', function () {
+      const data = getFormData();
+      localStorage.setItem('shippingAddress', JSON.stringify(data));
+      alert('Address saved and proceeding to order...');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = JSON.parse(localStorage.getItem('shippingAddress'));
+      if (saved) {
+        fillFormWith(saved);
+        showSavedAddress(saved);
+      }
+    });
   </script>
 </body>
 </html>
+
 
 
