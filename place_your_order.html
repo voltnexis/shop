@@ -119,18 +119,18 @@
   </div>
 
   <script>
-    function placeOrder() {
-      const params = new URLSearchParams(window.location.search);
-      const method = params.get("method");
+   function placeOrder() {
+    const upi = document.querySelector('input[value="upi"]');
+    const cod = document.querySelector('input[value="cod"]');
 
-      if (method === "cod") {
-        window.location.href = "order_confirmed_cod.html";
-      } else if (method === "upi") {
-        window.location.href = "upi_payment.html";
-      } else if (method === "netbanking") {
-        window.location.href = "order_confirmed_upi.html";
-      }
+    if (upi.checked) {
+      window.location.href = "upi_payment.html";
+    } else if (cod.checked) {
+      window.location.href = "order_confirmed_cod.html";
+    } else {
+      alert("Please select a payment method.");
     }
+  }
     const stateDistrictMap = {
 		"Andhra Pradesh": ["Alluri Sitarama Raju", "Anakapalli", "Anantapur", "Annamayya", "Bapatla", "Chittoor", "East Godavari", "Eluru", "Guntur", "Kadapa", "Kakinada", "Konaseema", "Krishna", "Kurnool", "Nandyal", "Nellore", "NTR", "Palnadu", "Parvathipuram Manyam", "Prakasam", "Sri Balaji (Tirupati)", "Sri Sathya Sai", "Srikakulam", "Visakhapatnam", "Vizianagaram"],
         "Arunachal Pradesh": ["Anjaw", "Changlang", "Dibang Valley", "East Kameng", "East Siang", "Kamle", "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Pakke-Kessang", "Papum Pare", "Shi Yomi", "Siang", "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"],
@@ -179,6 +179,20 @@
       }
     });
 
+        document.getElementById("state").addEventListener("change", function () {
+      const districtSelect = document.getElementById("district");
+      const state = this.value;
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+      if (stateDistrictMap[state]) {
+        stateDistrictMap[state].forEach(district => {
+          const option = document.createElement("option");
+          option.value = district;
+          option.textContent = district;
+          districtSelect.appendChild(option);
+        });
+      }
+    });
+
     document.getElementById('addressForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -196,7 +210,65 @@
       localStorage.setItem('shippingAddress', JSON.stringify(data));
       alert('Address saved successfully!');
     });
-      function showSavedAddress(data) {
+
+    const stateSelect = document.getElementById("state");
+    const districtSelect = document.getElementById("district");
+    const form = document.getElementById('addressForm');
+    const savedAddressDiv = document.getElementById('savedAddress');
+    const addressOverview = document.getElementById('addressOverview');
+    const editAddressLink = document.getElementById('editAddress');
+    const placeOrderButton = document.getElementById('placeOrder');
+    const saveAddressButton = document.getElementById('saveAddress');
+
+    Object.keys(stateDistrictMap).forEach(state => {
+      const option = document.createElement("option");
+      option.value = state;
+      option.textContent = state;
+      stateSelect.appendChild(option);
+    });
+
+    stateSelect.addEventListener("change", function () {
+      const selectedState = this.value;
+      districtSelect.innerHTML = '<option value="">Select District</option>';
+
+      if (selectedState && stateDistrictMap[selectedState]) {
+        stateDistrictMap[selectedState].forEach(district => {
+          const option = document.createElement("option");
+          option.value = district;
+          option.textContent = district;
+          districtSelect.appendChild(option);
+        });
+      }
+    });
+
+    function getFormData() {
+      return {
+        fullname: document.getElementById('fullname').value,
+        street: document.getElementById('street').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        district: document.getElementById('district').value,
+        pincode: document.getElementById('pincode').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value
+      };
+    }
+
+    function fillFormWith(data) {
+      document.getElementById('fullname').value = data.fullname;
+      document.getElementById('street').value = data.street;
+      document.getElementById('city').value = data.city;
+      document.getElementById('state').value = data.state;
+      document.getElementById('state').dispatchEvent(new Event('change'));
+      setTimeout(() => {
+        document.getElementById('district').value = data.district;
+      }, 50);
+      document.getElementById('pincode').value = data.pincode;
+      document.getElementById('phone').value = data.phone;
+      document.getElementById('email').value = data.email;
+    }
+
+    function showSavedAddress(data) {
       addressOverview.innerHTML = `
         <div><strong>${data.fullname}</strong></div>
         <div>${data.street}, ${data.city}</div>
@@ -239,6 +311,7 @@
   </script>
 </body>
 </html>
+
 
 
 
