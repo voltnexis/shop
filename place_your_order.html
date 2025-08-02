@@ -157,7 +157,17 @@
 
       <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Save Address</button>
     </form>
-  </div>
+      <!-- Saved Address Review (Hidden initially) -->
+      <div id="savedAddress" class="hidden bg-gray-50 border border-gray-300 rounded-lg p-4 mt-6 space-y-2">
+        <div id="addressOverview" class="text-sm text-gray-800"></div>
+          <div class="flex justify-between mt-4">
+            <a href="#" id="editAddress" class="text-blue-600 hover:underline">Edit</a>
+               <button id="placeOrderButton" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2 rounded">
+                   Place your order
+               </button>
+          </div>
+        </div>
+      </div>
 
   <script>
    function placeOrder() {
@@ -352,6 +362,7 @@
   </script>
 </body>
 </html>
+
 
 
 
