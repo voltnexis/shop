@@ -19,19 +19,11 @@
       </div>
       <div class="flex justify-between">
         <span>Items</span>
-        <span>₹XXXX</span>
-      </div>
-      <div class="flex justify-between">
-        <span>Delivery</span>
-        <span>₹0.00</span>
-      </div>
-      <div class="flex justify-between">
-        <span>COD Fee</span>
-        <span>₹10.00</span>
+        <span id="itemAmount">₹0.00</span>
       </div>
       <div class="flex justify-between font-bold border-t pt-2">
         <span>Payable Amount:</span>
-        <span>₹XXXX</span>
+        <span id="totalAmount">₹0.00</span>
       </div>
     </div>
 
@@ -118,6 +110,13 @@
   </div>
 
   <script>
+    <!-- price thing -->
+    const codFee = 10;
+  const productPrice = parseInt(sessionStorage.getItem("productPrice") || "499");
+
+  // Set prices in summary
+  document.getElementById("itemAmount").textContent = `₹${productPrice}`;
+  document.getElementById("totalAmount").textContent = `₹${productPrice}`;
     function selectMethod(method) {
       const pincodeField = document.getElementById("pincodeField");
       const infoIcon = document.getElementById("infoIcon");
@@ -226,6 +225,7 @@
   </script>
 </body>
 </html>
+
 
 
 
