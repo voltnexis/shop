@@ -14,7 +14,7 @@
 
     <!-- Order Summary -->
     <div class="text-sm space-y-2 bg-gray-100 p-4 rounded shadow-inner">
-	  <div class="flex justify-between font-bold border-t pt-5">
+      <div class="flex justify-between font-bold border-t pt-5">
         <span>AMOUNT :</span>
       </div>
       <div class="flex justify-between">
@@ -36,44 +36,38 @@
     </div>
 
     <hr class="my-4">
-	  
-      <div class="border border-gray-300 rounded-md p-5">
-    <h1 class="text-2xl font-bold mb-6 text-blue-600">Payment Option</h1>
-    <!-- UPI Payment Box -->
-    <div class="border border-gray-300 rounded-md p-4 mb-4">
-      <label class="inline-flex items-center">
-        <input type="radio" name="payment" value="upi" onclick="selectMethod('upi')" class="form-radio mr-2">
-        Pay with UPI
-      </label>
-    </div>
 
-    <!-- Other Methods Box -->
-    <div class="border border-gray-300 rounded-md p-4">
-      <p class="text-sm font-semibold mb-2">Other Methods</p>
-
-      <div class="flex flex-col space-y-2">
-        <div class="flex items-center">
-          <label id="codLabel" class="inline-flex items-center">
-            <input type="radio" id="codOption" name="payment" value="cod" onclick="selectMethod('cod')" class="form-radio mr-2">
-            Cash on Delivery (COD)
-          </label>
-          <span id="infoIcon" class="ml-2 cursor-pointer text-blue-500 hidden" onclick="toggleInfoBox(event)">ℹ️</span>
-        </div>
-        <div id="infoBox" class="text-xs bg-yellow-100 border border-yellow-400 text-yellow-700 p-2 rounded mt-1 hidden">
-          COD Only available in 673645 and 673639
-        </div>
-
+    <!-- Payment Options -->
+    <div class="border border-gray-300 rounded-md p-5">
+      <h1 class="text-2xl font-bold mb-6 text-blue-600">Payment Option</h1>
+      <div class="border border-gray-300 rounded-md p-4 mb-4">
         <label class="inline-flex items-center">
-          <input type="radio" name="payment" value="netbanking" onclick="selectMethod('netbanking')" class="form-radio mr-2">
-          Net Banking
+          <input type="radio" name="payment" value="upi" onclick="selectMethod('upi')" class="form-radio mr-2"> Pay with UPI
         </label>
       </div>
+      <div class="border border-gray-300 rounded-md p-4">
+        <p class="text-sm font-semibold mb-2">Other Methods</p>
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-center">
+            <label id="codLabel" class="inline-flex items-center">
+              <input type="radio" id="codOption" name="payment" value="cod" onclick="selectMethod('cod')" class="form-radio mr-2"> Cash on Delivery (COD)
+            </label>
+            <span id="infoIcon" class="ml-2 cursor-pointer text-blue-500 hidden" onclick="toggleInfoBox(event)">ℹ️</span>
+          </div>
+          <div id="infoBox" class="text-xs bg-yellow-100 border border-yellow-400 text-yellow-700 p-2 rounded mt-1 hidden">
+            COD Only available in 673645 and 673639
+          </div>
+          <label class="inline-flex items-center">
+            <input type="radio" name="payment" value="netbanking" onclick="selectMethod('netbanking')" class="form-radio mr-2"> Net Banking
+          </label>
+        </div>
+      </div>
     </div>
-    </div>
+
     <!-- Pincode Field (Hidden by Default) -->
     <div id="pincodeField" class="mt-4 hidden">
-      <label for="pincode" class="block text-sm font-medium mb-1">Enter Pincode:</label>
-      <input type="text" id="pincode" class="w-full border border-gray-300 rounded px-3 py-2" oninput="validatePincode(this.value)" placeholder="e.g. 673645" />
+      <label for="codPincode" class="block text-sm font-medium mb-1">Enter Pincode:</label>
+      <input type="text" id="codPincode" maxlength="6" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="e.g. 673645" oninput="validatePincode(this.value)" />
     </div>
 
     <hr class="my-4">
@@ -84,284 +78,156 @@
         <label for="fullname" class="block text-sm font-medium">Full Name</label>
         <input type="text" id="fullname" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
       </div>
-
       <div>
         <label for="street" class="block text-sm font-medium">Street Address</label>
         <textarea id="street" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1"></textarea>
       </div>
-
       <div>
         <label for="city" class="block text-sm font-medium">Town/City</label>
         <input type="text" id="city" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
       </div>
-
       <div>
         <label for="state" class="block text-sm font-medium">State</label>
-        <select id="state" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
-          <option value="">Select State</option>
-          <option>Andhra Pradesh</option>
-          <option>Arunachal Pradesh</option>
-          <option>Assam</option>
-          <option>Bihar</option>
-          <option>Chhattisgarh</option>
-          <option>Goa</option>
-          <option>Gujarat</option>
-          <option>Haryana</option>
-          <option>Himachal Pradesh</option>
-          <option>Jharkhand</option>
-          <option>Karnataka</option>
-          <option>Kerala</option>
-          <option>Madhya Pradesh</option>
-          <option>Maharashtra</option>
-          <option>Manipur</option>
-          <option>Meghalaya</option>
-          <option>Mizoram</option>
-          <option>Nagaland</option>
-          <option>Odisha</option>
-          <option>Punjab</option>
-          <option>Rajasthan</option>
-          <option>Sikkim</option>
-          <option>Tamil Nadu</option>
-          <option>Telangana</option>
-          <option>Tripura</option>
-          <option>Uttar Pradesh</option>
-          <option>Uttarakhand</option>
-          <option>West Bengal</option>
-          <option>Delhi</option>
-          <option>Jammu and Kashmir</option>
-          <option>Ladakh</option>
-        </select>
+        <input type="text" id="state" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
       </div>
-
       <div>
         <label for="district" class="block text-sm font-medium">District</label>
-        <select id="district" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
-          <option value="">Select District</option>
-        </select>
+        <input type="text" id="district" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
       </div>
-
       <div>
         <label for="pincode" class="block text-sm font-medium">Pincode</label>
         <input type="text" id="pincode" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
       </div>
-
       <div>
         <label for="phone" class="block text-sm font-medium">Phone Number</label>
         <input type="text" id="phone" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
       </div>
-
       <div>
         <label for="email" class="block text-sm font-medium">Email</label>
         <input type="email" id="email" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
       </div>
-
       <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Save Address</button>
     </form>
-      <!-- Saved Address Review (Hidden initially) -->
-      <div id="savedAddress" class="hidden bg-gray-50 border border-gray-300 rounded-lg p-4 mt-6 space-y-2">
-        <div id="addressOverview" class="text-sm text-gray-800"></div>
-          <div class="flex justify-between mt-4">
-            <a href="#" id="editAddress" class="text-blue-600 hover:underline">Edit</a>
-               <button id="placeOrderButton" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2 rounded">
-                   Place your order
-               </button>
-          </div>
-        </div>
-      </div>
+
+    <!-- Address Review Panel -->
+    <div id="addressReview" class="hidden mt-6 p-4 border border-gray-300 rounded-lg bg-gray-50">
+      <h2 class="text-lg font-semibold mb-2">Saved Address</h2>
+      <div id="reviewContent" class="text-sm text-gray-800"></div>
+      <button onclick="editAddress()" class="mt-4 text-blue-600 hover:underline">Edit Address</button>
+    </div>
+  </div>
 
   <script>
-   function placeOrder() {
-    const upi = document.querySelector('input[value="upi"]');
-    const cod = document.querySelector('input[value="cod"]');
-
-    if (upi.checked) {
-      window.location.href = "upi_payment.html";
-    } else if (cod.checked) {
-      window.location.href = "order_confirmed_cod.html";
-    } else {
-      alert("Please select a payment method.");
+    function selectMethod(method) {
+      const pincodeField = document.getElementById("pincodeField");
+      const infoIcon = document.getElementById("infoIcon");
+      const infoBox = document.getElementById("infoBox");
+      if (method === 'cod') {
+        pincodeField.classList.remove("hidden");
+        infoIcon.classList.add("hidden");
+        infoBox.classList.add("hidden");
+      } else {
+        pincodeField.classList.add("hidden");
+        infoIcon.classList.add("hidden");
+        infoBox.classList.add("hidden");
+      }
     }
-  }
-    const stateDistrictMap = {
-		"Andhra Pradesh": ["Alluri Sitarama Raju", "Anakapalli", "Anantapur", "Annamayya", "Bapatla", "Chittoor", "East Godavari", "Eluru", "Guntur", "Kadapa", "Kakinada", "Konaseema", "Krishna", "Kurnool", "Nandyal", "Nellore", "NTR", "Palnadu", "Parvathipuram Manyam", "Prakasam", "Sri Balaji (Tirupati)", "Sri Sathya Sai", "Srikakulam", "Visakhapatnam", "Vizianagaram"],
-        "Arunachal Pradesh": ["Anjaw", "Changlang", "Dibang Valley", "East Kameng", "East Siang", "Kamle", "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Pakke-Kessang", "Papum Pare", "Shi Yomi", "Siang", "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"],
-        "Assam": ["Baksa", "Bajali", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Dima Hasao", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tamulpur", "Tinsukia", "Udalguri", "West Karbi Anglong"],
-        "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
-        "Chhattisgarh": ["Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur", "Dantewada", "Dhamtari", "Durg", "Gariaband", "Gaurela-Pendra-Marwahi", "Janjgir-Champa", "Jashpur", "Kabirdham", "Kanker", "Kondagaon", "Korba", "Koriya", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"],
-        "Goa": ["North Goa", "South Goa"],
-        "Gujarat": ["Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udaipur", "Dahod", "Dang", "Devbhoomi Dwarka", "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kheda", "Kutch", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
-        "Haryana": ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Nuh", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
-        "Himachal Pradesh": ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Kullu", "Lahaul and Spiti", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
-        "Jharkhand": ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Saraikela-Kharsawan", "Simdega", "West Singhbhum"],
-        "Karnataka": ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikkaballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
-        "Kerala": ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
-        "Madhya Pradesh": ["Agar Malwa", "Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhatarpur", "Chhindwara", "Damoh", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Raisen", "Rajgarh", "Ratlam", "Rewa", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
-        "Maharashtra": ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
-        "Manipur": ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Pherzawl", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
-        "Meghalaya": ["East Garo Hills", "East Jaintia Hills", "East Khasi Hills", "North Garo Hills", "Ri Bhoi", "South Garo Hills", "South West Garo Hills", "South West Khasi Hills", "West Garo Hills", "West Jaintia Hills", "West Khasi Hills"],
-        "Mizoram": ["Aizawl", "Champhai", "Hnahthial", "Khawzawl", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Saitual", "Serchhip"],
-        "Nagaland": ["Chümoukedima", "Dimapur", "Kiphire", "Kohima", "Longleng", "Mokokchung", "Mon", "Niuland", "Noklak", "Peren", "Phek", "Shamator", "Tuensang", "Wokha", "Zunheboto"],
-        "Odisha": ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Gajapati", "Ganjam", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundergarh"],
-        "Punjab": ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Malerkotla", "Mansa", "Moga", "Muktsar", "Pathankot", "Patiala", "Rupnagar", "Sangrur", "Shaheed Bhagat Singh Nagar", "Tarn Taran"],
-        "Rajasthan": ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bharatpur", "Bhilwara", "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"],
-        "Sikkim": ["Gangtok", "Gyalshing", "Mangan", "Namchi", "Pakyong", "Soreng"],
-        "Tamil Nadu": ["Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Mayiladuthurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Ranipet", "Salem", "Sivaganga", "Tenkasi", "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupattur", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"],
-        "Telangana": ["Adilabad", "Bhadradri Kothagudem", "Hanumakonda", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar Bhupalpally", "Jogulamba Gadwal", "Kamareddy", "Karimnagar", "Khammam", "Komaram Bheem", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal–Malkajgiri", "Mulugu", "Nagarkurnool", "Nalgonda", "Narayanpet", "Nirmal", "Nizamabad", "Peddapalli", "Rajanna Sircilla", "Ranga Reddy", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Wanaparthy", "Warangal", "Yadadri Bhuvanagiri"],
-        "Tripura": ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
-        "Uttar Pradesh": ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Ayodhya", "Azamgarh", "Badaun", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kasganj", "Kaushambi", "Kheri", "Kushinagar", "Lalitpur", "Lucknow", "Maharajganj", "Mahoba", "Mainpuri", "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pilibhit", "Pratapgarh", "Prayagraj", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shamli", "Shrawasti", "Siddharthnagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
-        "Uttarakhand": ["Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital", "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"],
-        "West Bengal": ["Alipurduar", "Bankura", "Birbhum", "Cooch Behar", "Dakshin Dinajpur", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Jhargram", "Kalimpong", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "Paschim Bardhaman", "Paschim Medinipur", "Purba Bardhaman", "Purba Medinipur", "Purulia", "South 24 Parganas", "Uttar Dinajpur"],
-        "Delhi": ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
-        "Jammu and Kashmir": ["Anantnag", "Bandipora", "Baramulla", "Budgam", "Doda", "Ganderbal", "Jammu", "Kathua", "Kishtwar", "Kulgam", "Kupwara", "Poonch", "Pulwama", "Rajouri", "Ramban", "Reasi", "Samba", "Shopian", "Srinagar", "Udhampur"],
-        "Ladakh": ["Kargil", "Leh"]
-    };
 
-    document.getElementById("state").addEventListener("change", function () {
-      const districtSelect = document.getElementById("district");
-      const state = this.value;
-      districtSelect.innerHTML = '<option value="">Select District</option>';
-      if (stateDistrictMap[state]) {
-        stateDistrictMap[state].forEach(district => {
-          const option = document.createElement("option");
-          option.value = district;
-          option.textContent = district;
-          districtSelect.appendChild(option);
-        });
+    function toggleInfoBox(event) {
+      event.preventDefault();
+      const infoBox = document.getElementById("infoBox");
+      infoBox.classList.toggle("hidden");
+    }
+
+    function validatePincode(pincode) {
+      const infoIcon = document.getElementById("infoIcon");
+      const infoBox = document.getElementById("infoBox");
+      const allowed = ["673645", "673639"];
+
+      if (pincode.length === 6) {
+        if (allowed.includes(pincode)) {
+          infoIcon.classList.add("hidden");
+          infoBox.classList.add("hidden");
+        } else {
+          infoIcon.classList.remove("hidden");
+        }
+      } else {
+        infoIcon.classList.add("hidden");
+        infoBox.classList.add("hidden");
       }
-    });
+    }
 
-        document.getElementById("state").addEventListener("change", function () {
-      const districtSelect = document.getElementById("district");
-      const state = this.value;
-      districtSelect.innerHTML = '<option value="">Select District</option>';
-      if (stateDistrictMap[state]) {
-        stateDistrictMap[state].forEach(district => {
-          const option = document.createElement("option");
-          option.value = district;
-          option.textContent = district;
-          districtSelect.appendChild(option);
-        });
-      }
-    });
+    const form = document.getElementById("addressForm");
+    const review = document.getElementById("addressReview");
+    const content = document.getElementById("reviewContent");
 
-    document.getElementById('addressForm').addEventListener('submit', function(e) {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const data = {
-        fullname: document.getElementById('fullname').value,
-        street: document.getElementById('street').value,
-        city: document.getElementById('city').value,
-        state: document.getElementById('state').value,
-        district: document.getElementById('district').value,
-        pincode: document.getElementById('pincode').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value
+        fullname: document.getElementById("fullname").value,
+        street: document.getElementById("street").value,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        district: document.getElementById("district").value,
+        pincode: document.getElementById("pincode").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value
       };
 
-      localStorage.setItem('shippingAddress', JSON.stringify(data));
-      alert('Address saved successfully!');
-    });
+      localStorage.setItem("shippingAddress", JSON.stringify(data));
 
-    const stateSelect = document.getElementById("state");
-    const districtSelect = document.getElementById("district");
-    const form = document.getElementById('addressForm');
-    const savedAddressDiv = document.getElementById('savedAddress');
-    const addressOverview = document.getElementById('addressOverview');
-    const editAddressLink = document.getElementById('editAddress');
-    const placeOrderButton = document.getElementById('placeOrder');
-    const saveAddressButton = document.getElementById('saveAddress');
-
-    Object.keys(stateDistrictMap).forEach(state => {
-      const option = document.createElement("option");
-      option.value = state;
-      option.textContent = state;
-      stateSelect.appendChild(option);
-    });
-
-    stateSelect.addEventListener("change", function () {
-      const selectedState = this.value;
-      districtSelect.innerHTML = '<option value="">Select District</option>';
-
-      if (selectedState && stateDistrictMap[selectedState]) {
-        stateDistrictMap[selectedState].forEach(district => {
-          const option = document.createElement("option");
-          option.value = district;
-          option.textContent = district;
-          districtSelect.appendChild(option);
-        });
-      }
-    });
-
-    function getFormData() {
-      return {
-        fullname: document.getElementById('fullname').value,
-        street: document.getElementById('street').value,
-        city: document.getElementById('city').value,
-        state: document.getElementById('state').value,
-        district: document.getElementById('district').value,
-        pincode: document.getElementById('pincode').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value
-      };
-    }
-
-    function fillFormWith(data) {
-      document.getElementById('fullname').value = data.fullname;
-      document.getElementById('street').value = data.street;
-      document.getElementById('city').value = data.city;
-      document.getElementById('state').value = data.state;
-      document.getElementById('state').dispatchEvent(new Event('change'));
-      setTimeout(() => {
-        document.getElementById('district').value = data.district;
-      }, 50);
-      document.getElementById('pincode').value = data.pincode;
-      document.getElementById('phone').value = data.phone;
-      document.getElementById('email').value = data.email;
-    }
-
-    function showSavedAddress(data) {
-      addressOverview.innerHTML = `
-        <div><strong>${data.fullname}</strong></div>
-        <div>${data.street}, ${data.city}</div>
-        <div>${data.district}, ${data.state} - ${data.pincode}</div>
-        <div>${data.phone}, ${data.email}</div>
+      content.innerHTML = `
+        <p><strong>${data.fullname}</strong></p>
+        <p>${data.street}, ${data.city}</p>
+        <p>${data.district}, ${data.state} - ${data.pincode}</p>
+        <p>${data.phone} | ${data.email}</p>
       `;
-      form.classList.add('hidden');
-      savedAddressDiv.classList.remove('hidden');
+
+      form.classList.add("hidden");
+      review.classList.remove("hidden");
+    });
+
+    function editAddress() {
+      const saved = JSON.parse(localStorage.getItem("shippingAddress"));
+      if (saved) {
+        document.getElementById("fullname").value = saved.fullname;
+        document.getElementById("street").value = saved.street;
+        document.getElementById("city").value = saved.city;
+        document.getElementById("state").value = saved.state;
+        document.getElementById("district").value = saved.district;
+        document.getElementById("pincode").value = saved.pincode;
+        document.getElementById("phone").value = saved.phone;
+        document.getElementById("email").value = saved.email;
+
+        form.classList.remove("hidden");
+        review.classList.add("hidden");
+      }
     }
+    <!-- redirectiontonext-->
+    function placeOrder() {
+  const selectedPayment = document.querySelector('input[name="payment"]:checked');
 
-    editAddressLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      const saved = JSON.parse(sessionStorage.getItem('tempAddress'));
-      if (saved) {
-        fillFormWith(saved);
-      }
-      form.classList.remove('hidden');
-      savedAddressDiv.classList.add('hidden');
-    });
+  if (!selectedPayment) {
+    alert("Please select a payment method.");
+    return;
+  }
 
-    saveAddressButton.addEventListener('click', function () {
-      const data = getFormData();
-      sessionStorage.setItem('tempAddress', JSON.stringify(data));
-      showSavedAddress(data);
-    });
+  const method = selectedPayment.value;
 
-    placeOrderButton.addEventListener('click', function () {
-      const data = getFormData();
-      localStorage.setItem('shippingAddress', JSON.stringify(data));
-      alert('Address saved and proceeding to order...');
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const saved = JSON.parse(localStorage.getItem('shippingAddress'));
-      if (saved) {
-        fillFormWith(saved);
-        showSavedAddress(saved);
-      }
-    });
+  if (method === "cod") {
+    window.location.href = "order_confirmed_cod.html";
+  } else if (method === "upi") {
+    window.location.href = "upi_payment.html";
+  } else {
+    alert("Selected payment method not supported yet.");
+  }
+}
   </script>
 </body>
 </html>
+
+
 
 
 
