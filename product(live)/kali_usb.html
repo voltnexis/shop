@@ -217,7 +217,8 @@
     function buyNow() {
     const selectedPrice = document.getElementById("sizeSelect").value;
     sessionStorage.setItem("productPrice", selectedPrice);
-    window.location.href = "../Buy(Option)/place_your_order.html";  // adjust path if needed
+    const folder = encodeURIComponent("Buy(Option)");
+    window.location.href = `../${folder}/place_your_order.html`;  // adjust path if needed
   }
 </script>
 <footer>
@@ -237,6 +238,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
