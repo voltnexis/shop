@@ -216,7 +216,13 @@
   }
     function buyNow() {
     const selectedPrice = document.getElementById("sizeSelect").value;
+    const persistence = document.getElementById("persistSelect")?.checked ? "Yes" : "No";
+
+    sessionStorage.setItem("productName", "Kali Linux USB");
     sessionStorage.setItem("productPrice", selectedPrice);
+    sessionStorage.setItem("persistence", persistence);
+    sessionStorage.setItem("orderId", "ORD" + Date.now()); // Generate order ID
+	    
     const folder = encodeURIComponent("Buy(Option)");
     window.location.href = `../${folder}/place_your_order.html`;  // adjust path if needed
   }
@@ -238,6 +244,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
