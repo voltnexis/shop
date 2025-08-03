@@ -160,7 +160,7 @@
 
     <div class="buy-section">
       <button>Add to Cart 🛒</button>
-      <button>Buy Now 💳</button>
+      <button onclick="buyNow()">Buy Now 💳</button>
     </div>
 
     <div class="guarantee">
@@ -214,6 +214,11 @@
     const total = sizePrice + persistPrice;
     document.getElementById("price").textContent = `₹${total}`;
   }
+    function buyNow() {
+    const selectedPrice = document.getElementById("usbSize").value;
+    sessionStorage.setItem("productPrice", selectedPrice);
+    window.location.href = "../Buy(option)/place_your_order.html";  // adjust path if needed
+  }
 </script>
 <footer>
     <div class="footer-section">
@@ -232,4 +237,5 @@
   </footer>
 </body>
 </html>
+
 
