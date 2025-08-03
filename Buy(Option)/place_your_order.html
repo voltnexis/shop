@@ -110,31 +110,11 @@
   </div>
 
   <script>
-    <!-- storing -->
-    function saveAddress(e) {
-    e.preventDefault();
-    sessionStorage.setItem("fullname", document.getElementById("fullname").value);
-    sessionStorage.setItem("street", document.getElementById("street").value);
-    sessionStorage.setItem("city", document.getElementById("city").value);
-    sessionStorage.setItem("state", document.getElementById("state").value);
-    sessionStorage.setItem("district", document.getElementById("district").value);
-    sessionStorage.setItem("pincode", document.getElementById("pincode").value);
-    sessionStorage.setItem("phone", document.getElementById("phone").value);
-    sessionStorage.setItem("email", document.getElementById("email").value);
-
-    // store payment method (if selected)
-    const method = document.querySelector('input[name="payment"]:checked');
-    if (method) {
-      sessionStorage.setItem("paymentMethod", method.value);
-    }
-    
-    <!-- price thing -->
     const codFee = 10;
     const productPrice = parseInt(sessionStorage.getItem("productPrice") || "499");
+    document.getElementById("itemAmount").textContent = `₹${productPrice}`;
+    document.getElementById("totalAmount").textContent = `₹${productPrice + codFee}`;
 
-  // Set prices in summary
-  document.getElementById("itemAmount").textContent = `₹${productPrice}`;
-  document.getElementById("totalAmount").textContent = `₹${productPrice}`;
     function selectMethod(method) {
       const pincodeField = document.getElementById("pincodeField");
       const infoIcon = document.getElementById("infoIcon");
@@ -150,12 +130,6 @@
       }
     }
 
-    function toggleInfoBox(event) {
-      event.preventDefault();
-      const infoBox = document.getElementById("infoBox");
-      infoBox.classList.toggle("hidden");
-    }
-
     function validatePincode(pincode) {
       const infoIcon = document.getElementById("infoIcon");
       const infoBox = document.getElementById("infoBox");
@@ -167,6 +141,7 @@
           infoBox.classList.add("hidden");
         } else {
           infoIcon.classList.remove("hidden");
+          infoBox.classList.add("hidden");
         }
       } else {
         infoIcon.classList.add("hidden");
@@ -174,13 +149,14 @@
       }
     }
 
-    const form = document.getElementById("addressForm");
-    const review = document.getElementById("addressReview");
-    const content = document.getElementById("reviewContent");
+    function toggleInfoBox(event) {
+      event.preventDefault();
+      const infoBox = document.getElementById("infoBox");
+      infoBox.classList.toggle("hidden");
+    }
 
-    form.addEventListener("submit", function (e) {
+    function saveAddress(e) {
       e.preventDefault();
-
       const data = {
         fullname: document.getElementById("fullname").value,
         street: document.getElementById("street").value,
@@ -194,6 +170,7 @@
 
       localStorage.setItem("shippingAddress", JSON.stringify(data));
 
+      const content = document.getElementById("reviewContent");
       content.innerHTML = `
         <p><strong>${data.fullname}</strong></p>
         <p>${data.street}, ${data.city}</p>
@@ -201,9 +178,9 @@
         <p>${data.phone} | ${data.email}</p>
       `;
 
-      form.classList.add("hidden");
-      review.classList.remove("hidden");
-    });
+      document.getElementById("addressForm").classList.add("hidden");
+      document.getElementById("addressReview").classList.remove("hidden");
+    }
 
     function editAddress() {
       const saved = JSON.parse(localStorage.getItem("shippingAddress"));
@@ -217,32 +194,30 @@
         document.getElementById("phone").value = saved.phone;
         document.getElementById("email").value = saved.email;
 
-        form.classList.remove("hidden");
-        review.classList.add("hidden");
+        document.getElementById("addressForm").classList.remove("hidden");
+        document.getElementById("addressReview").classList.add("hidden");
       }
     }
-    <!-- redirectiontonext-->
+
     function placeOrder() {
-  const selectedPayment = document.querySelector('input[name="payment"]:checked');
-
-  if (!selectedPayment) {
-    alert("Please select a payment method.");
-    return;
-  }
-
-  const method = selectedPayment.value;
-
-  if (method === "cod") {
-    window.location.href = "order_confirmed_cod.html";
-  } else if (method === "upi") {
-    window.location.href = "upi_payment.html";
-  } else {
-    alert("Selected payment method not supported yet.");
-  }
-}
+      const selectedPayment = document.querySelector('input[name="payment"]:checked');
+      if (!selectedPayment) {
+        alert("Please select a payment method.");
+        return;
+      }
+      const method = selectedPayment.value;
+      if (method === "cod") {
+        window.location.href = "order_confirmed_cod.html";
+      } else if (method === "upi") {
+        window.location.href = "upi_payment.html";
+      } else {
+        alert("Selected payment method not supported yet.");
+      }
+    }
   </script>
 </body>
 </html>
+
 
 
 
