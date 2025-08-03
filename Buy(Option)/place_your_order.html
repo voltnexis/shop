@@ -65,7 +65,7 @@
     <hr class="my-4">
 
     <!-- Address Section -->
-    <form id="addressForm" class="space-y-4">
+    <form id="addressForm" class="space-y-4" onsubmit="saveAddress(event)">
       <div>
         <label for="fullname" class="block text-sm font-medium">Full Name</label>
         <input type="text" id="fullname" required class="w-full border border-gray-300 rounded px-3 py-2 mt-1">
@@ -110,9 +110,27 @@
   </div>
 
   <script>
+    <!-- storing -->
+    function saveAddress(e) {
+    e.preventDefault();
+    sessionStorage.setItem("fullname", document.getElementById("fullname").value);
+    sessionStorage.setItem("street", document.getElementById("street").value);
+    sessionStorage.setItem("city", document.getElementById("city").value);
+    sessionStorage.setItem("state", document.getElementById("state").value);
+    sessionStorage.setItem("district", document.getElementById("district").value);
+    sessionStorage.setItem("pincode", document.getElementById("pincode").value);
+    sessionStorage.setItem("phone", document.getElementById("phone").value);
+    sessionStorage.setItem("email", document.getElementById("email").value);
+
+    // store payment method (if selected)
+    const method = document.querySelector('input[name="payment"]:checked');
+    if (method) {
+      sessionStorage.setItem("paymentMethod", method.value);
+    }
+    
     <!-- price thing -->
     const codFee = 10;
-  const productPrice = parseInt(sessionStorage.getItem("productPrice") || "499");
+    const productPrice = parseInt(sessionStorage.getItem("productPrice") || "499");
 
   // Set prices in summary
   document.getElementById("itemAmount").textContent = `₹${productPrice}`;
@@ -225,6 +243,7 @@
   </script>
 </body>
 </html>
+
 
 
 
