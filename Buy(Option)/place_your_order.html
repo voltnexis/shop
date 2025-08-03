@@ -113,7 +113,7 @@
     const codFee = 10;
     const productPrice = parseInt(sessionStorage.getItem("productPrice") || "499");
     document.getElementById("itemAmount").textContent = `₹${productPrice}`;
-    document.getElementById("totalAmount").textContent = `₹${productPrice + codFee}`;
+    document.getElementById("totalAmount").textContent = `₹${productPrice}`;
 
     function selectMethod(method) {
       const pincodeField = document.getElementById("pincodeField");
@@ -217,6 +217,7 @@
   </script>
 </body>
 </html>
+
 
 
 
