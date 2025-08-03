@@ -205,6 +205,22 @@
         alert("Please select a payment method.");
         return;
       }
+      
+      // Save payment method
+      sessionStorage.setItem("payment", selectedPayment.value);
+
+      // Save address from localStorage to sessionStorage
+      const address = JSON.parse(localStorage.getItem("shippingAddress"));
+      if (address) {
+      sessionStorage.setItem("fullname", address.fullname);
+      sessionStorage.setItem("street", address.street);
+      sessionStorage.setItem("city", address.city);
+      sessionStorage.setItem("state", address.state);
+      sessionStorage.setItem("district", address.district);
+      sessionStorage.setItem("pincode", address.pincode);
+      sessionStorage.setItem("phone", address.phone);
+      sessionStorage.setItem("email", address.email);
+    }
       const method = selectedPayment.value;
       if (method === "cod") {
         window.location.href = "order_confirmed_cod.html";
@@ -217,6 +233,7 @@
   </script>
 </body>
 </html>
+
 
 
 
