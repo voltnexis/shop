@@ -44,27 +44,35 @@
   </div>
 
   <script>
-    const data = {
-      orderId: sessionStorage.getItem("orderId"),
-      product: sessionStorage.getItem("productName"),
-      size: sessionStorage.getItem("productPrice"),
-      persistence: sessionStorage.getItem("persistence"),
-      name: sessionStorage.getItem("fullname"),
-      street: sessionStorage.getItem("street"),
-      city: sessionStorage.getItem("city"),
-      state: sessionStorage.getItem("state"),
-      district: sessionStorage.getItem("district"),
-      pincode: sessionStorage.getItem("pincode"),
-      phone: sessionStorage.getItem("phone"),
-      email: sessionStorage.getItem("email"),
-      payment: sessionStorage.getItem("paymentMethod"),
-    };
+     window.onload = function () {
+       const orderData = {
+         orderId: "ORD" + Date.now(), // Generates a unique order id
+         product: sessionStorage.getItem("productName"),
+         size: sessionStorage.getItem("productPrice"),
+         persistence: sessionStorage.getItem("persistence"),
+         name: sessionStorage.getItem("fullname"),
+         street: sessionStorage.getItem("street"),
+         city: sessionStorage.getItem("city"),
+         state: sessionStorage.getItem("state"),
+         district: sessionStorage.getItem("district"),
+         pincode: sessionStorage.getItem("pincode"),
+         phone: sessionStorage.getItem("phone"),
+         email: sessionStorage.getItem("email"),
+         payment: sessionStorage.getItem("payment"),
+       };
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `order_${data.orderId}.json`;
-    a.click();
+       // Show amount
+       document.getElementById("priceAmount").textContent = `₹${orderData.size}`;
+       document.getElementById("orderId").textContent = orderData.orderId;
+
+       // Save to file
+       const blob = new Blob([JSON.stringify(orderData, null, 2)], { type: "application/json" });
+       const url = URL.createObjectURL(blob);
+       const a = document.createElement("a");
+       a.href = url;
+       a.download = `${orderData.orderId}.json`;
+       a.click();
+    };
     // Unique order ID generator starting from 654356
     const lastOrderref = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
     localStorage.setItem("lastOrderref", lastOrderId);
@@ -95,6 +103,7 @@
   </script>
 </body>
 </html>
+
 
 
 
