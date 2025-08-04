@@ -67,12 +67,7 @@
 
         <label for="size" class="block font-semibold mb-1">Select Size:</label>
         <select id="size" class="border p-2 rounded mb-4 w-full">
-		  <option value="">Choose Size</option>
-		  <option value="599">8GB</option>
-          <option value="699">16GB</option>
-          <option value="799">32GB</option>
-          <option value="999">64GB</option>
-          <option value="1299">128GB</option>
+	  <option value="">Choose Size</option>
         </select>
 
         <label for="persistence" class="block font-semibold mb-1">Persistence:</label>
@@ -174,7 +169,7 @@
       });
        function updatePrice() {
        const base = parseInt(document.getElementById("size").value || 0);
-       const persistence = document.getElementById("persistence").value || "No";
+       const persistence = document.getElementById("persistence").value;
        const total = persistence === "Yes" ? base + 20 : base;
        document.getElementById("priceDisplay").textContent = total;
      }
@@ -209,6 +204,7 @@
   </script>
 </body>
 </html>
+
 
 
 
