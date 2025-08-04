@@ -144,7 +144,7 @@
       productData.sizes.forEach((size, index) => {
         const option = document.createElement("option");
         option.value = size.price;
-        option.textContent = `${size.label} - ₹${size.price}`;
+        option.textContent = `${size.label}`;
         if (index === 1) option.selected = true;
         sizeSelect.appendChild(option);
       });
@@ -211,5 +211,6 @@
   </script>
 </body>
 </html>
+
 
 
