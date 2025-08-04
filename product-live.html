@@ -6,6 +6,33 @@
   <title>Live USB Product Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    footer {
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      border-top: 1px solid #ccc;
+    }
+    .footer-section {
+      margin-bottom: 10px;
+    }
+    .footer-section h3 {
+      margin: 10px 0 5px;
+    }
+    .footer-section a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #0077cc;
+    }
+    .guarantee {
+      background: #e9f5e9;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
     .zoom-overlay {
       position: fixed;
       top: 0;
@@ -59,6 +86,12 @@
           </select>
         </div>
 
+        <div class="guarantee">
+           📦 10-Day Replacement Guarantee<br>
+           🛡️ 5-Year Warranty on USB<br>
+           ⚡ Fast shipping across India
+         </div>
+
         <button onclick="buyNow()" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Buy Now</button>
 
         <div id="productDescription" class="mt-6 text-sm text-gray-700 leading-relaxed"></div>
@@ -81,6 +114,21 @@
   <div id="zoomModal" class="zoom-overlay hidden" onclick="this.classList.add('hidden')">
     <img id="zoomedImage" src="" alt="Zoomed View" />
   </div>
+
+  <footer>
+  <div class="footer-section">
+    <h3>Connect with us</h3>
+      📱 WhatsApp: 9947557025 | 📱 Telegram: 9946042794 | ☎️ Phone: (Coming soon)
+    </div>
+    <div class="footer-section">
+      <h3>Follow us</h3>
+      <a href="https://youtube.com/@voltedgebuilds?si=RZNaXDlvx_ItANN1" target="_blank">YouTube</a> | <a href="https://www.instagram.com/voltedgebuilds/profilecard/?igsh=MXJ2YnBvbzMzeXV6dA==">Instagram</a> | <a href="https://www.facebook.com/share/1Ea1o2Hj3Z/">Facebook</a>
+    </div>
+    <div class="footer-section">
+      <h3>Help</h3>
+      <a href="#">Returns</a> | <a href="#">Orders</a>
+    </div>
+  </footer>
 
   <script>
     const productData = JSON.parse(sessionStorage.getItem("liveProduct"));
@@ -164,3 +212,4 @@
   </script>
 </body>
 </html>
+
