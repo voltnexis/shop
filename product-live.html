@@ -92,7 +92,7 @@
          </div>
 
         <button onclick="buyNow()" class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Buy Now</button>
-        <h2 class="text-lg font-bold mb-2">About The Product :</h2>
+       
         <div id="productDescription" class="mt-6 text-sm text-gray-700 leading-relaxed"></div>
       </div>
     </div>
@@ -144,7 +144,7 @@
       productData.sizes.forEach((size, index) => {
         const option = document.createElement("option");
         option.value = size.price;
-        option.textContent = `${size.label}`;
+        option.textContent = `${size.label} - ₹${size.price}`;
         if (index === 1) option.selected = true;
         sizeSelect.appendChild(option);
       });
@@ -211,6 +211,7 @@
   </script>
 </body>
 </html>
+
 
 
 
