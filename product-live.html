@@ -26,6 +26,24 @@
       margin: 0 10px;
       text-decoration: none;
       color: #0077cc;
+    }
+    .zoom-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .zoom-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #000;
+    }
+	  
   </style>
 </head>
 <body class="bg-gray-100">
@@ -94,6 +112,30 @@
   </footer>
 
   <script>
+    	 // Create and append zoom overlay container
+     const zoomOverlay = document.createElement("div");
+     zoomOverlay.style.display = "none";
+     zoomOverlay.className = "zoom-overlay";
+     document.body.appendChild(zoomOverlay);
+
+     const zoomImage = document.createElement("img");
+     zoomOverlay.appendChild(zoomImage);
+
+     // Close overlay on click
+     zoomOverlay.onclick = () => (zoomOverlay.style.display = "none");
+
+     // Attach click events to images
+     ["productImage", "productImage2", "productImage3"].forEach(id => {
+       const img = document.getElementById(id);
+       if (img) {
+         img.addEventListener("click", () => {
+           zoomImage.src = img.src;
+           zoomOverlay.style.display = "flex";
+         });
+        }
+      });
+
+	  
     const productData = JSON.parse(sessionStorage.getItem("liveProduct"));
 
     if (productData) {
@@ -154,4 +196,5 @@
   </script>
 </body>
 </html>
+
 
