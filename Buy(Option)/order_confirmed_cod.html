@@ -32,7 +32,7 @@
       </div>
       <div class="flex justify-between">
         <span>COD Fee</span>
-        <span>₹10.00</span>
+        <span>₹00.00</span>
       </div>
       <div class="flex justify-between font-bold border-t pt-2">
         <span>Total</span>
@@ -40,69 +40,66 @@
       </div>
     </div>
 
-    <a href="index.html" class="inline-block mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Continue Shopping</a>
+    <a href="../index.html" class="inline-block mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Continue Shopping</a>
   </div>
 
   <script>
-     window.onload = function () {
-       const orderData = {
-         orderId: "ORD" + Date.now(), // Generates a unique order id
-         product: sessionStorage.getItem("productName"),
-         size: sessionStorage.getItem("productPrice"),
-         persistence: sessionStorage.getItem("persistence"),
-         name: sessionStorage.getItem("fullname"),
-         street: sessionStorage.getItem("street"),
-         city: sessionStorage.getItem("city"),
-         state: sessionStorage.getItem("state"),
-         district: sessionStorage.getItem("district"),
-         pincode: sessionStorage.getItem("pincode"),
-         phone: sessionStorage.getItem("phone"),
-         email: sessionStorage.getItem("email"),
-         payment: sessionStorage.getItem("payment"),
-       };
+    window.onload = function () {
+      const orderId = "ORD" + Date.now();
+      const lastOrderRef = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
+      localStorage.setItem("lastOrderref", lastOrderRef);
 
-       // Show amount
-       document.getElementById("priceAmount").textContent = `₹${orderData.size}`;
-       document.getElementById("orderId").textContent = orderData.orderId;
+      const orderData = {
+        orderId: orderId,
+        orderRef: lastOrderRef,
+        product: sessionStorage.getItem("productName"),
+        size: sessionStorage.getItem("productPrice"),
+        persistence: sessionStorage.getItem("persistence"),
+        name: sessionStorage.getItem("fullname"),
+        street: sessionStorage.getItem("street"),
+        city: sessionStorage.getItem("city"),
+        state: sessionStorage.getItem("state"),
+        district: sessionStorage.getItem("district"),
+        pincode: sessionStorage.getItem("pincode"),
+        phone: sessionStorage.getItem("phone"),
+        email: sessionStorage.getItem("email"),
+        payment: "COD"
+      };
 
-       // Save to file
-       const blob = new Blob([JSON.stringify(orderData, null, 2)], { type: "application/json" });
-       const url = URL.createObjectURL(blob);
-       const a = document.createElement("a");
-       a.href = url;
-       a.download = `${orderData.orderId}.json`;
-       a.click();
-    };
-    // Unique order ID generator starting from 654356
-    const lastOrderref = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
-    localStorage.setItem("lastOrderref", lastOrderId);
-    document.getElementById("orderref").textContent = lastOrderref;
-    sessionStorage.setItem("orderRef", orderRef);
+      // Set order details on the page
+      document.getElementById("orderref").textContent = orderData.orderRef;
 
-    // Estimated delivery (simulate 5 days later)
-    const deliveryDate = new Date();
-    deliveryDate.setDate(deliveryDate.getDate() + 5);
-    document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
-
-    // Load and show shipping address from localStorage
-    const address = JSON.parse(localStorage.getItem("shippingAddress"));
-    if (address) {
-      document.getElementById("displayAddress").innerHTML = `
-        <div><strong>${address.fullname}</strong></div>
-        <div>${address.street}, ${address.city}</div>
-        <div>${address.district}, ${address.state} - ${address.pincode}</div>
-        <div>${address.phone}, ${address.email}</div>
+      const addressHTML = `
+        <div><strong>${orderData.name}</strong></div>
+        <div>${orderData.street}, ${orderData.city}</div>
+        <div>${orderData.district}, ${orderData.state} - ${orderData.pincode}</div>
+        <div>${orderData.phone}, ${orderData.email}</div>
       `;
-    }
+      document.getElementById("displayAddress").innerHTML = addressHTML;
 
-    // Basic price logic
-    const itemCost = parseFloat(localStorage.getItem("itemCost")) || 0;
-    const codFee = 10;
-    document.getElementById("itemPrice").textContent = `₹${itemCost.toFixed(2)}`;
-    document.getElementById("totalPrice").textContent = `₹${(itemCost + codFee).toFixed(2)}`;
+      const itemPrice = parseFloat(orderData.size || 0);
+      const codFee = 00;
+      document.getElementById("itemPrice").textContent = `₹${itemPrice.toFixed(2)}`;
+      document.getElementById("totalPrice").textContent = `₹${(itemPrice + codFee).toFixed(2)}`;
+
+      // Estimated delivery date (5 days from now)
+      const deliveryDate = new Date();
+      deliveryDate.setDate(deliveryDate.getDate() + 5);
+      document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
+
+      // Trigger file download
+      const blob = new Blob([JSON.stringify(orderData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${orderId}.json`;
+      a.click();
+    };
   </script>
 </body>
 </html>
+
+
 
 
 
