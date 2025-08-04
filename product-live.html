@@ -172,6 +172,12 @@
         li.textContent = item;
         includedList.appendChild(li);
       });
+       function updatePrice() {
+       const base = parseInt(document.getElementById("size").value || 0);
+       const persistence = document.getElementById("persistence").value || "No";
+       const total = persistence === "Yes" ? base + 20 : base;
+       document.getElementById("priceDisplay").textContent = total;
+     }
 
       const specsTable = document.getElementById("productSpecs");
       productData.specs.forEach(([key, val]) => {
@@ -184,12 +190,7 @@
     document.getElementById("size").addEventListener("change", updatePrice);
     document.getElementById("persistence").addEventListener("change", updatePrice);
 
-    function updatePrice() {
-      const base = parseInt(document.getElementById("size").value || 0);
-      const persistence = document.getElementById("persistence").value;
-      const total = persistence === "Yes" ? base + 20 : base;
-      document.getElementById("priceDisplay").textContent = total;
-    }
+
 
     function buyNow() {
       const price = document.getElementById("priceDisplay").textContent;
@@ -208,6 +209,7 @@
   </script>
 </body>
 </html>
+
 
 
 
