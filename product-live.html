@@ -176,14 +176,14 @@
       document.getElementById("versionWrapper").classList.remove("hidden");
 
       //Show version select only for Mint
-       if (productData.name.toLowerCase().includes("mint")) {
-        document.getElementById("versionWrapper").classList.remove("hidden");
-      } 
+      
       const nameLower = productData.name.toLowerCase();
       if (nameLower.includes("windows") || nameLower.includes("win usb") || nameLower.includes("win")) {
         document.getElementById("winVersionWrapper").classList.remove("hidden");
       }
-      
+      if (productData.name.toLowerCase().includes("mint")) {
+        document.getElementById("versionWrapper").classList.remove("hidden");
+      } 
       
 
 
@@ -235,5 +235,6 @@
   </script>
 </body>
 </html>
+
 
 
