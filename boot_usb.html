@@ -170,7 +170,7 @@
   </header>
 
   <div class="container">
-    <div class="product horizontal-product" onclick='openLiveProduct({
+    <div class="product horizontal-product" onclick='openBootProduct({
         name: "windows OS",
         shortDesc: "Secure OS for Ethical Hacking.",
         description: "Windows OS is a lightweight security and privacy-focused Linux distro for ethical hacking and forensic tasks.",
@@ -476,7 +476,7 @@
   </footer>
 
   <script>
-        function openLiveProduct(productInfo) {
+        function openBootProduct(productInfo) {
         sessionStorage.setItem("bootProduct", JSON.stringify(productInfo));
         window.location.href = "product-boot.html"; // or the correct relative path
         }
@@ -484,6 +484,7 @@
 
 </body>
 </html>
+
 
 
 
