@@ -181,7 +181,7 @@
       if (nameLower.includes("windows") || nameLower.includes("win usb") || nameLower.includes("win")) {
         document.getElementById("winVersionWrapper").classList.remove("hidden");
       }
-      if (productData.name.toLowerCase().includes("mint")) {
+      if (nameLower.includes("mint") || nameLower.includes("mint usb") || nameLower.includes("mint OS")) {
         document.getElementById("versionWrapper").classList.remove("hidden");
       } 
       
@@ -235,6 +235,7 @@
   </script>
 </body>
 </html>
+
 
 
 
