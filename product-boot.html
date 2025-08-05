@@ -71,10 +71,10 @@
           <option value="">Choose size</option>
         </select>
         
-        <div class="hidden">
+        <div>
         <label for="persistence" class="block font-semibold mb-1">Persistence:</label>
         <select id="persistence" class="border p-2 rounded mb-4 w-full">
-          <option value="Yes">Yes (+₹20)</option>
+          <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
         </div>
@@ -82,21 +82,19 @@
         <div id="versionWrapper" class="hidden">
           <label for="version" class="block font-semibold mb-1">Mint Edition:</label>
           <select id="version" class="border p-2 rounded mb-4 w-full">
-			<option value="nothing">choose this if not mint os</option>
             <option value="Cinnamon">Cinnamon</option>
             <option value="MATE">MATE</option>
             <option value="XFCE">XFCE</option>
           </select>
         </div>
-        
         <div id="winVersionWrapper" class="hidden">
-          <label for="winVersion" class="block font-semibold mb-1">Windows Version:</label>
-          <select id="winVersion" class="border p-2 rounded mb-4 w-full">
-            <option value="Windows 8">Windows 8</option>
-            <option value="Windows 10">Windows 10</option>
-            <option value="Windows 11">Windows 11</option>
-          </select>
-        </div>
+  <label for="winVersion" class="block font-semibold mb-1">Windows Version:</label>
+  <select id="winVersion" class="border p-2 rounded mb-4 w-full">
+    <option value="Windows 8">Windows 8</option>
+    <option value="Windows 10">Windows 10</option>
+    <option value="Windows 11">Windows 11</option>
+  </select>
+</div>
 
         <div class="guarantee">
            📦 10-Day Replacement   Guarantee<br>
@@ -178,14 +176,19 @@
       document.getElementById("versionWrapper").classList.remove("hidden");
 
       //Show version select only for Mint
-       const nameLower = productData.name.toLowerCase();
-if (nameLower.includes("mint")) {
-  document.getElementById("versionWrapper").classList.remove("hidden");
-}
-if (nameLower.includes("windows")) {
-  document.getElementById("winVersionWrapper").classList.remove("hidden");
-} 
       
+      const nameLower = productData.name.toLowerCase();
+      if (nameLower.includes("mint")) {
+        document.getElementById("versionWrapper").classList.remove("hidden");
+      } else {
+        document.getElementById("versionWrapper").classList.add("hidden");
+      }
+
+      if (nameLower.includes("windows")) {
+        document.getElementById("winVersionWrapper").classList.remove("hidden");
+      } else {
+        document.getElementById("winVersionWrapper").classList.add("hidden");
+      }
       
 
 
@@ -198,22 +201,20 @@ if (nameLower.includes("windows")) {
     function updatePrice() {
       const base = parseInt(document.getElementById("size").value || 0);
       const persistence = document.getElementById("persistence").value;
-      const total = persistence === "Yes" ? base + 00 : base;
+      const total = persistence === "Yes" ? base + 20 : base;
       document.getElementById("priceDisplay").textContent = total;
     }
 
     function buyNow() {
-      const price = document.getElementById("priceDisplay").textContent;
-      const persistence = document.getElementById("persistence").value;
-      const versionSelect = document.getElementById("version");
-const winVersionSelect = document.getElementById("winVersion");
+    const price = document.getElementById("priceDisplay").textContent;
+    const versionSelect = document.getElementById("version");
+    const winVersionSelect = document.getElementById("winVersion");
 
-const mintVersion = versionSelect && !versionSelect.closest("#versionWrapper").classList.contains("hidden") ? versionSelect.value : null;
-const winVersion = winVersionSelect && !winVersionSelect.closest("#winVersionWrapper").classList.contains("hidden") ? winVersionSelect.value : null;
+    const mintVersion = versionSelect && !versionSelect.closest("#versionWrapper").classList.contains("hidden") ? versionSelect.value : null;
+    const winVersion = winVersionSelect && !winVersionSelect.closest("#winVersionWrapper").classList.contains("hidden") ? winVersionSelect.value : null;
 
-const version = mintVersion || winVersion || "N/A"; 
-      
-      
+    const version = mintVersion || winVersion || "N/A";
+
 
       if (!price || price === "0") {
         alert("Please select a size.");
@@ -239,6 +240,7 @@ const version = mintVersion || winVersion || "N/A";
   </script>
 </body>
 </html>
+
 
 
 
