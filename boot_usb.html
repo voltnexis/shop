@@ -170,7 +170,29 @@
   </header>
 
   <div class="container">
-    <div class="product horizontal-product" onclick="window.location.href='kali-usb.html';">
+    <div class="product horizontal-product" onclick='openLiveProduct({
+        name: "windows OS",
+        shortDesc: "Secure OS for Ethical Hacking.",
+        description: "Windows OS is a lightweight security and privacy-focused Linux distro for ethical hacking and forensic tasks.",
+        image: "img/windows.png",
+        image2: "img/parrot-1.png",
+        image3: "img/parrot-2.png",
+        sizes: [
+          { label: "8GB", price: 299 },
+          { label: "16GB", price: 399 },
+          { label: "32GB", price: 499 },
+          { label: "64GB", price: 699 },
+          { label: "128GB", price: 999 }
+        ],
+        included: ["Warrot ISO", "Live + Installer", "Persistence Ready"],
+        specs: [
+          ["USB Type", "USB 3.1"],
+          ["Boot Mode", "Legacy + UEFI"],
+          ["Live OS Mode", "Yes"],
+          ["Persistence Support", "Yes"],
+          ["Warranty", "5 Years"]
+        ]
+      })'>
       <img src="img/windows.png" alt="Windows USB">
       <div class="product-info">
         <h3>Windows Bootable USB </h3>
@@ -453,8 +475,16 @@
     </div>
   </footer>
 
+  <script>
+        function openLiveProduct(productInfo) {
+        sessionStorage.setItem("bootProduct", JSON.stringify(productInfo));
+        window.location.href = "product-boot.html"; // or the correct relative path
+        }
+  </script>
+
 </body>
 </html>
+
 
 
 
