@@ -178,12 +178,17 @@
       //Show version select only for Mint
       
       const nameLower = productData.name.toLowerCase();
-      if (nameLower.includes("windows") || nameLower.includes("win usb") || nameLower.includes("win")) {
-        document.getElementById("winVersionWrapper").classList.remove("hidden");
-      }
-      if (nameLower.includes("mint") || nameLower.includes("mint usb") || nameLower.includes("mint OS")) {
+      if (nameLower.includes("mint")) {
         document.getElementById("versionWrapper").classList.remove("hidden");
-      } 
+      } else {
+        document.getElementById("versionWrapper").classList.add("hidden");
+      }
+
+      if (nameLower.includes("windows")) {
+        document.getElementById("winVersionWrapper").classList.remove("hidden");
+      } else {
+        document.getElementById("winVersionWrapper").classList.add("hidden");
+      }
       
 
 
@@ -235,6 +240,7 @@
   </script>
 </body>
 </html>
+
 
 
 
