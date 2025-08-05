@@ -781,47 +781,15 @@
   </footer>
 
   <script>
-	const bootProducts = [
-        {
-          name: "Windows (8,10,11)",
-          shortDesc: "Bootable Windows (8,10,11) USB with recovery and installer support.",
-          description: "Windows 10 bootable USB for installation, recovery, and repair. Ideal for clean installations.",
-          image: "img/windows.png",
-          image2: "img/win10-1.png",
-          image3: "img/win10-2.png",
-          sizes: [
-            { label: "8GB", price: 349 },
-            { label: "16GB", price: 449 },
-            { label: "32GB", price: 549 },
-            { label: "64GB", price: 749 },
-            { label: "128GB", price: 1049 }
-          ],
-          included: ["Windows (8,10,11) ISO", "Bootable USB Setup", "UEFI + Legacy Support"],
-          specs: [
-            ["OS Type", "Windows"],
-            ["Edition", "Pro/Home (Select at install)"],
-            ["USB Type", "USB 3.1"],
-            ["Warranty", "5 Years"]
-          ]
+	function selectProduct(product) {
+          sessionStorage.setItem("liveProduct", JSON.stringify(product));
+          window.location.href = "E:\holy1.html"; // or product-boot.html if that's the bootable version
         }
-
-	 function viewProduct(productName) {
-         const product = bootProducts.find(p => p.name === productName);
-         if (product) {
-           sessionStorage.setItem("liveProduct", JSON.stringify(product));
-           window.location.href = "product-boot.html";
-         }
-       }
-  // You can add Windows 8, 11, etc. similarly.
-
-      // function openBootProduct(productInfo) {
-     //   sessionStorage.setItem("bootProduct", JSON.stringify(productInfo));
-     //   window.location.href = "product-boot.html"; // or the correct relative path
-     //   }
   </script>
 
 </body>
 </html>
+
 
 
 
