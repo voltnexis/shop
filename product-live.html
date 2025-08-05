@@ -70,12 +70,14 @@
         <select id="size" class="border p-2 rounded mb-4 w-full">
           <option value="">Choose size</option>
         </select>
-
+        
+        <div class="hidden">
         <label for="persistence" class="block font-semibold mb-1">Persistence:</label>
         <select id="persistence" class="border p-2 rounded mb-4 w-full">
           <option value="Yes">Yes (+₹20)</option>
           <option value="No">No</option>
         </select>
+        </div>
 
         <div id="versionWrapper" class="hidden">
           <label for="version" class="block font-semibold mb-1">Mint Edition:</label>
@@ -83,6 +85,15 @@
             <option value="Cinnamon">Cinnamon</option>
             <option value="MATE">MATE</option>
             <option value="XFCE">XFCE</option>
+          </select>
+        </div>
+        
+        <div id="winVersionWrapper" class="hidden">
+          <label for="winVersion" class="block font-semibold mb-1">Windows Version:</label>
+          <select id="winVersion" class="border p-2 rounded mb-4 w-full">
+            <option value="Windows 8">Windows 8</option>
+            <option value="Windows 10">Windows 10</option>
+            <option value="Windows 11">Windows 11</option>
           </select>
         </div>
 
@@ -163,11 +174,15 @@
         row.innerHTML = `<td class="font-semibold pr-4 py-2 border border-gray-200">${key}</td><td class="py-2 border border-gray-200">${val}</td>`;
         specsTable.appendChild(row);
       });
+      document.getElementById("versionWrapper").classList.remove("hidden");
 
-      // Show version select only for Mint
-      if (productData.name.toLowerCase().includes("mint")) {
+      //Show version select only for Mint
+       if (productData.name.toLowerCase().includes("mint")) {
         document.getElementById("versionWrapper").classList.remove("hidden");
-      }
+      } 
+      
+      
+
 
       updatePrice();
     }
@@ -178,7 +193,7 @@
     function updatePrice() {
       const base = parseInt(document.getElementById("size").value || 0);
       const persistence = document.getElementById("persistence").value;
-      const total = persistence === "Yes" ? base + 20 : base;
+      const total = persistence === "Yes" ? base + 00 : base;
       document.getElementById("priceDisplay").textContent = total;
     }
 
@@ -186,7 +201,10 @@
       const price = document.getElementById("priceDisplay").textContent;
       const persistence = document.getElementById("persistence").value;
       const versionSelect = document.getElementById("version");
-      const version = versionSelect && !versionSelect.closest("#versionWrapper").classList.contains("hidden") ? versionSelect.value : null;
+
+      const mintVersion = versionSelect && !versionSelect.closest("#versionWrapper").classList.contains("hidden") ? versionSelect.value : null; 
+      
+      const version = mintVersion || "N/A";
 
       if (!price || price === "0") {
         alert("Please select a size.");
@@ -198,7 +216,7 @@
       sessionStorage.setItem("persistence", persistence);
       if (version) sessionStorage.setItem("version", version);
 
-      window.location.href = "Buy(Option)/place_your_order.html";
+      window.location.href = "file:///E:/shit1.html";
     }
 
     document.querySelectorAll("img").forEach(img => {
@@ -212,6 +230,7 @@
   </script>
 </body>
 </html>
+
 
 
 
