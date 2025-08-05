@@ -85,6 +85,15 @@
             <option value="XFCE">XFCE</option>
           </select>
         </div>
+
+	<div id="versionWrapper2" class="hidden">
+          <label for="version2" class="block font-semibold mb-1">Windows Edition:</label>
+          <select id="version2" class="border p-2 rounded mb-4 w-full">
+            <option value="Win8">Win 8</option>
+            <option value="Win10">Win10</option>
+            <option value="Win11">Win11</option>
+          </select>
+        </div>
         
         <div class="guarantee">
            📦 10-Day Replacement Guarantee<br>
@@ -167,6 +176,11 @@
       if (productData.name.toLowerCase().includes("mint")) {
         document.getElementById("versionWrapper").classList.remove("hidden");
       }
+	    
+      if (productData.name.toLowerCase().includes("windows")) {
+        document.getElementById("versionWrapper2").classList.remove("hidden");
+      }
+    
 
       updatePrice();
     }
@@ -186,6 +200,9 @@
       const persistence = document.getElementById("persistence")?.value;
       const versionSelect = document.getElementById("version");
       const version = versionSelect && !versionSelect.closest("#versionWrapper").classList.contains("hidden") ? versionSelect.value : "N/A";
+      const versionSelect2 = document.getElementById("version2");
+      const version2 = versionSelect2 && !versionSelect2.closest("#versionWrapper2").classList.contains("hidden") ? versionSelect2.value : "N/A";
+
 
       if (!price || price === "0") {
         alert("Please select a size.");
@@ -196,9 +213,10 @@
       sessionStorage.setItem("productPrice", price);
       sessionStorage.setItem("persistence", persistence);
       if (version) sessionStorage.setItem("version", version);
+      if (version2) sessionStorage.setItem("version2", version2);
 
       // Download file with order details
-      const orderDetails = `\nProduct: ${productData.name}\nPrice: ₹${price}\nVersion: ${version}\nTime: ${new Date().toLocaleString()}\n------------------------------\n`;
+      const orderDetails = `\nProduct: ${productData.name}\nPrice: ₹${price}\nVersion: ${version}\nVersion2: ${version2}\nTime: ${new Date().toLocaleString()}\n------------------------------\n`;
       const blob = new Blob([orderDetails], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -207,7 +225,7 @@
       a.click();
       URL.revokeObjectURL(url);
 
-      window.location.href = "../Buy(Option)/place_your_order.html";
+      window.location.href = "Buy(Option)/place_your_order.html";
     }
 
     document.querySelectorAll("img").forEach(img => {
@@ -221,4 +239,5 @@
   </script>
 </body>
 </html>
+
 
