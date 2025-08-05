@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boot USB Product Page</title>
+  <title>Live USB Product Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-	footer {
+    footer {
       background-color: #f0f0f0;
       padding: 20px;
       text-align: center;
@@ -27,6 +27,12 @@
       text-decoration: none;
       color: #0077cc;
     }
+    .guarantee {
+      background: #e9f5e9;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
     .zoom-overlay {
       position: fixed;
       top: 0;
@@ -43,12 +49,6 @@
       max-width: 90%;
       max-height: 90%;
       border-radius: 10px;
-    }
-    .guarantee {
-      background: #e9f5e9;
-      padding: 15px;
-      border-radius: 5px;
-      margin: 20px 0;
     }
   </style>
 </head>
@@ -70,33 +70,36 @@
         <select id="size" class="border p-2 rounded mb-4 w-full">
           <option value="">Choose size</option>
         </select>
-
+        
+        <div class="hidden">
         <label for="persistence" class="block font-semibold mb-1">Persistence:</label>
         <select id="persistence" class="border p-2 rounded mb-4 w-full">
           <option value="Yes">Yes (+₹20)</option>
           <option value="No">No</option>
         </select>
+        </div>
 
         <div id="versionWrapper" class="hidden">
           <label for="version" class="block font-semibold mb-1">Mint Edition:</label>
           <select id="version" class="border p-2 rounded mb-4 w-full">
+			<option value="nothing">choose this if not mint os</option>
             <option value="Cinnamon">Cinnamon</option>
             <option value="MATE">MATE</option>
             <option value="XFCE">XFCE</option>
           </select>
         </div>
-
-	<div id="winVersionWrapper" class="hidden">
+        
+        <div id="winVersionWrapper" class="hidden">
           <label for="winVersion" class="block font-semibold mb-1">Windows Version:</label>
           <select id="winVersion" class="border p-2 rounded mb-4 w-full">
             <option value="Windows 8">Windows 8</option>
             <option value="Windows 10">Windows 10</option>
             <option value="Windows 11">Windows 11</option>
           </select>
-     </div>
-        
+        </div>
+
         <div class="guarantee">
-           📦 10-Day Replacement Guarantee<br>
+           📦 10-Day Replacement   Guarantee<br>
            🛡️ 5-Year Warranty on USB<br>
            ⚡ Fast shipping across India
          </div>
@@ -123,7 +126,7 @@
   <div id="zoomModal" class="zoom-overlay hidden" onclick="this.classList.add('hidden')">
     <img id="zoomedImage" src="" alt="Zoomed View" />
   </div>
-  
+
   <footer>
   <div class="footer-section">
     <h3>Connect with us</h3>
@@ -172,15 +175,19 @@
         row.innerHTML = `<td class="font-semibold pr-4 py-2 border border-gray-200">${key}</td><td class="py-2 border border-gray-200">${val}</td>`;
         specsTable.appendChild(row);
       });
+      document.getElementById("versionWrapper").classList.remove("hidden");
 
-      const nameLower = productData.name.toLowerCase();
-      if (nameLower.includes("mint")) {
-        document.getElementById("versionWrapper").classList.remove("hidden");
-      }
-      if (nameLower.includes("windows")) {
-        document.getElementById("winVersionWrapper").classList.remove("hidden");
-      }
-    
+      //Show version select only for Mint
+       const nameLower = productData.name.toLowerCase();
+if (nameLower.includes("mint")) {
+  document.getElementById("versionWrapper").classList.remove("hidden");
+}
+if (nameLower.includes("windows")) {
+  document.getElementById("winVersionWrapper").classList.remove("hidden");
+} 
+      
+      
+
 
       updatePrice();
     }
@@ -191,20 +198,22 @@
     function updatePrice() {
       const base = parseInt(document.getElementById("size").value || 0);
       const persistence = document.getElementById("persistence").value;
-      const total = persistence === "Yes" ? base + 20 : base;
+      const total = persistence === "Yes" ? base + 00 : base;
       document.getElementById("priceDisplay").textContent = total;
     }
 
     function buyNow() {
       const price = document.getElementById("priceDisplay").textContent;
-      const persistence = document.getElementById("persistence")?.value;
+      const persistence = document.getElementById("persistence").value;
       const versionSelect = document.getElementById("version");
-      const winVersionSelect = document.getElementById("winVersion");
+const winVersionSelect = document.getElementById("winVersion");
 
-      const mintVersion = versionSelect && !versionSelect.closest("#versionWrapper").classList.contains("hidden") ? versionSelect.value : null;
-      const winVersion = winVersionSelect && !winVersionSelect.closest("#winVersionWrapper").classList.contains("hidden") ? winVersionSelect.value : null;
+const mintVersion = versionSelect && !versionSelect.closest("#versionWrapper").classList.contains("hidden") ? versionSelect.value : null;
+const winVersion = winVersionSelect && !winVersionSelect.closest("#winVersionWrapper").classList.contains("hidden") ? winVersionSelect.value : null;
 
-      const version = mintVersion || winVersion || "N/A";
+const version = mintVersion || winVersion || "N/A"; 
+      
+      
 
       if (!price || price === "0") {
         alert("Please select a size.");
@@ -215,17 +224,6 @@
       sessionStorage.setItem("productPrice", price);
       sessionStorage.setItem("persistence", persistence);
       if (version) sessionStorage.setItem("version", version);
-      if (version2) sessionStorage.setItem("version2", version2);
-
-      // Download file with order details
-      const orderDetails = `\nProduct: ${productData.name}\nPrice: ₹${price}\nVersion: ${version}\nVersion2: ${version2}\nTime: ${new Date().toLocaleString()}\n------------------------------\n`;
-      const blob = new Blob([orderDetails], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Order_${Date.now()}.txt`;
-      a.click();
-      URL.revokeObjectURL(url);
 
       window.location.href = "Buy(Option)/place_your_order.html";
     }
