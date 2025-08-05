@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your actual EmailJS public key
+    })();
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Order Confirmed - COD</title>
@@ -89,16 +96,19 @@
       document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
 
       // Trigger file download
-      const blob = new Blob([JSON.stringify(orderData, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${orderId}.json`;
-      a.click();
-    };
+      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", orderData)
+     .then(function(response) {
+       console.log("SUCCESS!", response.status, response.text);
+       alert("Order placed successfully! Confirmation email sent.");
+       window.location.href = "order_success.html"; // or wherever you want to redirect
+     }, function(error) {
+       console.error("FAILED...", error);
+       alert("Error sending email. Please try again.");
+     });
   </script>
 </body>
 </html>
+
 
 
 
