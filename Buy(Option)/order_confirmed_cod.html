@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script>
-    (function() {
-      emailjs.init("VvarPfTBWRq5WBCrx"); // Replace with your actual EmailJS public key
-    })();
-  </script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,9 +43,13 @@
 
     <a href="../index.html" class="inline-block mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Continue Shopping</a>
   </div>
+  <!-- ✅ Load EmailJS -->
+<script type="module">
+  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
 
-  <script>
   window.onload = function () {
+    emailjs.init("VvarPfTBWRq5WBCrx"); // Your public key
+
     const orderId = "ORD" + Date.now();
     const lastOrderRef = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
     localStorage.setItem("lastOrderref", lastOrderRef);
@@ -74,41 +72,40 @@
       payment: "COD"
     };
 
-    // Display on the page
+    // Show info on screen
     document.getElementById("orderref").textContent = orderData.orderRef;
 
-    const addressHTML = `
+    document.getElementById("displayAddress").innerHTML = `
       <div><strong>${orderData.name}</strong></div>
       <div>${orderData.street}, ${orderData.city}</div>
       <div>${orderData.district}, ${orderData.state} - ${orderData.pincode}</div>
       <div>${orderData.phone}, ${orderData.email}</div>
     `;
-    document.getElementById("displayAddress").innerHTML = addressHTML;
 
     const itemPrice = parseFloat(orderData.size || 0);
     const codFee = 0;
     document.getElementById("itemPrice").textContent = `₹${itemPrice.toFixed(2)}`;
     document.getElementById("totalPrice").textContent = `₹${(itemPrice + codFee).toFixed(2)}`;
 
-    // Estimated delivery date
     const deliveryDate = new Date();
     deliveryDate.setDate(deliveryDate.getDate() + 5);
     document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
 
-    // ✅ EmailJS: Send email without redirect or download
+    // Send email
     emailjs.send("service_fht1mig", "template_ym233uo", orderData)
       .then(function (response) {
-        console.log("SUCCESS!", response.status, response.text);
         alert("Order placed successfully! Confirmation email sent.");
-        // ❌ No redirect
+        window.location.href = "order_success.html";
       }, function (error) {
         console.error("FAILED...", error);
-        alert("Error sending email. Please try again.");
+        alert("Error sending email: " + JSON.stringify(error));
       });
   };
 </script>
+  
 </body>
 </html>
+
 
 
 
