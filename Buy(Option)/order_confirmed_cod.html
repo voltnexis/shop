@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("VvarPfTBWRq5WBCrx"); // Replace with your actual EmailJS public key
+    })();
+  </script>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,13 +49,17 @@
 
     <a href="../index.html" class="inline-block mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Continue Shopping</a>
   </div>
+
   <!-- ✅ Load EmailJS -->
-<script type="module">
-  import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<script>
+  // ✅ Initialize with your Public Key
+  (function () {
+    emailjs.init("VvarPfTBWRq5WBCrx"); // <-- Your public key
+  })();
 
   window.onload = function () {
-    emailjs.init("VvarPfTBWRq5WBCrx"); // Your public key
-
     const orderId = "ORD" + Date.now();
     const lastOrderRef = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
     localStorage.setItem("lastOrderref", lastOrderRef);
@@ -72,37 +82,43 @@
       payment: "COD"
     };
 
-    // Show info on screen
+    // ✅ Show Order Ref
     document.getElementById("orderref").textContent = orderData.orderRef;
 
-    document.getElementById("displayAddress").innerHTML = `
+    // ✅ Display Address
+    const addressHTML = `
       <div><strong>${orderData.name}</strong></div>
       <div>${orderData.street}, ${orderData.city}</div>
       <div>${orderData.district}, ${orderData.state} - ${orderData.pincode}</div>
       <div>${orderData.phone}, ${orderData.email}</div>
     `;
+    document.getElementById("displayAddress").innerHTML = addressHTML;
 
+    // ✅ Show Price
     const itemPrice = parseFloat(orderData.size || 0);
     const codFee = 0;
     document.getElementById("itemPrice").textContent = `₹${itemPrice.toFixed(2)}`;
     document.getElementById("totalPrice").textContent = `₹${(itemPrice + codFee).toFixed(2)}`;
 
+    // ✅ Estimated delivery date (5 days from now)
     const deliveryDate = new Date();
     deliveryDate.setDate(deliveryDate.getDate() + 5);
     document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
 
-    // Send email
+    // ✅ Send email with EmailJS
     emailjs.send("service_fht1mig", "template_ym233uo", orderData)
       .then(function (response) {
+        console.log("SUCCESS!", response.status, response.text);
         alert("Order placed successfully! Confirmation email sent.");
-        window.location.href = "order_success.html";
+         // ✅ Redirect
       }, function (error) {
         console.error("FAILED...", error);
-        alert("Error sending email: " + JSON.stringify(error));
+        alert("Email error: " + JSON.stringify(error)); // Show real error
       });
   };
 </script>
-  
+
+
 </body>
 </html>
 
