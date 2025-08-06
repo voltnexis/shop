@@ -51,63 +51,66 @@
   </div>
 
   <script>
-    window.onload = function () {
-      const orderId = "ORD" + Date.now();
-      const lastOrderRef = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
-      localStorage.setItem("lastOrderref", lastOrderRef);
+  window.onload = function () {
+    const orderId = "ORD" + Date.now();
+    const lastOrderRef = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
+    localStorage.setItem("lastOrderref", lastOrderRef);
 
-      const orderData = {
-        orderId: orderId,
-        orderRef: lastOrderRef,
-        product: sessionStorage.getItem("productName"),
-        size: sessionStorage.getItem("productPrice"),
-        persistence: sessionStorage.getItem("persistence"),
-        version: sessionStorage.getItem("version") || "N/A",
-        name: sessionStorage.getItem("fullname"),
-        street: sessionStorage.getItem("street"),
-        city: sessionStorage.getItem("city"),
-        state: sessionStorage.getItem("state"),
-        district: sessionStorage.getItem("district"),
-        pincode: sessionStorage.getItem("pincode"),
-        phone: sessionStorage.getItem("phone"),
-        email: sessionStorage.getItem("email"),
-        payment: "COD"
-      };
+    const orderData = {
+      orderId: orderId,
+      orderRef: lastOrderRef,
+      product: sessionStorage.getItem("productName"),
+      size: sessionStorage.getItem("productPrice"),
+      persistence: sessionStorage.getItem("persistence"),
+      version: sessionStorage.getItem("version") || "N/A",
+      name: sessionStorage.getItem("fullname"),
+      street: sessionStorage.getItem("street"),
+      city: sessionStorage.getItem("city"),
+      state: sessionStorage.getItem("state"),
+      district: sessionStorage.getItem("district"),
+      pincode: sessionStorage.getItem("pincode"),
+      phone: sessionStorage.getItem("phone"),
+      email: sessionStorage.getItem("email"),
+      payment: "COD"
+    };
 
-      // Set order details on the page
-      document.getElementById("orderref").textContent = orderData.orderRef;
+    // Display on the page
+    document.getElementById("orderref").textContent = orderData.orderRef;
 
-      const addressHTML = `
-        <div><strong>${orderData.name}</strong></div>
-        <div>${orderData.street}, ${orderData.city}</div>
-        <div>${orderData.district}, ${orderData.state} - ${orderData.pincode}</div>
-        <div>${orderData.phone}, ${orderData.email}</div>
-      `;
-      document.getElementById("displayAddress").innerHTML = addressHTML;
+    const addressHTML = `
+      <div><strong>${orderData.name}</strong></div>
+      <div>${orderData.street}, ${orderData.city}</div>
+      <div>${orderData.district}, ${orderData.state} - ${orderData.pincode}</div>
+      <div>${orderData.phone}, ${orderData.email}</div>
+    `;
+    document.getElementById("displayAddress").innerHTML = addressHTML;
 
-      const itemPrice = parseFloat(orderData.size || 0);
-      const codFee = 00;
-      document.getElementById("itemPrice").textContent = `₹${itemPrice.toFixed(2)}`;
-      document.getElementById("totalPrice").textContent = `₹${(itemPrice + codFee).toFixed(2)}`;
+    const itemPrice = parseFloat(orderData.size || 0);
+    const codFee = 0;
+    document.getElementById("itemPrice").textContent = `₹${itemPrice.toFixed(2)}`;
+    document.getElementById("totalPrice").textContent = `₹${(itemPrice + codFee).toFixed(2)}`;
 
-      // Estimated delivery date (5 days from now)
-      const deliveryDate = new Date();
-      deliveryDate.setDate(deliveryDate.getDate() + 5);
-      document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
+    // Estimated delivery date
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + 5);
+    document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
 
-      // Trigger file download
-      emailjs.send("service_fht1mig","template_ym233uo", orderData)
-     .then(function(response) {
-       console.log("SUCCESS!", response.status, response.text);
-       alert("Order placed successfully! Confirmation email sent.");
-       window.location.href = "order_success.html"; // or wherever you want to redirect
-     }, function(error) {
-       console.error("FAILED...", error);
-       alert("Error sending email. Please try again.");
-     });
-  </script>
+    // ✅ EmailJS: Send email without redirect or download
+    emailjs.send("service_fht1mig", "template_ym233uo", orderData)
+      .then(function (response) {
+        console.log("SUCCESS!", response.status, response.text);
+        alert("Order placed successfully! Confirmation email sent.");
+        // ❌ No redirect
+      }, function (error) {
+        console.error("FAILED...", error);
+        alert("Error sending email. Please try again.");
+      });
+  };
+</script>
 </body>
 </html>
+
+
 
 
 
