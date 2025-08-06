@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("VvarPfTBWRq5WBCrx"); // Replace with your actual EmailJS public key
+    })();
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Order Confirmed - UPI</title>
@@ -12,7 +19,7 @@
     <p class="text-sm text-gray-600 mb-4">Your order has been placed successfully.</p>
 
     <div class="text-left bg-gray-50 p-4 rounded shadow mb-4">
-      <p class="text-sm font-semibold">Order ID: <span id="orderId"></span></p>
+      <p class="text-sm font-semibold">Order REF: <span id="orderref"></span></p>
       <p class="text-sm mt-2">Estimated Delivery: <span id="deliveryDate"></span></p>
     </div>
 
@@ -36,37 +43,77 @@
       </div>
     </div>
 
-    <a href="/shop.voltedgebuilds.github.io" class="inline-block mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Continue Shopping</a>
+    <a href="../index.html" class="inline-block mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded">Continue Shopping</a>
   </div>
 
-  <script>
-    // Unique order ID generator starting from 654356
-    const lastOrderId = parseInt(localStorage.getItem("lastOrderId") || "654355", 10) + 1;
-    localStorage.setItem("lastOrderId", lastOrderId);
-    document.getElementById("orderId").textContent = lastOrderId;
+  <!-- ✅ Load EmailJS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-    // Estimated delivery (simulate 5 days later)
+<script>
+  // ✅ Initialize with your Public Key
+  (function () {
+    emailjs.init("VvarPfTBWRq5WBCrx"); // <-- Your public key
+  })();
+
+  window.onload = function () {
+    const orderId = "ORD" + Date.now();
+    const lastOrderRef = parseInt(localStorage.getItem("lastOrderref") || "654355", 10) + 1;
+    localStorage.setItem("lastOrderref", lastOrderRef);
+
+    const orderData = {
+      orderId: orderId,
+      orderRef: lastOrderRef,
+      product: sessionStorage.getItem("productName"),
+      size: sessionStorage.getItem("productPrice"),
+      persistence: sessionStorage.getItem("persistence"),
+      version: sessionStorage.getItem("version") || "N/A",
+      name: sessionStorage.getItem("fullname"),
+      street: sessionStorage.getItem("street"),
+      city: sessionStorage.getItem("city"),
+      state: sessionStorage.getItem("state"),
+      district: sessionStorage.getItem("district"),
+      pincode: sessionStorage.getItem("pincode"),
+      phone: sessionStorage.getItem("phone"),
+      email: sessionStorage.getItem("email"),
+      payment: "UPI"
+    };
+
+    // ✅ Show Order Ref
+    document.getElementById("orderref").textContent = orderData.orderRef;
+
+    // ✅ Display Address
+    const addressHTML = `
+      <div><strong>${orderData.name}</strong></div>
+      <div>${orderData.street}, ${orderData.city}</div>
+      <div>${orderData.district}, ${orderData.state} - ${orderData.pincode}</div>
+      <div>${orderData.phone}, ${orderData.email}</div>
+    `;
+    document.getElementById("displayAddress").innerHTML = addressHTML;
+
+    // ✅ Show Price
+    const itemPrice = parseFloat(orderData.size || 0);
+    const codFee = 0;
+    document.getElementById("itemPrice").textContent = `₹${itemPrice.toFixed(2)}`;
+    document.getElementById("totalPrice").textContent = `₹${(itemPrice + codFee).toFixed(2)}`;
+
+    // ✅ Estimated delivery date (5 days from now)
     const deliveryDate = new Date();
     deliveryDate.setDate(deliveryDate.getDate() + 5);
     document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
 
-    // Load and show shipping address from localStorage
-    const address = JSON.parse(localStorage.getItem("shippingAddress"));
-    if (address) {
-      document.getElementById("displayAddress").innerHTML = `
-        <div><strong>${address.fullname}</strong></div>
-        <div>${address.street}, ${address.city}</div>
-        <div>${address.district}, ${address.state} - ${address.pincode}</div>
-        <div>${address.phone}, ${address.email}</div>
-      `;
-    }
+    // ✅ Send email with EmailJS
+    emailjs.send("service_fht1mig", "template_ym233uo", orderData)
+      .then(function (response) {
+        console.log("SUCCESS!", response.status, response.text);
+        alert("Order placed successfully! Confirmation email sent.");
+         // ✅ Redirect
+      }, function (error) {
+        console.error("FAILED...", error);
+        alert("Email error: " + JSON.stringify(error)); // Show real error
+      });
+  }; 
+</script>
 
-    // Basic price logic
-    const itemCost = parseFloat(localStorage.getItem("itemCost")) || 0;
-    const codFee = 10;
-    document.getElementById("itemPrice").textContent = `₹${itemCost.toFixed(2)}`;
-    document.getElementById("totalPrice").textContent = `₹${(itemCost ).toFixed(2)}`;
-  </script>
+
 </body>
 </html>
-
