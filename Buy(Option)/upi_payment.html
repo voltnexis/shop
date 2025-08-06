@@ -62,6 +62,20 @@
       border-radius: 0 4px 4px 0;
       cursor: pointer;
     }
+    #payButton {
+      background-color: #007BFF;
+      color: white;
+      padding: 1px 135px;
+      border: none;
+      border-radius: 6px 6px 6px 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.3s ease;
+      
+    }
+    #payButton:hover {
+      background-color: #0056b3;       /* Darker blue on hover */
+    }
     #qrImage {
       display: none;
       width: 100%;
@@ -96,9 +110,19 @@
         <input type="radio" name="upiOption" value="paytm" />
         Paytm
       </label>
-      <img id="qrImage" src="" alt="QR Code" />
+      <img id="qrImage" src="" alt="QR Code" /><br><br>
+         
+    <button id="payButton" onclick="window.location.href='order_confirmed_upi.html'">
+        <h3>I Have Paid - Proceed</h3>
+    </button>
+    
+    
     </div>
+    
+
   </div>
+  
+
 
   <script>
     const upiOptions = document.getElementsByName("upiOption");
@@ -130,11 +154,16 @@
         return;
       }
       alert("Payment of ₹XXX initiated from " + upiId);
-      window.location.href = "upi-confirm.html";
+      window.location.href = "order_confirmed_upi.html";
     });
+    
+
+
+    
   </script>
 </body>
 </html>
+
 
 
 
