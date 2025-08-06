@@ -116,11 +116,28 @@
         alert("Email error: " + JSON.stringify(error)); // Show real error
       });
   };
+  // ✅ Send to Google Sheets Web App
+fetch("https://script.google.com/macros/s/AKfycbwg5-ElrC25evzyOUnfhS-BcK6K8Y9Wq8rfbf9r8OMQtU8dMj_VeZ1uSjoliUwhb5G_/exec", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(orderData),
+})
+.then(res => res.text())
+.then(data => {
+  console.log("✅ Order sent to Google Sheets:", data);
+})
+.catch(err => {
+  console.error("❌ Error sending to Google Sheets:", err);
+});
+
 </script>
 
 
 </body>
 </html>
+
 
 
 
