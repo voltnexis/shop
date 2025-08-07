@@ -119,7 +119,7 @@
         alert("Email error: " + JSON.stringify(error)); // Show real error
       });
    // ✅ Send to Google Sheets
-     fetch("https://script.google.com/macros/s/AKfycbwhJROjNzpeRsmGHvWxPzwZJG0AvZBnnzM6MteyzMnFTOGyT9nk9W5cPD4HI3LvO3M/exec", {
+     fetch("https://corsproxy.io/?https://script.google.com/macros/s/AKfycbwhJROjNzpeRsmGHvWxPzwZJG0AvZBnnzM6MteyzMnFTOGyT9nk9W5cPD4HI3LvO3M/exec", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
