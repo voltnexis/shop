@@ -8,59 +8,55 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-  <div class="max-w-2xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold mb-6 text-center">📦 Return Order Details</h1>
-    <div id="returnDetails" class="bg-white p-6 rounded-lg shadow"></div>
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold mb-6 text-center">📦 Return Details</h1>
+    <div id="detailContainer" class="bg-white p-6 rounded shadow text-sm"></div>
   </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const orderRef = urlParams.get("ref");
+    const ref = urlParams.get("ref");
+    const container = document.getElementById("detailContainer");
 
-    Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEXAMPLELINK/pub?output=csv", {
+    Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vShlY2OGgaBNQUSWC_WhUnO_Aai0K9i96ocJo1aH78b475c8o7_X0--IBAMBKUABJIqPIppiuXcEIgG/pub?gid=0&single=true&output=csv", {
       download: true,
       header: true,
       complete: function(results) {
         const orders = results.data;
-        const order = orders.find(o => o.orderRef === orderRef);
-        const container = document.getElementById("returnDetails");
+        const order = orders.find(o => o.orderRef === ref);
 
-        if (!order || !(order.status?.toLowerCase() === "return" || order.status?.toLowerCase() === "returned")) {
-          container.innerHTML = `<p class="text-red-600 text-center font-semibold">Return order not found!</p>`;
+        if (!order || !ref || !["return", "returned"].includes(order.status?.toLowerCase())) {
+          container.innerHTML = `<p class='text-red-500 text-center'>Return details not found for ref: ${ref}</p>`;
           return;
         }
 
-        const image = order.productImage || "img/default.png";
-
+        const productImage = order.productImage || "img/default.png";
         container.innerHTML = `
-          <div class="flex gap-6 items-center mb-6">
-            <img src="${image}" alt="${order.product}" class="w-32 h-32 bg-gray-100 rounded object-contain" />
+          <div class="flex gap-6">
+            <img src="${productImage}" alt="Product" class="w-32 h-32 object-contain bg-gray-100 rounded" />
             <div>
               <p><strong>Order Ref:</strong> ${order.orderRef}</p>
               <p><strong>Status:</strong> ${order.status}</p>
               <p><strong>Product:</strong> ${order.product}</p>
-              <p><strong>Persistence:</strong> ${order.persistence || "N/A"}</p>
-              <p><strong>Version:</strong> ${order.version || "N/A"}</p>
+              <p><strong>Version:</strong> ${order.version || 'N/A'}</p>
+              <p><strong>Persistence:</strong> ${order.persistence || 'N/A'}</p>
+              <p><strong>Size:</strong> ${order.size || 'N/A'}</p>
             </div>
           </div>
-
-          <div class="mb-6">
-            <h2 class="font-semibold text-lg mb-2">Shipping Details</h2>
-            <p><strong>Name:</strong> ${order.name}</p>
+          <hr class="my-4">
+          <div>
+            <p class="font-semibold mb-1">Shipping Address</p>
+            <p>${order.name}</p>
             <p>${order.street}, ${order.city}</p>
             <p>${order.district}, ${order.state} - ${order.pincode}</p>
-            <p><strong>Phone:</strong> ${order.phone}</p>
-            <p><strong>Email:</strong> ${order.email}</p>
+            <p>${order.phone}, ${order.email}</p>
           </div>
-
-          <div>
-            <h2 class="font-semibold text-lg mb-2">Payment</h2>
-            <p><strong>Method:</strong> ${order.payment}</p>
-            <p><strong>Price:</strong> ₹${order.size}</p>
-          </div>
+          <hr class="my-4">
+          <p><strong>Payment:</strong> ${order.payment || 'N/A'}</p>
         `;
       }
     });
   </script>
 </body>
 </html>
+
