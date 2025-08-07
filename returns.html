@@ -6,6 +6,7 @@
   <title>Returns - VoltEdge</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <div class="max-w-3xl mx-auto px-4 py-10">
@@ -20,6 +21,7 @@
   </div>
 
   <script>
+    emailjs.init("VvarPfTBWRq5WBCrx");
     let ordersFromSheet = [];
 
     Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vShlY2OGgaBNQUSWC_WhUnO_Aai0K9i96ocJo1aH78b475c8o7_X0--IBAMBKUABJIqPIppiuXcEIgG/pub?gid=0&single=true&output=csv", {
@@ -45,8 +47,9 @@
       if (filtered.length > 0) {
         filtered.forEach(order => {
           const productImage = order.productImage || "img/default.png";
+          const isReturned = order.status?.toLowerCase() === "returned";
           resultArea.innerHTML += `
-            <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4 cursor-pointer" onclick="goToReturnDetail('${order.orderRef}')">
               <div class="flex gap-4 items-center">
                 <img src="${productImage}" alt="Product" class="w-24 h-24 object-contain bg-gray-100 rounded" />
                 <div>
@@ -55,6 +58,9 @@
                   <p><strong>Product:</strong> ${order.product}</p>
                 </div>
               </div>
+              ${!isReturned ? `<div class="mt-4 text-right">
+                <button onclick="event.stopPropagation(); updateOrderStatus('${order.orderRef}', '${order.product}', 'Cancel', '${order.email}')" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Cancel</button>
+              </div>` : ""}
             </div>
           `;
         });
@@ -62,6 +68,28 @@
         resultArea.innerHTML = `<p class="text-center text-red-500 font-semibold">No returns found for: ${input}</p>`;
       }
     }
+
+    function updateOrderStatus(orderRef, product, actionType, email) {
+      const timestamp = new Date().toLocaleString();
+      const message = `Action: ${actionType}\nProduct: ${product}\nEmail: ${email}\nTime: ${timestamp}`;
+
+      emailjs.send("service_fht1mig", "template_dosl9dx", {
+        orderId: orderRef,
+        message: message
+      })
+      .then(() => {
+        alert(`Order ${actionType} request sent successfully!`);
+      })
+      .catch(error => {
+        console.error("EmailJS Error:", error);
+        alert("Failed to send request. Please try again later.");
+      });
+    }
+
+    function goToReturnDetail(orderRef) {
+      window.location.href = `return_detail.html?ref=${orderRef}`;
+    }
   </script>
 </body>
 </html>
+
