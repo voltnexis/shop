@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Details - VoltEdge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="max-w-2xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold mb-6 text-center">📄 Order Details</h1>
+    <div id="orderDetails" class="bg-white p-6 rounded-lg shadow"></div>
+  </div>
+
+  <script>
+    // 1. Get orderRef from URL query
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderRef = urlParams.get("ref");
+
+    // 2. Load data from Google Sheet
+    Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vQEXAMPLELINK/pub?output=csv", {
+      download: true,
+      header: true,
+      complete: function(results) {
+        const orders = results.data;
+        const order = orders.find(o => o.orderRef === orderRef);
+
+        const detailDiv = document.getElementById("orderDetails");
+
+        if (!order) {
+          detailDiv.innerHTML = `<p class="text-red-600 text-center font-semibold">Order not found!</p>`;
+          return;
+        }
+
+        const image = order.productImage || "img/default.png";
+
+        detailDiv.innerHTML = `
+          <div class="flex gap-6 items-center mb-6">
+            <img src="${image}" alt="${order.product}" class="w-32 h-32 bg-gray-100 rounded object-contain" />
+            <div>
+              <p><strong>Order Ref:</strong> ${order.orderRef}</p>
+              <p><strong>Status:</strong> ${order.status}</p>
+              <p><strong>Product:</strong> ${order.product}</p>
+              <p><strong>Persistence:</strong> ${order.persistence || "N/A"}</p>
+              <p><strong>Version:</strong> ${order.version || "N/A"}</p>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <h2 class="font-semibold text-lg mb-2">Shipping Details</h2>
+            <p><strong>Name:</strong> ${order.name}</p>
+            <p>${order.street}, ${order.city}</p>
+            <p>${order.district}, ${order.state} - ${order.pincode}</p>
+            <p><strong>Phone:</strong> ${order.phone}</p>
+            <p><strong>Email:</strong> ${order.email}</p>
+          </div>
+
+          <div>
+            <h2 class="font-semibold text-lg mb-2">Payment</h2>
+            <p><strong>Method:</strong> ${order.payment}</p>
+            <p><strong>Price:</strong> ₹${order.size}</p>
+          </div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
