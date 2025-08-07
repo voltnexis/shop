@@ -6,6 +6,7 @@
   <title>Your Orders - VoltEdge</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen">
   <div class="max-w-3xl mx-auto px-4 py-10">
@@ -20,6 +21,8 @@
   </div>
 
   <script>
+    emailjs.init("VvarPfTBWRq5WBCrx"); // Replace with your actual public key
+
     let ordersFromSheet = [];
 
     // Load the spreadsheet CSV
@@ -30,6 +33,31 @@
         ordersFromSheet = results.data;
       }
     });
+
+    function sendActionEmail(orderRef, actionType) {
+      const now = new Date();
+      const formattedTime = now.toLocaleString();
+
+      const order = ordersFromSheet.find(o => o.orderRef === orderRef);
+  const product = order?.product || "Unknown Product";
+
+  const emailParams = {
+    order_id: orderRef,
+    message: `Order ${orderRef} for "${product}" has been requested for ${actionType} at ${formattedTime}`
+  };
+
+      emailjs.send("service_fht1mig","template_dosl9dx", emailParams)
+        .then(function(response) {
+          console.log("Email sent", response);
+        }, function(error) {
+          console.error("Email error", error);
+        });
+    }
+
+    function updateOrderStatus(orderRef, actionType) {
+      sendActionEmail(orderRef, actionType);
+      alert(`Order ${actionType} request sent successfully!`);
+    }
 
     function searchOrder() {
       const input = document.getElementById("orderRefInput").value.trim().toLowerCase();
@@ -44,12 +72,18 @@
         results.forEach(result => {
           const productImage = result.productImage || "img/default.png";
           resultArea.innerHTML += `
-            <div onclick="window.location.href='order_detail.html'" class="cursor-pointer bg-white shadow-md rounded-lg p-4 flex gap-4 items-center hover:bg-gray-50 mb-4">
-              <img src="${productImage}" alt="Product" class="w-24 h-24 object-contain bg-gray-100 rounded" />
-              <div>
-                <p><strong>Order Ref:</strong> ${result.orderRef}</p>
-                <p><strong>Status:</strong> ${result.status}</p>
-                <p><strong>Product:</strong> ${result.product}</p>
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+              <div class="flex gap-4 items-center">
+                <img src="${productImage}" alt="Product" class="w-24 h-24 object-contain bg-gray-100 rounded" />
+                <div>
+                  <p><strong>Order Ref:</strong> ${result.orderRef}</p>
+                  <p><strong>Status:</strong> ${result.status}</p>
+                  <p><strong>Product:</strong> ${result.product}</p>
+                </div>
+              </div>
+              <div class="flex justify-end gap-4 mt-4">
+                <button onclick="updateOrderStatus('${result.orderRef}', 'Return')" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Return</button>
+                <button onclick="updateOrderStatus('${result.orderRef}', 'Cancel')" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Cancel</button>
               </div>
             </div>
           `;
@@ -61,3 +95,4 @@
   </script>
 </body>
 </html>
+
