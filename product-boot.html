@@ -6,6 +6,14 @@
   <title>Live USB Product Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #232f3e;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ccc;
+    }
     footer {
       background-color: #f0f0f0;
       padding: 20px;
@@ -53,6 +61,16 @@
   </style>
 </head>
 <body class="bg-gray-100">
+  <header>
+    <a href="#" class="brand" onclick="location.reload()">VoltEdge</a>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for USBs...">
+    </div>
+    <div class="top-links">
+      <a href="#">↩ Returns</a>
+      <a href="orders.html">📦 Orders</a>
+    </div>
+  </header>
   <div class="max-w-5xl mx-auto bg-white p-8 my-12 rounded-lg shadow-lg">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
       <div class="space-y-2">
@@ -136,7 +154,7 @@
     </div>
     <div class="footer-section">
       <h3>Help</h3>
-      <a href="#">Returns</a> | <a href="#">Orders</a>
+      <a href="#">Returns</a> | <a href="orders.html">Orders</a>
     </div>
   </footer>
 
@@ -240,6 +258,7 @@
   </script>
 </body>
 </html>
+
 
 
 
