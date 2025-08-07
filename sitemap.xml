@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Product Pages -->
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/live_usb.html</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/boot_usb.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Order & Return System -->
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/order.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/order_detail.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/returns.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/return_detail.html</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Payment Options -->
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/payment_cod.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/payment_upi.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Confirm Page -->
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/confirm.html</loc>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- (Future) Contact Page -->
+  <url>
+    <loc>https://voltedgebuilds.github.io/shop.voltedgebuilds.github.io/contact.html</loc>
+    <priority>0.4</priority>
+  </url>
+
+</urlset>
