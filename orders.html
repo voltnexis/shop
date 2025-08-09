@@ -7,30 +7,518 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Base styles for light mode */
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --background-color: #f4f7f6;
+      --card-background: #ffffff;
+      --text-color: #333333;
+      --light-text: #ecf0f1;
+      --header-bg: #232f3e;
+      --footer-bg: #232f3e;
+
+      --bg-body: #f5f7fa;
+      --text-body: #333333;
+      --bg-main-card: #ffffff;
+      --border-color: #e0e0e0;
+      --color-accent-blue: #3498db;
+      --color-accent-blue-hover: #2980b9;
+      --color-return-button: #facc15;
+      --color-return-button-hover: #eab308;
+      --color-cancel-button: #ef4444; /* red-500 */
+      --color-cancel-button-hover: #dc2626; /* red-600 */
+      --color-error-text: #ef4444;
+      --input-bg: #ffffff;
+      --input-text: #333333;
+      --input-border: #d1d5db; /* gray-300 */
+      --order-card-bg: #f9fafb; /* light gray for order item card */
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      --primary-color: #f4f7f6;
+      --secondary-color: #5d9cec;
+      --accent-color: #ff6b6b;
+      --background-color: #1a1a2e;
+      --card-background: #232f3e;
+      --text-color: #ecf0f1;
+      --light-text: #ecf0f1;
+      --header-bg: #162232;
+      --footer-bg: #162232;
+
+      --bg-body: #0D1117; /* Very dark blue-grey for overall background */
+      --text-body: #C9D1D9; /* Light grey for general text */
+      --bg-main-card: #161B22; /* Slightly lighter than body, for containers */
+      --border-color: #30363D; /* Subtle, darker grey for borders */
+      --color-accent-blue: #58A6FF; /* Vibrant blue for accents */
+      --color-accent-blue-hover: #3E8EFF;
+      --color-return-button: #ca8a04; /* Darker yellow for button */
+      --color-return-button-hover: #a16207;
+      --color-cancel-button: #b91c1c; /* red-700 for dark mode */
+      --color-cancel-button-hover: #991b1b; /* red-800 for dark mode */
+      --color-error-text: #ff6b6b;
+      --input-bg: #242D38;
+      --input-text: #C9D1D9;
+      --input-border: #4F5968;
+      --order-card-bg: #1C2128; /* darker grey for order item card */
+    }
+
+    /* Global Base Styles */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-body);
+      line-height: 1.7;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* --- Header & Navigation (Copied from live-usb-page for consistency) --- */
+    header {
+        background-color: var(--header-bg);
+        color: var(--light-text);
+        padding: 15px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        transition: background-color 0.5s ease;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .brand {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--light-text);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: var(--light-text);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }
+
+    .nav-links a:hover {
+        color: var(--secondary-color);
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .hamburger {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--light-text);
+    }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: var(--header-bg);
+            position: absolute;
+            top: 60px;
+            left: 0;
+            padding: 10px 0;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        .nav-links a {
+            padding: 15px 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .hamburger {
+            display: block;
+            order: 2;
+        }
+    }
+
+    /* Main content styling */
+    .main-content-card {
+      background-color: var(--bg-main-card);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-top: 50px;
+      border: 1px solid var(--border-color);
+      transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    body.dark-mode .main-content-card {
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+      color: var(--color-accent-blue);
+      transition: color 0.5s ease;
+      animation: slideInFromTop 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    /* Search input and button */
+    .search-input {
+      border: 1px solid var(--input-border);
+      padding: 12px 15px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+    }
+    .search-input:focus {
+        outline: none;
+        border-color: var(--color-accent-blue);
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+    }
+
+    .search-button {
+      background-color: var(--color-accent-blue);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      font-weight: 600;
+    }
+    .search-button:hover {
+      background-color: var(--color-accent-blue-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Order result card */
+    .order-result-card {
+      background-color: var(--order-card-bg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid var(--border-color);
+      transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      cursor: pointer;
+      animation: slideInFromBottom 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .order-result-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+    body.dark-mode .order-result-card {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .order-result-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      background-color: var(--input-bg); /* Use a light background for image area */
+      border-radius: 8px;
+      padding: 5px;
+      border: 1px solid var(--border-color);
+    }
+
+    .order-info p {
+      margin: 4px 0;
+      font-size: 0.95rem;
+    }
+    .order-info p strong {
+        color: var(--text-body); /* Ensure strong text is visible */
+    }
+
+    /* Action buttons */
+    .action-buttons-group button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .return-button {
+      background-color: var(--color-return-button);
+      color: var(--button-text); /* Use text variable */
+    }
+    .return-button:hover {
+      background-color: var(--color-return-button-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .cancel-button {
+      background-color: var(--color-cancel-button);
+      color: white;
+    }
+    .cancel-button:hover {
+      background-color: var(--color-cancel-button-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .no-order-found {
+      text-align: center;
+      color: var(--color-error-text);
+      font-weight: 600;
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    /* Custom alert/modal styles */
+    .custom-alert-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+    .custom-alert-box {
+        background-color: var(--bg-main-card);
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        max-width: 90%;
+        width: 320px;
+        color: var(--text-body);
+        transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    .custom-alert-box button {
+        background-color: var(--color-accent-blue);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        margin-top: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes slideInFromTop {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInFromBottom {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* --- Footer (Copied from live-usb-page for consistency) --- */
+    footer {
+        background-color: var(--footer-bg);
+        color: white;
+        padding: 40px 0;
+        margin-top: 80px; /* This was 500px in your provided code, changed back to 80px */
+        transition: background-color 0.5s ease;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+    }
+
+    .footer-section h3 {
+        color: var(--secondary-color);
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+    }
+
+    .footer-section p, .footer-section a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        display: block;
+        margin-bottom: 10px;
+        transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+        color: var(--secondary-color);
+    }
+
+    .social-links a {
+        display: inline-block;
+        margin-right: 15px;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.8);
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .social-links a:hover {
+        transform: scale(1.1);
+        color: var(--secondary-color);
+    }
+
+    .copyright {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.6);
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-  <div class="max-w-3xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold mb-6 text-center">🔍 Track Your Order</h1>
+<body>
+    <header>
+        <div class="container navbar">
+            <a href="index.html" class="brand">VoltEdge</a>
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="returns.html">↩ Returns</a></li>
+                <li><a href="orders.html">📦 Orders</a></li>
+                <li><a href="contactus.html">📞 Contact</a></li>
+            </ul>
+        </div>
+    </header>
 
-    <div class="flex flex-col sm:flex-row gap-2 justify-center mb-8">
-      <input id="orderRefInput" type="text" placeholder="Enter Order Reference Number or Email" class="border p-2 rounded w-full max-w-sm" />
-      <button onclick="searchOrder()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Search</button>
-    </div>
+    <main class="container">
+      <div class="main-content-card">
+        <h1 class="text-2xl font-bold mb-6 text-center">🔍 Track Your Order</h1>
 
-    <div id="resultArea"></div>
-  </div>
+        <div class="flex flex-col sm:flex-row gap-2 justify-center mb-8">
+          <input id="orderRefInput" type="text" placeholder="Enter Order Reference Number or Email" class="search-input" />
+          <button onclick="searchOrder()" class="search-button">Search</button>
+        </div>
+
+        <div id="resultArea"></div>
+      </div>
+    </main>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-section">
+                <h3>About VoltEdge</h3>
+                <p>Your trusted partner for high-quality tech tools and custom builds. We make technology accessible and exciting for everyone.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <a href="returns.html">Returns & Refunds</a>
+                <a href="orders.html">Track Orders</a>
+                <a href="contactus.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <p>📱 WhatsApp: 9947557025</p>
+                <p>📱 Telegram: 9946042794</p>
+                <p>☎️ Phone: (Coming soon)</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://youtube.com/@voltedgebuilds" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/voltedgebuilds/profilecard/?igsh=MXJ2YnBvbzMzeXV6dA=="><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/share/1Ea1o2Hj3Z/"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright container">
+            &copy; 2025 VoltEdge Shop. All rights reserved.
+        </div>
+    </footer>
 
   <script>
+    // --- Theme Persistence Logic ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            body.classList.add(currentTheme);
+        } else {
+            // Default to dark mode if no theme is saved (matches other pages)
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark-mode');
+        }
+    });
+
+    // --- Hamburger Menu Toggle (for consistency with other pages) ---
+    function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('active');
+    }
+
+    // Initialize EmailJS with your Public Key
     emailjs.init("VvarPfTBWRq5WBCrx"); // Replace with your actual public key
 
     let ordersFromSheet = [];
 
     // Load the spreadsheet CSV
+    // CORRECTED URL: Added gid=0&single=true
     Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vShlY2OGgaBNQUSWC_WhUnO_Aai0K9i96ocJo1aH78b475c8o7_X0--IBAMBKUABJIqPIppiuXcEIgG/pub?gid=0&single=true&output=csv", {
       download: true,
       header: true,
       complete: function(results) {
-        ordersFromSheet = results.data;
+        // Filter out rows where 'Order Ref' is missing or empty, and trim whitespace from data values
+        ordersFromSheet = results.data.filter(row => row['Order Ref'] && String(row['Order Ref']).trim() !== '').map(row => {
+            const newRow = {};
+            for (const key in row) {
+                // Trim all string values
+                newRow[key] = typeof row[key] === 'string' ? row[key].trim() : row[key];
+            }
+            return newRow;
+        });
+        console.log('Orders loaded from spreadsheet:', ordersFromSheet);
+      },
+      error: function(error) {
+        console.error("PapaParse Error:", error);
+        showCustomAlert("Failed to load order data. Please try again later. Check your sheet URL and permissions.");
       }
     });
 
@@ -38,64 +526,108 @@
       const now = new Date();
       const formattedTime = now.toLocaleString();
 
-      const order = ordersFromSheet.find(o => o.orderRef === orderRef);
-  const product = order?.product || "Unknown Product";
+      const order = ordersFromSheet.find(o => o['Order Ref'] === orderRef); // Use bracket notation
+      const product = order?.['Product Name'] || "Unknown Product"; // Use bracket notation for product name
 
-  const emailParams = {
-    order_id: orderRef,
-    message: `Order ${orderRef} for "${product}" has been requested for ${actionType} at ${formattedTime}`
-  };
+      const emailParams = {
+        order_id: orderRef,
+        message: `Order ${orderRef} for "${product}" has been requested for ${actionType} at ${formattedTime}`
+      };
 
       emailjs.send("service_fht1mig","template_dosl9dx", emailParams)
         .then(function(response) {
           console.log("Email sent", response);
+          showCustomAlert(`Order ${actionType} request sent successfully!`);
         }, function(error) {
           console.error("Email error", error);
+          showCustomAlert(`Failed to send ${actionType} request. Please try again or contact support.`);
         });
-    }
-
-    function updateOrderStatus(orderRef, actionType) {
-      sendActionEmail(orderRef, actionType);
-      alert(`Order ${actionType} request sent successfully!`);
     }
 
     function searchOrder() {
       const input = document.getElementById("orderRefInput").value.trim().toLowerCase();
-      const results = ordersFromSheet.filter(order =>
-        order.orderRef?.toLowerCase() === input || order.email?.toLowerCase() === input
-      );
-
       const resultArea = document.getElementById("resultArea");
-      resultArea.innerHTML = "";
+      resultArea.innerHTML = ""; // Clear previous results
+
+      if (!input) {
+        resultArea.innerHTML = `<p class="no-order-found">Please enter an Order Reference Number or Email to search.</p>`;
+        return;
+      }
+
+      const results = ordersFromSheet.filter(order =>
+        // Use bracket notation for 'Order Ref' and 'Customer Email'
+        String(order['Order Ref'])?.toLowerCase() === input || String(order['Customer Email'])?.toLowerCase() === input
+      );
 
       if (results.length > 0) {
         results.forEach(result => {
-          const productImage = result.productImage || "img/default.png";
+          // Ensure all properties are accessed using bracket notation for safety
+          const orderRef = result['Order Ref'] || 'N/A';
+          const status = result['Status'] || 'N/A';
+          const productName = result['Product Name'] || 'N/A';
+          const paymentMethod = result['Payment Method'] || 'N/A';
+          const productImage = result['Product Image'] || "../img/default.png"; // Assuming you have a 'Product Image' column
+
           resultArea.innerHTML += `
-            <div class="bg-white shadow-md rounded-lg p-4 mb-4">
-              <div class="bg-white shadow-md rounded-lg p-4 mb-4 cursor-pointer" onclick="goToOrderDetail('${result.orderRef}')">
-                <img src="${productImage}" alt="Product" class="w-24 h-24 object-contain bg-gray-100 rounded" />
-                <div>
-                  <p><strong>Order Ref:</strong> ${result.orderRef}</p>
-                  <p><strong>Status:</strong> ${result.status}</p>
-                  <p><strong>Product:</strong> ${result.product}</p>
+            <div class="order-result-card" onclick="goToOrderDetail('${orderRef}')">
+                <img src="${productImage}" alt="Product" />
+                <div class="order-info">
+                  <p><strong>Order Ref:</strong> ${orderRef}</p>
+                  <p><strong>Status:</strong> <span style="color: ${getOrderStatusColor(status)};">${status}</span></p>
+                  <p><strong>Product:</strong> ${productName}</p>
+                  <p><strong>Payment Method:</strong> ${paymentMethod}</p>
                 </div>
-              </div>
-              <div class="flex justify-end gap-4 mt-4">
-                <button onclick="event.stopPropagation(); updateOrderStatus('${result.orderRef}', 'Return')" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Return</button>
-                <button onclick="event.stopPropagation(); updateOrderStatus('${result.orderRef}', 'Cancel')" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Cancel</button>
+              <div class="flex-grow flex justify-end gap-4 mt-4 action-buttons-group">
+                <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Return')" class="return-button">Return</button>
+                <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Cancel')" class="cancel-button">Cancel</button>
               </div>
             </div>
           `;
         });
       } else {
-        resultArea.innerHTML = `<p class="text-center text-red-500 font-semibold">No order found with reference or email: ${input}</p>`;
+        resultArea.innerHTML = `<p class="no-order-found">No order found with reference or email: "${input}"</p>`;
       }
     }
+
+    function getOrderStatusColor(status) {
+        status = String(status).toLowerCase(); // Ensure status is a string and lowercased
+        if (status.includes("delivered")) return "#28a745"; /* green */
+        if (status.includes("shipped")) return "#17a2b8"; /* info blue */
+        if (status.includes("pending")) return "#ffc107"; /* yellow */
+        if (status.includes("cancelled")) return "#dc3545"; /* red */
+        return "var(--text-body)"; /* default */
+    }
+
     function goToOrderDetail(orderRef) {
-      window.location.href = `order_detail.html?ref=${orderRef}`;
+      // In a real application, you'd navigate to a dedicated order detail page
+      // window.location.href = `order_detail.html?ref=${orderRef}`;
+       window.location.href = `file:///C:/Users/HP/Desktop/selection/3/order_detail.html?ref=${orderRef}`;
+    }
+
+    // --- Custom Alert/Modal Function (replaces alert()) ---
+    function showCustomAlert(message) {
+        const overlay = document.createElement('div');
+        overlay.classList.add('custom-alert-overlay');
+
+        const alertBox = document.createElement('div');
+        alertBox.classList.add('custom-alert-box');
+        alertBox.innerHTML = `<p>${message}</p><button onclick="closeCustomAlert()">OK</button>`;
+
+        overlay.appendChild(alertBox);
+        document.body.appendChild(overlay);
+
+        // Add dark mode class if body has it
+        if (document.body.classList.contains('dark-mode')) {
+            alertBox.classList.add('dark-mode');
+        }
+    }
+
+    function closeCustomAlert() {
+        const overlay = document.querySelector('.custom-alert-overlay');
+        if (overlay) {
+            overlay.remove();
+        }
     }
   </script>
 </body>
 </html>
-
