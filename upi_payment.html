@@ -442,7 +442,7 @@
         // If UPI ID was selected, the 'Pay' button for UPI ID handles its flow.
         if (selectedOption.value !== "upiId" || document.getElementById("upiId").value) {
              sessionStorage.setItem("paymentMethod", "upi"); // Set payment method for confirmation page
-             window.location.href = "file:///C:/Users/HP/Desktop/selection/4/order_confirmed.html"; // Redirect to universal confirmation page
+             window.location.href = "order_confirmed.html"; // Redirect to universal confirmation page
         } else {
              showCustomAlert("Please enter your UPI ID or select a QR code option.");
         }
@@ -475,3 +475,4 @@
   </script>
 </body>
 </html>
+
