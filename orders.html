@@ -240,9 +240,7 @@
       margin-bottom: 15px;
       border: 1px solid var(--border-color);
       transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 20px;
+      /* Tailwind classes handle flex behavior now: flex flex-col sm:flex-row */
       cursor: pointer;
       animation: slideInFromBottom 0.6s ease-out forwards;
       opacity: 0;
@@ -264,7 +262,14 @@
       border-radius: 8px;
       padding: 5px;
       border: 1px solid var(--border-color);
+      margin-bottom: 1rem; /* Spacing for mobile layout */
     }
+    @media (min-width: 640px) { /* sm breakpoint */
+        .order-result-card img {
+            margin-bottom: 0; /* Reset margin for larger screens */
+        }
+    }
+
 
     .order-info p {
       margin: 4px 0;
@@ -285,7 +290,7 @@
 
     .return-button {
       background-color: var(--color-return-button);
-      color: var(--button-text); /* Use text variable */
+      color: var(--text-color); /* Ensure text color is appropriate for light/dark mode */
     }
     .return-button:hover {
       background-color: var(--color-return-button-hover);
@@ -364,7 +369,7 @@
         background-color: var(--footer-bg);
         color: white;
         padding: 40px 0;
-        margin-top: 80px; /* This was 500px in your provided code, changed back to 80px */
+        margin-top: 80px;
         transition: background-color 0.5s ease;
     }
 
@@ -500,7 +505,6 @@
     let ordersFromSheet = [];
 
     // Load the spreadsheet CSV
-    // CORRECTED URL: Added gid=0&single=true
     Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vShlY2OGgaBNQUSWC_WhUnO_Aai0K9i96ocJo1aH78b475c8o7_X0--IBAMBKUABJIqPIppiuXcEIgG/pub?gid=0&single=true&output=csv", {
       download: true,
       header: true,
@@ -510,7 +514,7 @@
             const newRow = {};
             for (const key in row) {
                 // Trim all string values
-                newRow[key] = typeof row[key] === 'string' ? row[key].trim() : row[key];
+                newRow[key] = typeof row[key] === 'string' ? row[key].trim() : newRow[key];
             }
             return newRow;
         });
@@ -526,8 +530,8 @@
       const now = new Date();
       const formattedTime = now.toLocaleString();
 
-      const order = ordersFromSheet.find(o => o['Order Ref'] === orderRef); // Use bracket notation
-      const product = order?.['Product Name'] || "Unknown Product"; // Use bracket notation for product name
+      const order = ordersFromSheet.find(o => o['Order Ref'] === orderRef);
+      const product = order?.['Product Name'] || "Unknown Product";
 
       const emailParams = {
         order_id: orderRef,
@@ -555,32 +559,40 @@
       }
 
       const results = ordersFromSheet.filter(order =>
-        // Use bracket notation for 'Order Ref' and 'Customer Email'
         String(order['Order Ref'])?.toLowerCase() === input || String(order['Customer Email'])?.toLowerCase() === input
       );
 
       if (results.length > 0) {
         results.forEach(result => {
-          // Ensure all properties are accessed using bracket notation for safety
           const orderRef = result['Order Ref'] || 'N/A';
           const status = result['Status'] || 'N/A';
           const productName = result['Product Name'] || 'N/A';
           const paymentMethod = result['Payment Method'] || 'N/A';
-          const productImage = result['Product Image'] || "../img/default.png"; // Assuming you have a 'Product Image' column
+          const productImage = result['Product Image'] || "../img/default.png";
+
+          // Determine if buttons should be hidden based on status
+          // Added 'returned' to the array for status check
+          const hideButtons = ['return', 'returned', 'return completed'].includes(status.toLowerCase());
+          const buttonGroupClasses = hideButtons ? 'hidden' : 'flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0';
+
+          // Determine the onclick action for the card
+          const cardOnClickAction = hideButtons ?
+            `showCustomAlert('Go to the returns page for more details.')` :
+            `goToOrderDetail('${orderRef}')`;
 
           resultArea.innerHTML += `
-            <div class="order-result-card" onclick="goToOrderDetail('${orderRef}')">
-                <img src="${productImage}" alt="Product" />
-                <div class="order-info">
+            <div class="order-result-card flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6" onclick="${cardOnClickAction}">
+                <img class="flex-shrink-0" src="${productImage}" alt="Product" />
+                <div class="order-info flex-grow">
                   <p><strong>Order Ref:</strong> ${orderRef}</p>
                   <p><strong>Status:</strong> <span style="color: ${getOrderStatusColor(status)};">${status}</span></p>
                   <p><strong>Product:</strong> ${productName}</p>
                   <p><strong>Payment Method:</strong> ${paymentMethod}</p>
                 </div>
-              <div class="flex-grow flex justify-end gap-4 mt-4 action-buttons-group">
-                <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Return')" class="return-button">Return</button>
-                <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Cancel')" class="cancel-button">Cancel</button>
-              </div>
+                <div class="${buttonGroupClasses} action-buttons-group">
+                  <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Return')" class="return-button">Return</button>
+                  <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Cancel')" class="cancel-button">Cancel</button>
+                </div>
             </div>
           `;
         });
@@ -595,13 +607,13 @@
         if (status.includes("shipped")) return "#17a2b8"; /* info blue */
         if (status.includes("pending")) return "#ffc107"; /* yellow */
         if (status.includes("cancelled")) return "#dc3545"; /* red */
+        if (status.includes("return completed")) return "#9b59b6"; /* purple */
+        if (status.includes("return") || status.includes("returned")) return "#f39c12"; /* orange - Added 'returned' here */
         return "var(--text-body)"; /* default */
     }
 
     function goToOrderDetail(orderRef) {
-      // In a real application, you'd navigate to a dedicated order detail page
-      // window.location.href = `order_detail.html?ref=${orderRef}`;
-       window.location.href = `order_detail.html?ref=${orderRef}`;
+      window.location.href = `order_detail.html?ref=${orderRef}`;
     }
 
     // --- Custom Alert/Modal Function (replaces alert()) ---
