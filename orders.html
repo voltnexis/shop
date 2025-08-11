@@ -510,7 +510,7 @@
       header: true,
       complete: function(results) {
         // Filter out rows where 'Order Ref' is missing or empty, and trim whitespace from data values
-        ordersFromSheet = results.data.filter(row => row['order_ref'] && String(row['order_ref']).trim() !== '').map(row => {
+        ordersFromSheet = results.data.filter(row => row['Order Ref'] && String(row['Order Ref']).trim() !== '').map(row => {
             const newRow = {};
             for (const key in row) {
                 // Trim all string values
@@ -530,12 +530,12 @@
       const now = new Date();
       const formattedTime = now.toLocaleString();
 
-      const order = ordersFromSheet.find(o => o['order_ref'] === order_ref);
+      const order = ordersFromSheet.find(o => o['Order Ref'] === orderRef);
       const product = order?.['Product Name'] || "Unknown Product";
 
       const emailParams = {
-        order_id: order_ref,
-        message: `Order ${order_ref} for "${product}" has been requested for ${actionType} at ${formattedTime}`
+        order_id: orderRef,
+        message: `Order ${orderRef} for "${product}" has been requested for ${actionType} at ${formattedTime}`
       };
 
       emailjs.send("service_fht1mig","template_dosl9dx", emailParams)
@@ -549,7 +549,7 @@
     }
 
     function searchOrder() {
-      const input = document.getElementById("order_refInput").value.trim().toLowerCase();
+      const input = document.getElementById("orderRefInput").value.trim().toLowerCase();
       const resultArea = document.getElementById("resultArea");
       resultArea.innerHTML = ""; // Clear previous results
 
@@ -559,15 +559,15 @@
       }
 
       const results = ordersFromSheet.filter(order =>
-        String(order['order_ref'])?.toLowerCase() === input || String(order['customer_email'])?.toLowerCase() === input
+        String(order['Order Ref'])?.toLowerCase() === input || String(order['Customer Email'])?.toLowerCase() === input
       );
 
       if (results.length > 0) {
         results.forEach(result => {
-          const orderRef = result['order_ref'] || 'N/A';
+          const orderRef = result['Order Ref'] || 'N/A';
           const status = result['Status'] || 'N/A';
-          const productName = result['product_name'] || 'N/A';
-          const paymentMethod = result['payment_method'] || 'N/A';
+          const productName = result['Product Name'] || 'N/A';
+          const paymentMethod = result['Payment Method'] || 'N/A';
           const productImage = result['Product Image'] || "../img/default.png";
 
           // Determine if buttons should be hidden based on status
@@ -578,20 +578,20 @@
           // Determine the onclick action for the card
           const cardOnClickAction = hideButtons ?
             `showCustomAlert('Go to the returns page for more details.')` :
-            `goToOrderDetail('${order_ref}')`;
+            `goToOrderDetail('${orderRef}')`;
 
           resultArea.innerHTML += `
             <div class="order-result-card flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6" onclick="${cardOnClickAction}">
                 <img class="flex-shrink-0" src="${productImage}" alt="Product" />
                 <div class="order-info flex-grow">
-                  <p><strong>Order Ref:</strong> ${order_ref}</p>
+                  <p><strong>Order Ref:</strong> ${orderRef}</p>
                   <p><strong>Status:</strong> <span style="color: ${getOrderStatusColor(status)};">${status}</span></p>
-                  <p><strong>Product:</strong> ${product_name}</p>
-                  <p><strong>Payment Method:</strong> ${payment_method}</p>
+                  <p><strong>Product:</strong> ${productName}</p>
+                  <p><strong>Payment Method:</strong> ${paymentMethod}</p>
                 </div>
                 <div class="${buttonGroupClasses} action-buttons-group">
-                  <button onclick="event.stopPropagation(); sendActionEmail('${order_ref}', 'Return')" class="return-button">Return</button>
-                  <button onclick="event.stopPropagation(); sendActionEmail('${order_ref}', 'Cancel')" class="cancel-button">Cancel</button>
+                  <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Return')" class="return-button">Return</button>
+                  <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Cancel')" class="cancel-button">Cancel</button>
                 </div>
             </div>
           `;
@@ -612,8 +612,8 @@
         return "var(--text-body)"; /* default */
     }
 
-    function goToOrderDetail(order_ref) {
-      window.location.href = `order_detail.html?ref=${order_ref}`;
+    function goToOrderDetail(orderRef) {
+      window.location.href = `order_detail.html?ref=${orderRef}`;
     }
 
     // --- Custom Alert/Modal Function (replaces alert()) ---
