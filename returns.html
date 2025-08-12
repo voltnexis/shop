@@ -355,7 +355,6 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-
     /* --- Footer (Copied for consistency) --- */
     footer {
         background-color: var(--footer-bg);
@@ -546,7 +545,7 @@
       download: true,
       header: true,
       complete: function(results) {
-        ordersFromSheet = results.data.filter(row => row['Order Ref'] && String(row['Order Ref']).trim() !== '').map(row => {
+        ordersFromSheet = results.data.filter(row => row['order_ref'] && String(row['order_ref']).trim() !== '').map(row => {
             const newRow = {};
             for (const key in row) {
                 newRow[key] = typeof row[key] === 'string' ? row[key].trim() : row[key];
@@ -595,9 +594,9 @@
 
       // Filter for orders that match the input AND have a 'Return' or 'Returned' status
       const results = ordersFromSheet.filter(order => {
-        const orderRefMatch = String(order['Order Ref'])?.toLowerCase() === input;
-        const emailMatch = String(order['Customer Email'])?.toLowerCase() === input;
-        const statusLower = String(order['Status'] || '').toLowerCase(); // Ensure status is string and lowercased
+        const orderRefMatch = String(order['order_ref'])?.toLowerCase() === input;
+        const emailMatch = String(order['customer_email'])?.toLowerCase() === input;
+        const statusLower = String(order['status'] || '').toLowerCase(); // Ensure status is string and lowercased
 
         // Only show orders that are explicitly 'Return' or 'Returned'
         return (orderRefMatch || emailMatch) && (statusLower.includes("return") || statusLower.includes("returned"));
@@ -605,12 +604,12 @@
 
       if (results.length > 0) {
         results.forEach(result => {
-          const orderRef = result['Order Ref'] || 'N/A';
-          const status = result['Status'] || 'N/A';
-          const productName = result['Product Name'] || 'N/A';
-          const customerEmail = result['Customer Email'] || 'N/A'; // Get email for emailjs
-          const productImage = result['Product Image'] || "img/default.png"; // Use Product Image column
-          
+          const orderRef = result['order_ref'] || 'N/A';
+          const status = result['status'] || 'N/A';
+          const productName = result['product_name'] || 'N/A';
+          const customerEmail = result['customer_email'] || 'N/A'; // Get email for emailjs
+          const productImage = result['product_image'] || "img/default.png"; // Use product_image column
+          const isCancelled = result['cancel'] && String(result['cancel']).toLowerCase() === 'true'; // Check cancel status
           const isReturnedStatus = String(status).toLowerCase().includes("returned"); // Check if status is "returned" (past tense)
 
           resultArea.innerHTML += `
@@ -622,9 +621,13 @@
                   <p><strong>Product:</strong> ${productName}</p>
                 </div>
               <div class="action-buttons-group">
-                ${!isReturnedStatus ? `
+                ${!isReturnedStatus && !isCancelled ? `
                   <button onclick="event.stopPropagation(); sendActionEmail('${orderRef}', 'Cancel Return', '${customerEmail}', '${productName}')" class="cancel-return-button">Cancel Return</button>
-                ` : `<span class="text-sm font-semibold text-green-500">Return Completed</span>`}
+                ` : isReturnedStatus ? `
+                  <span class="text-sm font-semibold text-green-500">Return Completed</span>
+                ` : `
+                  <span class="text-sm font-semibold text-red-500">Return Cancelled</span>
+                `}
               </div>
             </div>
           `;
@@ -674,5 +677,3 @@
   </script>
 </body>
 </html>
-
-
