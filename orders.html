@@ -509,12 +509,12 @@
       download: true,
       header: true,
       complete: function(results) {
-        // Filter out rows where 'Order Ref' is missing or empty, and trim whitespace from data values
-        ordersFromSheet = results.data.filter(row => row['Order Ref'] && String(row['Order Ref']).trim() !== '').map(row => {
+        // Filter out rows where 'order_ref' is missing or empty, and trim whitespace from data values
+        ordersFromSheet = results.data.filter(row => row['order_ref'] && String(row['order_ref']).trim() !== '').map(row => {
             const newRow = {};
             for (const key in row) {
                 // Trim all string values
-                newRow[key] = typeof row[key] === 'string' ? row[key].trim() : newRow[key];
+                newRow[key] = typeof row[key] === 'string' ? row[key].trim() : row[key];
             }
             return newRow;
         });
@@ -530,8 +530,8 @@
       const now = new Date();
       const formattedTime = now.toLocaleString();
 
-      const order = ordersFromSheet.find(o => o['Order Ref'] === orderRef);
-      const product = order?.['Product Name'] || "Unknown Product";
+      const order = ordersFromSheet.find(o => o['order_ref'] === orderRef);
+      const product = order?.['product_name'] || "Unknown Product";
 
       const emailParams = {
         order_id: orderRef,
@@ -559,16 +559,16 @@
       }
 
       const results = ordersFromSheet.filter(order =>
-        String(order['Order Ref'])?.toLowerCase() === input || String(order['Customer Email'])?.toLowerCase() === input
+        String(order['order_ref'])?.toLowerCase() === input || String(order['customer_email'])?.toLowerCase() === input
       );
 
       if (results.length > 0) {
         results.forEach(result => {
-          const orderRef = result['Order Ref'] || 'N/A';
-          const status = result['Status'] || 'N/A';
-          const productName = result['Product Name'] || 'N/A';
-          const paymentMethod = result['Payment Method'] || 'N/A';
-          const productImage = result['Product Image'] || "../img/default.png";
+          const orderRef = result['order_ref'] || 'N/A';
+          const status = result['status'] || 'N/A';
+          const productName = result['product_name'] || 'N/A';
+          const paymentMethod = result['payment_method'] || 'N/A';
+          const productImage = result['product_mage'] || "../img/default.png";
 
           // Determine if buttons should be hidden based on status
           // Added 'returned' to the array for status check
@@ -608,7 +608,7 @@
         if (status.includes("pending")) return "#ffc107"; /* yellow */
         if (status.includes("cancelled")) return "#dc3545"; /* red */
         if (status.includes("return completed")) return "#9b59b6"; /* purple */
-        if (status.includes("return") || status.includes("returned")) return "#f39c12"; /* orange - Added 'returned' here */
+        if (status.includes("return") || status.includes("returned")) return "#f39c12"; /* orange */
         return "var(--text-body)"; /* default */
     }
 
@@ -640,6 +640,6 @@
             overlay.remove();
         }
     }
-  </script>
+</script>
 </body>
 </html>
