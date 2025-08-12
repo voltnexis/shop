@@ -545,12 +545,11 @@
         detailDiv.innerHTML = `<h1 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-spinner fa-spin"></i>Loading Return Details...</h1><p class="not-found-message" style="display: block;">Fetching data for Order Ref: ${orderRef}</p>`;
         detailDiv.style.textAlign = 'center';
 
-
         Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vShlY2OGgaBNQUSWC_WhUnO_Aai0K9i96ocJo1aH78b475c8o7_X0--IBAMBKUABJIqPIppiuXcEIgG/pub?gid=0&single=true&output=csv", {
             download: true,
             header: true,
             complete: function(results) {
-                const orders = results.data.filter(row => row['Order Ref'] && String(row['Order Ref']).trim() !== '').map(row => {
+                const orders = results.data.filter(row => row['order_ref'] && String(row['order_ref']).trim() !== '').map(row => {
                     const newRow = {};
                     for (const key in row) {
                         newRow[key] = typeof row[key] === 'string' ? row[key].trim() : row[key];
@@ -560,8 +559,8 @@
                 
                 // Find the order and ensure it's a return
                 const returnOrder = orders.find(o => 
-                    String(o['Order Ref']) === orderRef && 
-                    (String(o['Status'] || '').toLowerCase().includes("return") || String(o['Status'] || '').toLowerCase().includes("returned"))
+                    String(o['order_ref']) === orderRef && 
+                    (String(o['status'] || '').toLowerCase().includes("return") || String(o['status'] || '').toLowerCase().includes("returned"))
                 );
 
                 if (!returnOrder) {
@@ -570,46 +569,54 @@
                     return;
                 }
 
-                const productImage = returnOrder['Product Image'] || "../img/default.png";
-                
-                // Estimated delivery date (using current date + 5 days as a placeholder)
-                // Ideally, you'd store the original order date in your sheet and calculate from that.
-                const estimatedDeliveryDate = new Date();
-                estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 5);
+                const productImage = returnOrder['product_image'] || "../img/default.png";
+                // Use Timestamp for order date, fallback to current date if not available
+                const orderDate = returnOrder['Timestamp'] ? new Date(returnOrder['Timestamp']) : new Date();
+                const estimatedDeliveryDate = new Date(orderDate);
+                estimatedDeliveryDate.setDate(orderDate.getDate() + 5); // Add 5 days for estimated delivery
 
                 detailDiv.innerHTML = `
-                    <h1 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-box"></i>Return Details #${returnOrder['Order Ref']}</h1>
+                    <h1 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-box"></i>Return Details #${returnOrder['order_ref']}</h1>
                     
                     <div class="info-box">
                         <p class="font-semibold mb-2">Return Summary:</p>
                         <div class="order-summary-item">
                             <span>Order REF:</span>
-                            <span>${returnOrder['Order Ref']}</span>
+                            <span>${returnOrder['order_ref']}</span>
+                        </div>
+                        <div class="order-summary-item">
+                            <span>Order Date:</span>
+                            <span>${orderDate.toDateString()}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Status:</span>
-                            <span style="color: ${getOrderStatusColor(returnOrder['Status'])}; font-weight: bold;">${returnOrder['Status'] || 'N/A'}</span>
+                            <span style="color: ${getOrderStatusColor(returnOrder['status'])}; font-weight: bold;">${returnOrder['status'] || 'N/A'}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Original Delivery:</span>
                             <span>${estimatedDeliveryDate.toDateString()}</span>
                         </div>
+                        ${returnOrder['cancel'] && String(returnOrder['cancel']).toLowerCase() === 'true' ? `
+                        <div class="order-summary-item">
+                            <span>Cancellation Status:</span>
+                            <span style="color: #dc3545; font-weight: bold;">Return Cancelled</span>
+                        </div>` : ''}
                     </div>
 
                     <div class="info-box">
                         <p class="font-semibold mb-2">Product Details:</p>
                         <div class="product-details-header">
                             <div class="product-image-container">
-                                <img src="${productImage}" alt="${returnOrder['Product Name'] || 'Product'}" />
+                                <img src="${productImage}" alt="${returnOrder['product_name'] || 'Product'}" />
                             </div>
                             <div class="product-text-info">
-                                <p><strong>Product Name:</strong> ${returnOrder['Product Name'] || 'N/A'}</p>
-                                <p><strong>Size:</strong> ${returnOrder['Product Size'] || 'N/A'}</p>
-                                <p><strong>Persistence:</strong> ${returnOrder['Persistence'] || 'N/A'}</p>
+                                <p><strong>Product Name:</strong> ${returnOrder['product_name'] || 'N/A'}</p>
+                                <p><strong>Size:</strong> ${returnOrder['product_size'] || 'N/A'}</p>
+                                <p><strong>Persistence:</strong> ${returnOrder['persistence'] || 'N/A'}</p>
                                 <!-- Conditional OS/Version displays -->
-                                ${returnOrder['Selected Version'] && String(returnOrder['Selected Version']).trim() !== 'N/A' ? `<p><strong>Selected Version:</strong> ${returnOrder['Selected Version']}</p>` : ''}
-                                ${returnOrder['First OS'] && String(returnOrder['First OS']).trim() !== 'N/A' ? `<p><strong>First OS:</strong> ${returnOrder['First OS']}</p>` : ''}
-                                ${returnOrder['Second OS'] && String(returnOrder['Second OS']).trim() !== 'N/A' ? `<p><strong>Second OS:</strong> ${returnOrder['Second OS']}</p>` : ''}
+                                ${returnOrder['selected_version'] && String(returnOrder['selected_version']).trim() !== 'N/A' ? `<p><strong>Selected Version:</strong> ${returnOrder['selected_version']}</p>` : ''}
+                                ${returnOrder['first_os'] && String(returnOrder['first_os']).trim() !== 'N/A' ? `<p><strong>First OS:</strong> ${returnOrder['first_os']}</p>` : ''}
+                                ${returnOrder['second_os'] && String(returnOrder['second_os']).trim() !== 'N/A' ? `<p><strong>Second OS:</strong> ${returnOrder['second_os']}</p>` : ''}
                             </div>
                         </div>
                     </div>
@@ -617,9 +624,9 @@
                     <div class="info-box">
                         <p class="font-semibold mb-2">Customer Address:</p>
                         <div class="text-sm">
-                            <p><strong>${returnOrder['Customer Name'] || 'N/A'}</strong></p>
-                            <p>${returnOrder['Customer Address'] || 'N/A'}</p>
-                            <p>${returnOrder['Customer Phone'] || 'N/A'} | ${returnOrder['Customer Email'] || 'N/A'}</p>
+                            <p><strong>${returnOrder['customer_name'] || 'N/A'}</strong></p>
+                            <p>${returnOrder['customer_address'] || 'N/A'}</p>
+                            <p>${returnOrder['customer_phone'] || 'N/A'} | ${returnOrder['customer_email'] || 'N/A'}</p>
                         </div>
                     </div>
 
@@ -627,19 +634,19 @@
                         <p class="font-semibold mb-2">Payment Details (Original Order):</p>
                         <div class="order-summary-item">
                             <span>Items Price:</span>
-                            <span>₹${parseFloat(returnOrder['Items Price'] || 0).toFixed(2)}</span>
+                            <span>₹${parseFloat(returnOrder['items_price'] || 0).toFixed(2)}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Delivery Fee:</span>
-                            <span>₹${parseFloat(returnOrder['Delivery Fee'] || 0).toFixed(2)}</span>
+                            <span>₹${parseFloat(returnOrder['delivery_fee'] || 0).toFixed(2)}</span>
                         </div>
                         <div class="order-summary-item total">
                             <span>Total Paid:</span>
-                            <span>₹${parseFloat(returnOrder['Total Price'] || 0).toFixed(2)}</span>
+                            <span>₹${parseFloat(returnOrder['total_price'] || 0).toFixed(2)}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Payment Method:</span>
-                            <span>${returnOrder['Payment Method'] || 'N/A'}</span>
+                            <span>${returnOrder['payment_method'] || 'N/A'}</span>
                         </div>
                     </div>
                 `;
@@ -665,4 +672,5 @@
   </script>
 </body>
 </html>
+
 
