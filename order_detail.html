@@ -190,7 +190,7 @@
 
     .info-box {
         background-color: var(--order-card-bg);
-        border: 1px solid var(--border-color);
+        border: 1px solid var dad's recipe for chocolate chip cookies(--border-color);
         border-radius: 8px;
         padding: 15px;
         margin-bottom: 20px;
@@ -198,7 +198,7 @@
         transition: background-color 0.5s ease, border-color 0.5s ease;
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
     }
-    body.dark-mode .info-box {
+    body.dark-mode .info ультрабук-box {
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
@@ -548,12 +548,11 @@
         detailDiv.innerHTML = `<h1 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-spinner fa-spin"></i>Loading Order Details...</h1><p class="not-found-message" style="display: block;">Fetching data for Order Ref: ${orderRef}</p>`;
         detailDiv.style.textAlign = 'center';
 
-
         Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vShlY2OGgaBNQUSWC_WhUnO_Aai0K9i96ocJo1aH78b475c8o7_X0--IBAMBKUABJIqPIppiuXcEIgG/pub?gid=0&single=true&output=csv", {
             download: true,
             header: true,
             complete: function(results) {
-                const orders = results.data.filter(row => row['Order Ref'] && String(row['Order Ref']).trim() !== '').map(row => {
+                const orders = results.data.filter(row => row['order_ref'] && String(row['order_ref']).trim() !== '').map(row => {
                     const newRow = {};
                     for (const key in row) {
                         newRow[key] = typeof row[key] === 'string' ? row[key].trim() : row[key];
@@ -561,7 +560,7 @@
                     return newRow;
                 });
                 
-                const order = orders.find(o => String(o['Order Ref']) === orderRef); // Ensure comparison is robust
+                const order = orders.find(o => String(o['order_ref']) === orderRef); // Ensure comparison is robust
 
                 if (!order) {
                     detailDiv.innerHTML = `<h1 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-exclamation-triangle"></i>Order Not Found</h1><p class="not-found-message" style="display: block;">No order found with reference: ${orderRef}</p>`;
@@ -569,46 +568,54 @@
                     return;
                 }
 
-                const productImage = order['Product Image'] || "../img/default.png";
-                const estimatedDeliveryDate = new Date();
-                // Assuming order confirmation page sends Date.now() for orderId which results in a timestamp.
-                // For simplicity, let's just add 5 days to current date as a placeholder.
-                // Ideally, you'd store the actual order date in your sheet and calculate from there.
-                estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 5);
+                const productImage = order['product_image'] || "../img/default.png";
+                // Use Timestamp for order date, fallback to current date if not available
+                const orderDate = order['Timestamp'] ? new Date(order['Timestamp']) : new Date();
+                const estimatedDeliveryDate = new Date(orderDate);
+                estimatedDeliveryDate.setDate(orderDate.getDate() + 5); // Add 5 days for estimated delivery
 
                 detailDiv.innerHTML = `
-                    <h1 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-box"></i>Order Details #${order['Order Ref']}</h1>
+                    <h1 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-box"></i>Order Details #${order['order_ref']}</h1>
                     
                     <div class="info-box">
                         <p class="font-semibold mb-2">Order Summary:</p>
                         <div class="order-summary-item">
                             <span>Order REF:</span>
-                            <span>${order['Order Ref']}</span>
+                            <span>${order['order_ref']}</span>
+                        </div>
+                        <div class="order-summary-item">
+                            <span>Order Date:</span>
+                            <span>${orderDate.toDateString()}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Status:</span>
-                            <span style="color: ${getOrderStatusColor(order['Status'])}; font-weight: bold;">${order['Status'] || 'N/A'}</span>
+                            <span style="color: ${getOrderStatusColor(order['status'])}; font-weight: bold;">${order['status'] || 'N/A'}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Estimated Delivery:</span>
                             <span>${estimatedDeliveryDate.toDateString()}</span>
                         </div>
+                        ${order['cancel'] && order['cancel'].toLowerCase() === 'true' ? `
+                        <div class="order-summary-item">
+                            <span>Cancellation Status:</span>
+                            <span style="color: #dc3545; font-weight: bold;">Cancelled</span>
+                        </div>` : ''}
                     </div>
 
                     <div class="info-box">
                         <p class="font-semibold mb-2">Product Details:</p>
                         <div class="product-details-header">
                             <div class="product-image-container">
-                                <img src="${productImage}" alt="${order['Product Name'] || 'Product'}" />
+                                <img src="${productImage}" alt="${order['product_name'] || 'Product'}" />
                             </div>
                             <div class="product-text-info">
-                                <p><strong>Product Name:</strong> ${order['Product Name'] || 'N/A'}</p>
-                                <p><strong>Size:</strong> ${order['Product Size'] || 'N/A'}</p>
-                                <p><strong>Persistence:</strong> ${order['Persistence'] || 'N/A'}</p>
+                                <p><strong>Product Name:</strong> ${order['product_name'] || 'N/A'}</p>
+                                <p><strong>Size:</strong> ${order['product_size'] || 'N/A'}</p>
+                                <p><strong>Persistence:</strong> ${order['persistence'] || 'N/A'}</p>
                                 <!-- Conditional OS/Version displays -->
-                                ${order['Selected Version'] && order['Selected Version'] !== 'N/A' ? `<p><strong>Selected Version:</strong> ${order['Selected Version']}</p>` : ''}
-                                ${order['First OS'] && order['First OS'] !== 'N/A' ? `<p><strong>First OS:</strong> ${order['First OS']}</p>` : ''}
-                                ${order['Second OS'] && order['Second OS'] !== 'N/A' ? `<p><strong>Second OS:</strong> ${order['Second OS']}</p>` : ''}
+                                ${order['selected_version'] && order['selected_version'] !== 'N/A' ? `<p><strong>Selected Version:</strong> ${order['selected_version']}</p>` : ''}
+                                ${order['first_os'] && order['first_os'] !== 'N/A' ? `<p><strong>First OS:</strong> ${order['first_os']}</p>` : ''}
+                                ${order['second_os'] && order['second_os'] !== 'N/A' ? `<p><strong>Second OS:</strong> ${order['second_os']}</p>` : ''}
                             </div>
                         </div>
                     </div>
@@ -616,9 +623,9 @@
                     <div class="info-box">
                         <p class="font-semibold mb-2">Shipping Address:</p>
                         <div class="text-sm">
-                            <p><strong>${order['Customer Name'] || 'N/A'}</strong></p>
-                            <p>${order['Customer Address'] || 'N/A'}</p>
-                            <p>${order['Customer Phone'] || 'N/A'} | ${order['Customer Email'] || 'N/A'}</p>
+                            <p><strong>${order['customer_name'] || 'N/A'}</strong></p>
+                            <p>${order['customer_address'] || 'N/A'}</p>
+                            <p>${order['customer_phone'] || 'N/A'} | ${order['customer_email'] || 'N/A'}</p>
                         </div>
                     </div>
 
@@ -626,19 +633,19 @@
                         <p class="font-semibold mb-2">Payment Details:</p>
                         <div class="order-summary-item">
                             <span>Items Price:</span>
-                            <span>₹${parseFloat(order['Items Price'] || 0).toFixed(2)}</span>
+                            <span>₹${parseFloat(order['items_price'] || 0).toFixed(2)}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Delivery Fee:</span>
-                            <span>₹${parseFloat(order['Delivery Fee'] || 0).toFixed(2)}</span>
+                            <span>₹${parseFloat(order['delivery_fee'] || 0).toFixed(2)}</span>
                         </div>
                         <div class="order-summary-item total">
                             <span>Total Payable:</span>
-                            <span>₹${parseFloat(order['Total Price'] || 0).toFixed(2)}</span>
+                            <span>₹${parseFloat(order['total_price'] || 0).toFixed(2)}</span>
                         </div>
                         <div class="order-summary-item">
                             <span>Payment Method:</span>
-                            <span>${order['Payment Method'] || 'N/A'}</span>
+                            <span>${order['payment_method'] || 'N/A'}</span>
                         </div>
                     </div>
                 `;
