@@ -240,6 +240,100 @@
             color: #ccc;
         }
 
+        /* --- Info Section --- */
+        .info-section {
+            padding: 80px 0;
+            background-color: var(--card-background);
+            border-top: 1px solid #e0e0e0;
+            transition: background-color 0.5s ease;
+        }
+
+        body.dark-mode .info-section {
+            border-color: #3c546b;
+        }
+
+        .info-section h2, .info-section h3 {
+            color: var(--primary-color);
+        }
+        
+        body.dark-mode .info-section h2, body.dark-mode .info-section h3 {
+            color: var(--light-text);
+        }
+
+        .info-section ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .info-section li {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .info-section li::before {
+            content: '✔️';
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            position: absolute;
+            left: -20px;
+        }
+
+        /* --- FAQ Section --- */
+        .faq-section {
+            padding: 80px 0;
+        }
+
+        .faq-item {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            transition: background-color 0.5s ease;
+        }
+
+        body.dark-mode .faq-item {
+            border-color: #3c546b;
+        }
+
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        .faq-question::after {
+            content: '+';
+            position: absolute;
+            right: 20px;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            content: '-';
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+            color: #555;
+        }
+
+        body.dark-mode .faq-answer {
+            color: #ccc;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 20px;
+        }
+
         /* --- Footer --- */
         footer {
             background-color: var(--footer-bg);
@@ -292,22 +386,51 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.6);
         }
-
-        /* --- Mobile-Specific Styles --- */
+        
+        /* Mobile-Specific Styles */
         @media (max-width: 768px) {
-            .page-hero h1 {
-                font-size: 2rem;
+            .navbar {
+                flex-wrap: wrap;
             }
-            .page-hero p {
-                font-size: 1rem;
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--header-bg);
+                position: absolute;
+                top: 60px;
+                left: 0;
+                padding: 10px 0;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
             }
-            .product-cards-list {
-                grid-template-columns: 1fr;
+            
+            .nav-links.active {
+                display: flex;
             }
+            
+            .nav-links a {
+                padding: 15px 20px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .hamburger {
+                display: block;
+                order: 2; /* Ensures it's on the right */
+            }
+            
+            .product-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
             .footer-grid {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
+            
             .footer-section {
                 margin-bottom: 20px;
             }
@@ -344,29 +467,78 @@
                 <h2 class="section-title">Our Premium Kits</h2>
                 <div class="product-cards-list">
           
-                    <!-- Kali Basic Kit -->
-                    <div class="product-card" data-product-id="kali-basic-kit">
-                        <img src="img/kali-basic.png" alt="Kali Basic Kit">
-                        <h3>Kali Basic Kit</h3>
+                    <!-- Offline Survival Box -->
+                    <div class="product-card" data-product-id="offline-survival-box">
+                        <img src="img/offline-survival.png" alt="Offline Survival Box">
+                        <h3>Offline Survival Box</h3>
                         <p>
-                            <strong>💡 Kali Linux Live & Installer</strong><br>
-                            <strong>✅ Standard Tools Included</strong><br>
-                            <strong>💽 USB 3.0 • Read: 100MB/s</strong><br>
+                            <strong>📦 Emergency Offline Resources</strong><br>
+                            <strong>📚 Includes PDFs, Tools, Guides</strong><br>
+                            <strong>💽 USB 3.0 • 64GB Capacity</strong><br>
+                            <strong>🛠️ No Internet Required</strong>
+                        </p>
+                    </div>
+
+                    <!-- VoltEdge “Hack In A Box” USB Kit -->
+                    <div class="product-card" data-product-id="hack-in-a-box">
+                        <img src="img/hack-in-a-box.png" alt="Hack In A Box USB Kit">
+                        <h3>VoltEdge “Hack In A Box” USB Kit</h3>
+                        <p>
+                            <strong>🧠 Ethical Hacking Tools & Scripts</strong><br>
+                            <strong>🎯 Preconfigured for Penetration Testing</strong><br>
+                            <strong>💽 USB 3.0 • 32GB</strong><br>
+                            <strong>🧩 Legacy + UEFI Boot Support</strong>
+                        </p>
+                    </div>
+
+                    <!-- Mini Cybersecurity Training Kit -->
+                    <div class="product-card" data-product-id="mini-cyber-kit">
+                        <img src="img/mini-cyber-kit.png" alt="Mini Cybersecurity Training Kit">
+                        <h3>Mini Cybersecurity Training Kit</h3>
+                        <p>
+                            <strong>🔐 USB Toolkit + Online Portal Access</strong><br>
+                            <strong>📘 Beginner-Friendly Modules</strong><br>
+                            <strong>💽 USB 3.0 • 16GB</strong><br>
+                            <strong>🌐 Includes Online Dashboard</strong>
+                        </p>
+                    </div>
+
+                    <!-- VoltEdge Creation Kit -->
+                    <div class="product-card" data-product-id="voltedge-creation-kit">
+                        <img src="img/creation-kit.png" alt="VoltEdge Creation Kit">
+                        <h3>VoltEdge Creation Kit</h3>
+                        <p>
+                            <strong>💡 Live OS + Installer Combo</strong><br>
+                            <strong>🧰 Developer Tools Preloaded</strong><br>
+                            <strong>💽 USB 3.1 • 64GB</strong><br>
+                            <strong>🧩 Legacy + UEFI Compatible</strong>
+                        </p>
+                    </div>
+
+                    <!-- Exam Boot USB -->
+                    <div class="product-card" data-product-id="exam-boot-usb">
+                        <img src="img/exam-boot.png" alt="Exam Boot USB">
+                        <h3>Exam Boot USB</h3>
+                        <p>
+                            <strong>📚 Offline Study OS (JEE/NEET/UPSC)</strong><br>
+                            <strong>📝 Includes Notes, Practice Sets</strong><br>
+                            <strong>💽 USB 3.0 • 32GB</strong><br>
+                            <strong>🚫 No Internet Required</strong>
+                        </p>
+                    </div>
+
+                    <!-- School Lab OS USB -->
+                    <div class="product-card" data-product-id="school-lab-os">
+                        <img src="img/school-lab.png" alt="School Lab OS USB">
+                        <h3>School Lab OS USB</h3>
+                        <p>
+                            <strong>🔬 Coding & Science Lab Environment</strong><br>
+                            <strong>👨‍🏫 Ideal for School PCs & Labs</strong><br>
+                            <strong>💽 USB 3.0 • 32GB</strong><br>
                             <strong>🧩 Legacy + UEFI Support</strong>
                         </p>
                     </div>
 
-                    <!-- Kali Pro Kit -->
-                    <div class="product-card" data-product-id="kali-pro-kit">
-                        <img src="img/kali-pro.png" alt="Kali Pro Kit">
-                        <h3>Kali Pro Kit</h3>
-                        <p>
-                            <strong>🌟 Kali Linux with Full Persistence</strong><br>
-                            <strong>🔧 Advanced Toolsets & Scripts</strong><br>
-                            <strong>💽 USB 3.2 • Read: 180MB/s</strong><br>
-                            <strong>🧩 Legacy + UEFI Support</strong>
-                        </p>
-                    </div>
 
                     <!-- Dual OS Kit -->
                     <div class="product-card" data-product-id="dual-os-kit">
@@ -392,6 +564,64 @@
                         </p>
                     </div>
 
+                </div>
+            </div>
+        </section>
+
+        <section class="info-section">
+            <div class="container">
+                <h2 class="section-title">Unlock Advanced Capabilities with VoltEdge Kits</h2>
+                <p>VoltEdge Special USB Kits are designed for those who demand more from their technology. Whether you're an IT professional, a student, a developer, or a cybersecurity enthusiast, our curated kits provide specialized tools and operating systems to meet your unique needs. These aren't just USB drives; they're complete solutions engineered for specific tasks.</p>
+                <p>From **Offline Survival Boxes** packed with essential resources for disconnected environments, to **"Hack In A Box"** kits for ethical penetration testing, and **Dual OS Kits** offering flexibility with multiple operating systems, each kit is meticulously prepared. We also offer **Exam Boot USBs** for secure offline testing, and **School Lab OS USBs** to create portable learning environments.</p>
+                <p>Each kit is built with high-speed USB 3.0/3.1/3.2 drives, ensuring rapid boot times and efficient data transfer. All contents are verified, up-to-date, and designed for ease of use across various systems supporting Legacy and UEFI boot modes. Equip yourself with VoltEdge and take control of your digital world.</p>
+                
+                <h3 style="margin-top: 40px;">Key Features of VoltEdge Special USB Kits:</h3>
+                <ul>
+                    <li>&nbsp;&nbsp;<strong>Specialized Functionality:</strong> Kits tailored for ethical hacking, system recovery, offline learning, development, and dual-booting.</li>
+                    <li>&nbsp;&nbsp;<strong>High-Speed Performance:</strong> Built with USB 3.0 or higher drives for optimal read/write speeds, reducing waiting times.</li>
+                    <li>&nbsp;&nbsp;<strong>Comprehensive Content:</strong> Includes pre-configured OS, essential tools, guides, and resources relevant to the kit's purpose.</li>
+                    <li>&nbsp;&nbsp;<strong>Universal Boot Compatibility:</strong> Designed to boot seamlessly on most modern and legacy systems supporting Legacy and UEFI.</li>
+                    <li>&nbsp;&nbsp;<strong>Reliable & Tested:</strong> Each kit undergoes rigorous testing to ensure stability, reliability, and error-free operation.</li>
+                </ul>
+                <h3 style="margin-top: 40px;">What’s Included:</h3>
+                <ul>
+                    <li>&nbsp;&nbsp;A high-quality USB drive (capacity varies by kit) preloaded with the specified operating systems and tools.</li>
+                    <li>&nbsp;&nbsp;Digital or printed guides/manuals to help you maximize the kit's potential.</li>
+                    <li>&nbsp;&nbsp;Support for both Live environment and full installation (where applicable).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="faq-section container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">What makes these "Special USB Kits" different from standard Live USBs?</div>
+                <div class="faq-answer">
+                    <p>Our Special USB Kits are highly curated solutions designed for specific advanced use cases like ethical hacking, comprehensive system recovery, secure offline environments, or running multiple OSes. They often include specialized software, detailed guides, and pre-configurations that go beyond a simple Live OS.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I use these kits on any computer?</div>
+                <div class="faq-answer">
+                    <p>These kits are designed for broad compatibility, supporting both Legacy BIOS and UEFI boot modes found in most modern and older PCs. As long as your computer can boot from a USB drive, our kits should work seamlessly.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Are the ethical hacking tools legal to use?</div>
+                <div class="faq-answer">
+                    <p>The ethical hacking tools in kits like "Hack In A Box" are intended strictly for educational purposes, personal learning, and testing your *own* networks and systems. Unauthorized use against any other network or system is illegal and unethical.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">What is an "Offline Survival Box" used for?</div>
+                <div class="faq-answer">
+                    <p>The Offline Survival Box provides critical information and tools in scenarios without internet access. It can include essential software, manuals, troubleshooting guides, and educational content that's accessible anytime, anywhere, ensuring you're prepared for unexpected outages or remote work.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can the "Dual OS Kit" install both operating systems on my computer?</div>
+                <div class="faq-answer">
+                    <p>The Dual OS Kit provides two operating systems on a single USB for portable use or installation. While it enables you to install both OSes to your computer's hard drive (creating a dual-boot setup), it's crucial to follow proper partitioning and installation procedures to avoid data loss.</p>
                 </div>
             </div>
         </section>
@@ -449,8 +679,7 @@
             navLinks.classList.toggle('active');
         }
 
-        // --- FAQ accordion functionality (if needed on this page) ---
-        // This was in your previous boot_usb.html, keeping it here for consistency if you need it.
+        // --- FAQ accordion functionality ---
         document.querySelectorAll('.faq-question').forEach(item => {
             item.addEventListener('click', () => {
                 const parent = item.parentElement;
@@ -461,52 +690,128 @@
         // --- Product Data Definitions ---
         // Define all kit product data here, accessible by a unique ID
         const allKitProducts = {
-            "kali-basic-kit": {
-                name: "Kali Basic Kit", // Matches `product-detail.html` logic for no persistence price
-                shortDesc: "Kali Linux Live & Installer USB",
-                description: "A foundational Kali Linux USB, perfect for ethical hacking and penetration testing. Includes full Live and Installation modes, optimized for performance.",
-                image: "img/kali-basic.png",
-                image2: "https://placehold.co/400x300/e74c3c/ffffff?text=Kali+Basic+Kit+2",
-                image3: "https://placehold.co/400x300/e74c3c/ffffff?text=Kali+Basic+Kit+3",
+            "offline-survival-box": {
+                name: "Offline Survival Box",
+                shortDesc: "Emergency Offline Resources",
+                description: "A crucial kit for situations without internet access. Includes essential PDFs, troubleshooting tools, and survival guides to keep you operational and informed.",
+                image: "img/offline-survival.png",
+                image2: "https://placehold.co/400x300/e74c3c/ffffff?text=Offline+Survival+Box+2",
+                image3: "https://placehold.co/400x300/e74c3c/ffffff?text=Offline+Survival+Box+3",
                 sizes: [
-                    { label: "16GB", price: 399 },
-                    { label: "32GB", price: 499 },
-                    { label: "64GB", price: 649 }
+                    { label: "64GB", price: 799 },
+                    { label: "128GB", price: 1099 }
                 ],
-                included: ["Kali Linux OS (Live & Installer)", "Standard Kali Toolset"],
+                included: ["64GB USB 3.0 Drive", "Offline Manuals & Guides (PDF)", "Basic Troubleshooting Tools", "Essential Software (Portable)"],
                 specs: [
-                    ["Boot Mode", "Legacy + UEFI"],
                     ["USB Type", "USB 3.0"],
-                    ["Read Speed", "100MB/s"],
-                    ["Write Speed", "50MB/s"],
+                    ["Capacity", "64GB"],
+                    ["No Internet Required", "Yes"],
+                    ["Warranty", "3 Years"]
+                ]
+            },
+            "hack-in-a-box": {
+                name: "VoltEdge “Hack In A Box” USB Kit",
+                shortDesc: "Ethical Hacking Tools + Guides",
+                description: "This kit is designed for ethical hacking and penetration testing. It includes a bootable USB pre-configured with essential tools and scripts for network analysis and security assessments.",
+                image: "img/hack-in-a-box.png",
+                image2: "https://placehold.co/400x300/3498db/ffffff?text=Hack+In+A+Box+2",
+                image3: "https://placehold.co/400x300/3498db/ffffff?text=Hack+In+A+Box+3",
+                sizes: [
+                    { label: "32GB", price: 899 },
+                    { label: "64GB", price: 1099 }
+                ],
+                included: ["32GB USB 3.0 Drive", "Preconfigured Ethical Hacking OS (e.g., Kali or Parrot)", "Collection of Hacking Tools & Scripts", "Digital Guides for Ethical Hacking"],
+                specs: [
+                    ["Boot Support", "Legacy + UEFI"],
+                    ["USB Type", "USB 3.0"],
+                    ["Capacity", "32GB"],
+                    ["Preconfigured", "Yes"],
                     ["Warranty", "5 Years"]
                 ]
             },
-            "kali-pro-kit": {
-                name: "Kali Pro Kit", // Matches `product-detail.html` logic for included persistence price
-                shortDesc: "Advanced Kali with Persistence & Extra Tools",
-                description: "The professional's choice for Kali Linux. Includes full persistence, extended toolsets, specialized scripts, and additional resources for advanced security tasks.",
-                image: "img/kali-pro.png",
-                image2: "https://placehold.co/400x300/3498db/ffffff?text=Kali+Pro+Kit+2",
-                image3: "https://placehold.co/400x300/3498db/ffffff?text=Kali+Pro+Kit+3",
+            "mini-cyber-kit": {
+                name: "Mini Cybersecurity Training Kit",
+                shortDesc: "USB Toolkit + Online Portal Access",
+                description: "A perfect starter kit for aspiring cybersecurity professionals. This USB provides a toolkit for hands-on learning, complemented by access to an exclusive online portal with beginner-friendly modules.",
+                image: "img/mini-cyber-kit.png",
+                image2: "https://placehold.co/400x300/2c3e50/ffffff?text=Mini+Cyber+Kit+2",
+                image3: "https://placehold.co/400x300/2c3e50/ffffff?text=Mini+Cyber+Kit+3",
                 sizes: [
-                    { label: "32GB", price: 749 },
-                    { label: "64GB", price: 899 },
-                    { label: "128GB", price: 1199 }
+                    { label: "16GB", price: 599 },
+                    { label: "32GB", price: 749 }
                 ],
-                included: ["Kali Linux OS (Live & Installer)", "Full Persistence Enabled", "Extended Kali Toolset", "Specialized Scripts", "Digital Resources"],
+                included: ["16GB USB 3.0 Drive", "Basic Cybersecurity Tools", "Access to Online Training Portal", "Beginner-Friendly Modules"],
                 specs: [
-                    ["Boot Mode", "Legacy + UEFI"],
-                    ["USB Type", "USB 3.2"],
-                    ["Read Speed", "180MB/s"],
-                    ["Write Speed", "120MB/s"],
+                    ["USB Type", "USB 3.0"],
+                    ["Capacity", "16GB"],
+                    ["Online Access", "Yes"],
+                    ["Target Audience", "Beginners"],
+                    ["Warranty", "2 Years"]
+                ]
+            },
+            "voltedge-creation-kit": {
+                name: "VoltEdge Creation Kit",
+                shortDesc: "Live OS + Installer Combo & Developer Tools",
+                description: "Designed for developers and creators, this kit combines a live OS with installer capabilities and a suite of preloaded developer tools. Ideal for coding, design, and multimedia projects.",
+                image: "img/creation-kit.png",
+                image2: "https://placehold.co/400x300/3498db/ffffff?text=Creation+Kit+2",
+                image3: "https://placehold.co/400x300/3498db/ffffff?text=Creation+Kit+3",
+                sizes: [
+                    { label: "64GB", price: 999 },
+                    { label: "128GB", price: 1299 }
+                ],
+                included: ["64GB USB 3.1 Drive", "Live OS + Installer Combo (e.g., Ubuntu Studio)", "Preloaded Developer Tools (IDEs, Frameworks)", "Multimedia Software"],
+                specs: [
+                    ["Boot Support", "Legacy + UEFI"],
+                    ["USB Type", "USB 3.1"],
+                    ["Capacity", "64GB"],
+                    ["Target Audience", "Developers/Creators"],
                     ["Warranty", "5 Years"]
+                ]
+            },
+            "exam-boot-usb": {
+                name: "Exam Boot USB",
+                shortDesc: "Offline Study OS (JEE/NEET/UPSC)",
+                description: "A secure, isolated offline operating system designed for students preparing for competitive exams like JEE, NEET, and UPSC. Comes preloaded with study materials, notes, and practice sets.",
+                image: "img/exam-boot.png",
+                image2: "https://placehold.co/400x300/e74c3c/ffffff?text=Exam+Boot+2",
+                image3: "https://placehold.co/400x300/e74c3c/ffffff?text=Exam+Boot+3",
+                sizes: [
+                    { label: "32GB", price: 649 },
+                    { label: "64GB", price: 799 }
+                ],
+                included: ["32GB USB 3.0 Drive", "Offline Study OS", "Curated Notes & Practice Sets (PDFs)", "No Internet Required for Functionality"],
+                specs: [
+                    ["USB Type", "USB 3.0"],
+                    ["Capacity", "32GB"],
+                    ["Internet Requirement", "None"],
+                    ["Warranty", "3 Years"]
+                ]
+            },
+            "school-lab-os": {
+                name: "School Lab OS USB",
+                shortDesc: "Coding & Science Lab Environment",
+                description: "Transform any PC into a dedicated coding or science lab with this plug-and-play USB. Ideal for school computer labs or individual student use, providing a consistent learning environment.",
+                image: "img/school-lab.png",
+                image2: "https://placehold.co/400x300/2c3e50/ffffff?text=School+Lab+2",
+                image3: "https://placehold.co/400x300/2c3e50/ffffff?text=School+Lab+3",
+                sizes: [
+                    { label: "32GB", price: 599 },
+                    { label: "64GB", price: 749 }
+                ],
+                included: ["32GB USB 3.0 Drive", "Educational Linux OS (e.g., Edubuntu, Fedora Education)", "Preloaded Coding Environments & Science Software"],
+                specs: [
+                    ["Boot Support", "Legacy + UEFI"],
+                    ["USB Type", "USB 3.0"],
+                    ["Capacity", "32GB"],
+                    ["Target Audience", "Students/Educators"],
+                    ["Warranty", "3 Years"]
                 ]
             },
             "dual-os-kit": {
-                name: "Dual OS Kit", // Matches `product-detail.html` logic for included persistence price
+                name: "Dual OS Kit",
                 shortDesc: "Two Operating Systems on One USB",
-                description: "Get two powerful operating systems of your choice on a single, high-speed USB drive. Ideal for dual-booting or carrying multiple environments.",
+                description: "Get two powerful operating systems of your choice on a single, high-speed USB drive. Ideal for dual-booting or carrying multiple environments for different tasks.",
                 image: "img/dual-os.png",
                 image2: "https://placehold.co/400x300/5d9cec/ffffff?text=Dual+OS+Kit+2",
                 image3: "https://placehold.co/400x300/5d9cec/ffffff?text=Dual+OS+Kit+3",
@@ -515,7 +820,7 @@
                     { label: "64GB", price: 949 },
                     { label: "128GB", price: 1249 }
                 ],
-                included: ["Two OSes of your choice (via dropdown)", "Pre-configured Dual Boot Loader"],
+                included: ["USB 3.2 Drive", "Two OSes of your choice (pre-installed)", "Pre-configured Dual Boot Loader"],
                 specs: [
                     ["Boot Mode", "Legacy + UEFI"],
                     ["USB Type", "USB 3.2"],
@@ -526,8 +831,8 @@
             },
             "voltedge-max-kit": {
                 name: "VoltEdge Max Kit",
-                shortDesc: "Kali + Parrot + Tools + Offline Toolkit",
-                description: "The ultimate cybersecurity USB kit: Kali Linux, Parrot OS, essential payloads, full toolset, offline HTML launcher, custom wallpapers, and sticker image.",
+                shortDesc: "Kali + Parrot + Tools & Launcher",
+                description: "The ultimate cybersecurity USB kit: Kali Linux, Parrot OS, essential payloads, full toolset, offline HTML launcher, custom wallpapers, and sticker image for a complete experience.",
                 image: "img/max-kit.png",
                 image2: "img/max-kit-1.png",
                 image3: "img/max-kit-2.png",
@@ -537,7 +842,7 @@
                     { label: "128GB", price: 1299 },
                     { label: "256GB", price: 1799 }
                 ],
-                included: ["Kali Linux OS", "Parrot OS", "Full Toolsets (Hacking, Forensics)", "Offline HTML Launcher", "Custom Wallpapers", "Sticker Image", "PDF Guides"],
+                included: ["USB 3.2 Drive", "Kali Linux OS", "Parrot OS", "Full Toolsets (Hacking, Forensics)", "Offline HTML Launcher", "Custom Wallpapers", "Sticker Image", "PDF Guides"],
                 specs: [
                     ["Boot Mode", "Legacy + UEFI"],
                     ["USB Type", "USB 3.2"],
@@ -552,7 +857,7 @@
         function selectProduct(productInfo) {
             sessionStorage.setItem("liveProduct", JSON.stringify(productInfo));
             // IMPORTANT: Ensure this redirects to your universal product detail page
-            window.location.href = "product.html"; // Changed to product-detail.html
+            window.location.href = "product.html"; 
         }
 
         // --- Attach Click Listeners to Product Cards (after DOM content is loaded) ---
@@ -574,5 +879,3 @@
     </script>
 </body>
 </html>
-
-
