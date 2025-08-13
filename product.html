@@ -910,9 +910,6 @@
             const nameLower = productData.name.toLowerCase().trim(); // Trim for robust comparison
 
             // Hide all optional wrappers initially
-            // Using `style.display = 'none'` for initial absolute hiding
-            // and `style.display = 'block'` for showing, as `hidden` class
-            // might have other CSS rules overriding it.
             persistenceWrapper.style.display = 'none';
             versionWrapper.style.display = 'none';
             winVersionWrapper.style.display = 'none';
@@ -928,18 +925,29 @@
                 versionWrapper.style.display = 'block';
             }
 
-            // Logic for Persistence option visibility
-            // Visible for all 'Live' products EXCEPT 'Installer Only' or specific kits where it's inherent.
+            // List of product IDs where persistence should *not* be shown as a selectable option,
+            // or where it's implicitly included/not applicable.
             const productsWithFixedOrNoPersistence = [
-                "installer only", "kali basic kit", "voltedge max kit", "kali pro kit", "dual os kit", "tails os usb (live only)"
+                "installer only", // General installer USBs
+                "kali-basic-kit", // Kali Basic Kit
+                "voltedge-max-kit", // VoltEdge Max Kit (persistence included)
+                "kali-pro-kit", // Kali Pro Kit (persistence included)
+                "dual-os-kit", // Dual OS Kit (persistence handled by dual boot)
+                "tails-os-live-only", // Tails OS (designed for no persistence)
+                "exam-boot-usb", // Explicitly no persistence option for exam environment
+                "school-lab-os", // Explicitly no persistence option for clean lab environment
+                "hack-in-a-box", // Specialized kit, no separate persistence option
+                "offline-survival-box", // Data/resource pack, not a persistent OS
+                "mini-cyber-kit" // Training kit, persistence likely managed differently
+                // "os-in-a-drive-pro" // This product ID is not in the HTML, so it's commented out
             ];
 
-            if (nameLower.includes("live") && !productsWithFixedOrNoPersistence.some(keyword => nameLower.includes(keyword))) {
-                // If it's a general live product and not one of the exceptions, show persistence.
+            // Show persistence option only if it's a general 'Live' product AND not in the exclusion list
+            if (nameLower.includes("live") && !productsWithFixedOrNoPersistence.some(id => productData.name.toLowerCase().includes(id))) {
+                // Check if the product name contains "live" AND is not one of the explicitly excluded kit IDs.
+                // Note: using productData.name directly with .includes(id) because product IDs are keywords.
                 persistenceWrapper.style.display = 'block';
             }
-            // For any other product (installer only, non-live, or specific kits listed in productsWithFixedOrNoPersistence),
-            // persistenceWrapper will remain hidden due to the initial `style.display = 'none'` call.
             
             // Initial price update
             updatePrice();
@@ -957,10 +965,6 @@
 
         // --- Event Listeners for Dynamic Price Update ---
         sizeSelect.addEventListener("change", updatePrice);
-        // Only add listener if persistenceSelect is visible (it might be hidden from start)
-        // Check if elements exist before adding listeners to avoid errors.
-        // It's safer to check if the element exists and then add the listener,
-        // rather than relying solely on display style, though style controls visibility.
         if (persistenceSelect) persistenceSelect.addEventListener("change", updatePrice); 
         if (mintVersionSelect) mintVersionSelect.addEventListener("change", updatePrice);
         if (winVersionSelect) winVersionSelect.addEventListener("change", updatePrice);
@@ -972,22 +976,27 @@
             let currentPrice = parseInt(sizeSelect.value || 0);
             const nameLower = productData.name.toLowerCase().trim(); // Use trimmed name
 
-            // Add persistence price if applicable
-            // Price adjustment for selectable persistence for regular Live USBs
-            const productsWithFixedOrNoPersistence = [
-                "installer only", "kali basic kit", "voltedge max kit", "kali pro kit", "dual os kit", "tails os usb (live only)"
+            // List of product IDs where persistence is either inherently included (and priced)
+            // or is not applicable/selectable and thus has no price adjustment.
+            // This array must match the one used for UI visibility.
+            const productsWithFixedOrNoPersistencePrice = [
+                "installer only", "kali-basic-kit", "voltedge-max-kit", "kali-pro-kit", "dual-os-kit", 
+                "tails-os-live-only", "exam-boot-usb", "school-lab-os", "hack-in-a-box", 
+                "offline-survival-box", "mini-cyber-kit"
+                // "os-in-a-drive-pro" // This product ID is not in the HTML, so it's commented out
             ];
 
-            if (nameLower.includes("live") && !productsWithFixedOrNoPersistence.some(keyword => nameLower.includes(keyword))) {
-                // If it's a general live product and not one of the exceptions, and persistence is selected.
+            // Add persistence price if applicable (only for general 'Live' products where it's selectable)
+            if (nameLower.includes("live") && !productsWithFixedOrNoPersistencePrice.some(id => productData.name.toLowerCase().includes(id))) {
                 if (persistenceSelect && persistenceSelect.value === "Yes") {
                     currentPrice += 20;
                 }
             } 
-            // Price adjustment for kits where persistence is inherently included (and not selectable via dropdown)
-            else if ((nameLower.includes("voltedge max kit") || nameLower.includes("dual os kit") || nameLower.includes("kali pro kit")) && !nameLower.includes("kali basic kit")) {
-                currentPrice += 20;
+            // Automatically add persistence price for specific kits where it's always included
+            else if (["voltedge max kit", "dual os kit", "kali pro kit"].some(keyword => nameLower.includes(keyword))) {
+                currentPrice += 20; // This handles the kits where persistence is built-in
             }
+            // For other products in productsWithFixedOrNoPersistencePrice, no price is added.
             
             productPriceEl.textContent = `₹${currentPrice}`;
         }
@@ -999,9 +1008,7 @@
             const nameLower = productData.name.toLowerCase().trim(); // Use trimmed name
 
             if (!price || price === "₹0") {
-                // Using a custom alert for better UI compatibility later
                 console.warn("Please select a size for the product."); 
-                // You might replace this with a custom modal or message box
                 return;
             }
 
@@ -1010,19 +1017,22 @@
             sessionStorage.setItem("productPrice", price);
             sessionStorage.setItem("productSize", selectedSizeLabel);
 
-            // Store persistence status based on new logic
+            // Determine and store persistence status
             const productsWithFixedOrNoPersistence = [
-                "installer only", "kali basic kit", "voltedge max kit", "kali pro kit", "dual os kit", "tails os usb (live only)"
+                "installer only", "kali-basic-kit", "voltedge-max-kit", "kali-pro-kit", "dual-os-kit", 
+                "tails-os-live-only", "exam-boot-usb", "school-lab-os", "hack-in-a-box", 
+                "offline-survival-box", "mini-cyber-kit"
             ];
 
-            if (productsWithFixedOrNoPersistence.some(keyword => nameLower.includes(keyword))) {
-                if (nameLower.includes("voltedge max kit") || nameLower.includes("dual os kit") || nameLower.includes("kali pro kit")) {
-                    sessionStorage.setItem("persistence", "Included"); // Persistence is part of the kit for these
+            if (productsWithFixedOrNoPersistence.some(id => productData.name.toLowerCase().includes(id))) {
+                // For products in this list, decide if persistence is 'Included' or 'Not Applicable'
+                if (["voltedge max kit", "dual os kit", "kali pro kit"].some(keyword => nameLower.includes(keyword))) {
+                    sessionStorage.setItem("persistence", "Included");
                 } else {
-                    sessionStorage.setItem("persistence", "Not Applicable"); // For installer-only, basic kit, Tails etc.
+                    sessionStorage.setItem("persistence", "Not Applicable");
                 }
-            } else { // For regular Live USBs with selectable persistence
-                sessionStorage.setItem("persistence", persistenceSelect ? persistenceSelect.value : "No"); // Check if persistenceSelect exists
+            } else { // For general Live USBs where persistence is selectable via dropdown
+                sessionStorage.setItem("persistence", persistenceSelect ? persistenceSelect.value : "No");
             }
 
             // Store specific version/OS if applicable
@@ -1061,4 +1071,3 @@
     </script>
 </body>
 </html>
-
