@@ -178,6 +178,10 @@
         .product-card:nth-child(1) { animation-delay: 0s; }
         .product-card:nth-child(2) { animation-delay: 0.2s; }
         .product-card:nth-child(3) { animation-delay: 0.4s; }
+        .product-card:nth-child(4) { animation-delay: 0.6s; } /* New card 1 */
+        .product-card:nth-child(5) { animation-delay: 0.8s; } /* New card 2 */
+        .product-card:nth-child(6) { animation-delay: 1.0s; } /* New card 3 */
+
 
         .testimonial-card:nth-child(1) { animation-delay: 0.2s; }
         .testimonial-card:nth-child(2) { animation-delay: 0.4s; }
@@ -501,7 +505,7 @@
         }
     </style>
 </head>
-<body >
+<body>
 
     <header>
         <div class="container navbar">
@@ -553,6 +557,24 @@
                         <img src="img/kit_usb.png" alt="Recovery Kit">
                         <h3>VoltEdge Special USB Kit</h3>
                         <p>A full Linux USB toolkit with multiple distros and recovery tools.</p>
+                    </div>
+                    <!-- New Card: DVD & Offline Media -->
+                    <div class="product-card" onclick="window.location.href='dvd_media.html';">
+                        <img src="https://placehold.co/400x200/2c3e50/ffffff?text=DVD+Media" alt="DVD & Offline Media">
+                        <h3>DVD & Offline Media</h3>
+                        <p>Reliable installers and classic media for systems without USB boot. Essential for legacy setups.</p>
+                    </div>
+                    <!-- New Card: Smart Gadgets & Accessories -->
+                    <div class="product-card" onclick="window.location.href='smart_gadgets.html';">
+                        <img src="https://placehold.co/400x200/3498db/ffffff?text=Smart+Gadgets" alt="Smart Gadgets & Accessories">
+                        <h3>Smart Gadgets & Accessories</h3>
+                        <p>Enhance your tech experience with innovative tools and practical accessories.</p>
+                    </div>
+                    <!-- New Card: Cybersecurity & Recovery -->
+                    <div class="product-card" onclick="window.location.href='cybersecurity_recovery.html';">
+                        <img src="https://placehold.co/400x200/e74c3c/ffffff?text=Cybersecurity" alt="Cybersecurity & Recovery">
+                        <h3>Cybersecurity & Recovery</h3>
+                        <p>Advanced tools for digital defense, data recovery, and system troubleshooting.</p>
                     </div>
                 </div>
             </div>
@@ -762,13 +784,6 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
 
 
 
