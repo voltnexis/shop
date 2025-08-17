@@ -263,23 +263,62 @@
 
     <a href="index.html" class="btn-continue">Continue Shopping</a>
   </div>
-  <!-- EmailJS Library -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <!-- Supabase CDN import - Added 'defer' attribute to ensure it loads before our script tries to use it -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script>
-    // Initialize EmailJS with your Public Key
-    (function () {
-      emailjs.init("VvarPfTBWRq5WBCrX"); // Replace with your actual EmailJS public key
-    })();
-    document.addEventListener('DOMContentLoaded', function () {
+    // Declare supabase client variable globally or within a scope accessible by initializeSupabase
+    let supabaseClient;
+
+    // Use window.onload to ensure all external scripts, including Supabase, are fully loaded.
+    window.onload = function() {
+      const maxRetries = 5;
+      let retryCount = 0;
+      const retryDelayMs = 500; // Initial delay in milliseconds
+
+      // Function to initialize Supabase client with a retry mechanism
+      function initializeSupabase() {
+        try {
+          // IMPORTANT: Replace 'YOUR_SUPABASE_URL' and 'YOUR_SUPABASE_KEY' with your actual Supabase Project URL and Public Anonymous Key.
+          // You can find these in your Supabase project settings under API.
+          // Using the values from your previous code as requested, to avoid changes.
+          const supabaseUrl = 'https://tovqkhgkhpbswloktbwe.supabase.co'; 
+          const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvdnFraGdraHBic3dsb2t0YndlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0MDY2NDMsImV4cCI6MjA3MDk4MjY0M30.fSrMvEXTaxoWF_1o77jHYG8ccVg-nuQxsKOqEP_1_MY'; 
+          
+          // Check if Supabase object is available
+          if (typeof supabase !== 'undefined' && typeof supabase.createClient === 'function') {
+            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+            console.log("Supabase client initialized successfully.");
+            mainAppLogic(); // Proceed with the main application logic
+          } else {
+            // Supabase object not yet available, throw error to trigger retry
+            throw new Error("Supabase object not available yet.");
+          }
+        } catch (e) {
+          console.warn(`Supabase initialization attempt ${retryCount + 1} failed:`, e.message);
+          if (retryCount < maxRetries) {
+            retryCount++;
+            // Exponential backoff strategy for retries
+            setTimeout(initializeSupabase, retryDelayMs * Math.pow(2, retryCount)); 
+          } else {
+            console.error("Failed to initialize Supabase after multiple retries. Please check the Supabase CDN link and network connection.");
+            showCustomAlert("Order confirmed, but there was an issue connecting to Supabase. Please contact support if needed.");
+            // Still proceed with main logic even if Supabase failed, to not break other functionality
+            mainAppLogic();
+          }
+        }
+      }
+
+      // --- Main Application Logic (originally in DOMContentLoaded) ---
+      function mainAppLogic() {
         // --- Theme Persistence Logic ---
         const body = document.body;
         const currentTheme = localStorage.getItem('theme');
         if (currentTheme) {
-            body.classList.add(currentTheme);
+          body.classList.add(currentTheme);
         } else {
-            // Default to dark mode if no theme is saved
-            body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark-mode');
+          // Default to dark mode if no theme is saved
+          body.classList.add('dark-mode');
+          localStorage.setItem('theme', 'dark-mode');
         }
 
         // Generate Order ID and Reference
@@ -294,138 +333,165 @@
         const selectedVersion = sessionStorage.getItem("selectedVersion") || "N/A"; // For Mint/Windows editions
         const firstOS = sessionStorage.getItem("firstOS") || "N/A"; // For Dual OS kits
         const secondOS = sessionStorage.getItem("secondOS") || "N/A"; // For Dual OS kits
-        const finalProductPrice = parseFloat(sessionStorage.getItem("finalProductPrice") || "0"); // Total from previous page (item + delivery)
-        const paymentMethod = sessionStorage.getItem("paymentMethod") || "N/A"; // Retrieve payment method
+        const finalProductPrice = parseFloat(sessionStorage.getItem("finalProductPrice") || "0");
+        const paymentMethod = sessionStorage.getItem("paymentMethod") || "N/A";
 
-        // Retrieve shipping address from Session Storage (copied from localStorage on previous page)
+        // Retrieve shipping address
         let shippingAddressDetails = null;
         try {
-            shippingAddressDetails = JSON.parse(sessionStorage.getItem("shippingAddressDetails"));
+          shippingAddressDetails = JSON.parse(sessionStorage.getItem("shippingAddressDetails"));
         } catch (e) {
-            console.error("Error parsing shipping address from sessionStorage:", e);
-         }
+          console.error("Error parsing shipping address from sessionStorage:", e);
+        }
 
         const addressData = shippingAddressDetails || {
-            fullname: "N/A", street: "N/A", city: "N/A", state: "N/A", district: "N/A", pincode: "N/A", phone: "N/A", email: "N/A"
+          fullname: "N/A", street: "N/A", city: "N/A", state: "N/A",
+          district: "N/A", pincode: "N/A", phone: "N/A", email: "N/A"
         };
 
-        // Calculate prices
-        const deliveryFee = 50; // Re-define for display consistency
-        const itemsPrice = finalProductPrice - deliveryFee; // Derive original item price
-
-        // Total payable amount (no COD fee added on this confirmation page)
+        // Prices
+        const deliveryFee = 50;
+        const itemsPrice = finalProductPrice - deliveryFee;
         const totalPayable = finalProductPrice;
 
-        // Populate HTML elements
+        // Populate HTML
         document.getElementById("orderref").textContent = lastOrderRef;
         document.getElementById("productName").textContent = productName;
         document.getElementById("productSize").textContent = productSize;
         document.getElementById("productPersistence").textContent = productPersistence;
         document.getElementById("itemPrice").textContent = `₹${itemsPrice.toFixed(2)}`;
         document.getElementById("deliveryFeeDisplay").textContent = `₹${deliveryFee.toFixed(2)}`;
-        // Removed codFeeDisplay update
         document.getElementById("totalPrice").textContent = `₹${totalPayable.toFixed(2)}`;
-        document.getElementById("paymentMethodDisplay").textContent = paymentMethod.toUpperCase(); // Display payment method
+        document.getElementById("paymentMethodDisplay").textContent = paymentMethod.toUpperCase();
 
-        // Update the main heading based on payment method
+        // Confirmation heading
         const confirmationHeading = document.getElementById("confirmationHeading");
         if (paymentMethod === "cod") {
-            confirmationHeading.innerHTML = '<i class="fas fa-check-circle"></i>Order Confirmed (COD)!';
-            document.querySelector('.confirmation-container p').textContent = "Your order has been successfully placed and will be delivered via Cash on Delivery.";
+          confirmationHeading.innerHTML = '<i class="fas fa-check-circle"></i>Order Confirmed (COD)!';
+          document.querySelector('.confirmation-container p').textContent = "Your order has been successfully placed and will be delivered via Cash on Delivery.";
         } else if (paymentMethod === "upi") {
-            confirmationHeading.innerHTML = '<i class="fas fa-check-circle"></i>Order Confirmed (UPI)!';
-            document.querySelector('.confirmation-container p').textContent = "Your payment via UPI has been confirmed and your order has been successfully placed.";
+          confirmationHeading.innerHTML = '<i class="fas fa-check-circle"></i>Order Confirmed (UPI)!';
+          document.querySelector('.confirmation-container p').textContent = "Your payment via UPI has been confirmed and your order has been successfully placed.";
         } else {
-            confirmationHeading.innerHTML = '<i class="fas fa-check-circle"></i>Order Confirmed!';
+          confirmationHeading.innerHTML = '<i class="fas fa-check-circle"></i>Order Confirmed!';
         }
 
-        // Display Estimated Delivery Date (5 days from now)
+        // Estimated Delivery Date
         const deliveryDate = new Date();
         deliveryDate.setDate(deliveryDate.getDate() + 5);
         document.getElementById("deliveryDate").textContent = deliveryDate.toDateString();
 
-        // Display Shipping Address
-        document.getElementById("displayAddress").innerHTML = `
+        // Shipping Address
+        // This check ensures 'N/A' isn't displayed as an address line if data is truly missing
+        if (addressData.fullname !== "N/A" && addressData.fullname !== null) {
+          document.getElementById("displayAddress").innerHTML = `
             <div><strong>${addressData.fullname}</strong></div>
             <div>${addressData.street}, ${addressData.city}</div>
             <div>${addressData.district}, ${addressData.state} - ${addressData.pincode}</div>
             <div>${addressData.phone} | ${addressData.email}</div>
-        `;
+          `;
+        } else {
+          document.getElementById("displayAddress").textContent = "Shipping address details not available.";
+        }
 
-         // Display specific OS versions/dual OS if applicable
+
+        // OS details
         if (selectedVersion !== "N/A") {
-            document.getElementById("selectedVersionDisplay").classList.remove("hidden");
-            document.getElementById("selectedVersionValue").textContent = selectedVersion;
+          document.getElementById("selectedVersionDisplay").classList.remove("hidden");
+          document.getElementById("selectedVersionValue").textContent = selectedVersion;
         }
         if (firstOS !== "N/A" || secondOS !== "N/A") {
-            // Only show dual OS fields if either is actually selected
-            if (firstOS !== "N/A") {
-                 document.getElementById("firstOSDisplay").classList.remove("hidden");
-                 document.getElementById("firstOSValue").textContent = firstOS;
-                 }
-            if (secondOS !== "N/A") {
-                 document.getElementById("secondOSDisplay").classList.remove("hidden");
-                 document.getElementById("secondOSValue").textContent = secondOS;
-            }
+          if (firstOS !== "N/A") {
+            document.getElementById("firstOSDisplay").classList.remove("hidden");
+            document.getElementById("firstOSValue").textContent = firstOS;
+          }
+          if (secondOS !== "N/A") {
+            document.getElementById("secondOSDisplay").classList.remove("hidden");
+            document.getElementById("secondOSValue").textContent = secondOS;
+          }
         }
 
-        // Prepare data for EmailJS and Google Sheet
+        // Order data structured to match both Google Sheet and Supabase table headers
         const orderData = {
-            orderId: orderId,
-            orderRef: lastOrderRef,
-            productName: productName,
-            productSize: productSize,
-            persistence: productPersistence,
-            selectedVersion: selectedVersion,
-            firstOS: firstOS,
-            secondOS: secondOS,
-            itemsPrice: itemsPrice.toFixed(2),
-            deliveryFee: deliveryFee.toFixed(2),
-            // Removed codFee from orderData as it's no longer relevant for display or calculation here
-            totalPrice: totalPayable.toFixed(2), // This now reflects itemPrice + deliveryFee
-            deliveryDate: deliveryDate.toDateString(),
-            paymentMethod: paymentMethod.toUpperCase(), // Send actual payment method
-            customerName: addressData.fullname,
-            customerAddress: `${addressData.street}, ${addressData.city}, ${addressData.district}, ${addressData.state} - ${addressData.pincode}`,
-            customerPhone: addressData.phone,
-            customerEmail: addressData.email
+          timestamp: new Date().toISOString(), // Matches 'Timestamp'
+          order_id: orderId, // Matches 'order_id'
+          order_ref: lastOrderRef, // Matches 'order_ref'
+          product_name: productName, // Matches 'product_name'
+          product_size: productSize, // Matches 'product_size'
+          persistence: productPersistence, // Matches 'persistence'
+          selected_version: selectedVersion, // Matches 'selected_version'
+          first_os: firstOS, // Matches 'first_os'
+          second_os: secondOS, // Matches 'second_os'
+          items_price: itemsPrice.toFixed(2), // Matches 'items_price'
+          delivery_fee: deliveryFee.toFixed(2), // Matches 'delivery_fee'
+          total_price: totalPayable.toFixed(2), // Matches 'total_price'
+          payment_method: paymentMethod.toUpperCase(), // Matches 'payment_method'
+          customer_name: addressData.fullname, // Matches 'customer_name'
+          customer_address: `${addressData.street}, ${addressData.city}, ${addressData.district}, ${addressData.state} - ${addressData.pincode}`, // Matches 'customer_address'
+          customer_phone: addressData.phone, // Matches 'customer_phone'
+          customer_email: addressData.email, // Matches 'customer_email'
+          status: "Processing", // Matches 'status' - Default status for a new order
+          product_image: "", // Matches 'product_image' - Placeholder, you might get this from session storage if applicable
+          cancel: false, // Matches 'cancel' - Default value
+          return: false, // Matches 'return' - Default value
         };
 
+        // --- Function to send data to Supabase ---
+        async function sendOrderToSupabase(dataToSend) {
+          if (!supabaseClient) {
+            console.error("Supabase client not initialized. Cannot send data.");
+            return;
+          }
+          try {
+            // 'orders' should be the exact name of your table in Supabase
+            const { data, error } = await supabaseClient
+              .from('orders') 
+              .insert([dataToSend]); // Insert the orderData object as a new row
+
+            if (error) {
+              console.error("Supabase Insert Error:", error);
+              showCustomAlert("Order confirmed, but there was an issue saving to Supabase. Please contact support if needed.");
+            } else {
+              console.log("Supabase Success:", data);
+            }
+          } catch (e) {
+            console.error("Supabase API Call Exception:", e);
+            showCustomAlert("Order confirmed, but there was a network issue with Supabase. Please contact support if needed.");
+          }
+        }
+
         // Send data to Google Sheet
-        const sheetUrl = "https://script.google.com/macros/s/AKfycbzaP-b_2k8jRyCsQuuFY4wxmM3SmlxC1hDoVB-a1rhwrlj2cf3hmy2Vgl7IvqPF744/exec"; // Your Google Sheet API URL
+        const sheetUrl = "https://script.google.com/macros/s/AKfycbzaP-b_2k8jRyCsQuuFY4wxmM3SmlxC1hDoVB-a1rhwrlj2cf3hmy2Vgl7IvqPF744/exec";
 
         fetch(sheetUrl, {
-            method: "POST",
-            body: JSON.stringify(orderData),
-            headers: {
-                "Content-Type": "text/plain" // Google Sheets API expects text/plain for simple JSON POST
-              }
+          method: "POST",
+          body: JSON.stringify(orderData),
+          headers: {
+            "Content-Type": "text/plain"
+          }
         })
-        .then(response => response.text()) // Expect plain text response
+        .then(response => response.text())
         .then(data => {
-            console.log("Google Sheet Success:", data);
+          console.log("Google Sheet Success:", data);
+          sendOrderToSupabase(orderData); // Call Supabase function after successful Google Sheet logging
         })
         .catch(error => {
-            console.error("Google Sheet Error:", error);
-            showCustomAlert("Order confirmed, but there was an issue logging to Google Sheet. Please contact support if needed.");
+          console.error("Google Sheet Error:", error);
+          showCustomAlert("Order confirmed, but there was an issue logging to Google Sheet. Please contact support if needed.");
+          sendOrderToSupabase(orderData); // Still try to log to Supabase even if sheet fails
         });
 
-        // Send email with EmailJS
-        emailjs.send("service_fht1mig", "template_ym233uo", orderData) // Replace with your service ID and template ID
-            .then(function (response) {
-                console.log("EmailJS SUCCESS!", response.status, response.text);
-                // Optionally show a confirmation here or handle success
-            }, function (error) {
-                console.error("EmailJS FAILED...", error);
-                showCustomAlert("Order confirmed, but there was an issue sending your confirmation email. Please check your spam or contact support.");
-            });
+        // DO NOT CLEAR SESSION STORAGE HERE! 
+        // Clearing sessionStorage here will prevent the current page from displaying retrieved data.
+        // It should be cleared on the previous page after successful submission, or selectively cleared.
+        // sessionStorage.clear(); // This line has been removed
+      }
 
-        // Clear session storage for a clean slate for next potential orders
-        sessionStorage.clear();
-    });
+      // Initiate the Supabase initialization process when the window fully loads
+      initializeSupabase();
 
-    // --- Custom Alert/Modal Function (replaces alert()) ---
-    function showCustomAlert(message) {
+      // --- Custom Alert (defined outside mainAppLogic for broader accessibility) ---
+      function showCustomAlert(message) {
         const overlay = document.createElement('div');
         overlay.classList.add('custom-alert-overlay');
 
@@ -436,141 +502,126 @@
         overlay.appendChild(alertBox);
         document.body.appendChild(overlay);
 
-        // Add dark mode class if body has it
         if (document.body.classList.contains('dark-mode')) {
-            alertBox.classList.add('dark-mode');
-          }
-    }
-    // Function to generate and download the invoice
-function generateAndDownloadInvoice() {
-    // Get all the relevant order data
-    const orderRef = document.getElementById("orderref").textContent;
-    const deliveryDate = document.getElementById("deliveryDate").textContent;
-    const productName = document.getElementById("productName").textContent;
-    const productSize = document.getElementById("productSize").textContent;
-    const productPersistence = document.getElementById("productPersistence").textContent;
-    const firstOSValue = document.getElementById("firstOSValue")?.textContent || "N/A";
-    const secondOSValue = document.getElementById("secondOSValue")?.textContent || "N/A";
-    const selectedVersionValue = document.getElementById("selectedVersionValue")?.textContent || "N/A";
-    const displayAddressHtml = document.getElementById("displayAddress").innerHTML;
-    const itemPrice = document.getElementById("itemPrice").textContent;
-    const deliveryFeeDisplay = document.getElementById("deliveryFeeDisplay").textContent;
-    const totalPrice = document.getElementById("totalPrice").textContent;
-    const paymentMethodDisplay = document.getElementById("paymentMethodDisplay").textContent;
+          alertBox.classList.add('dark-mode');
+        }
+      }
 
-    // --- Create a virtual HTML structure for the invoice ---
-    // This uses a very basic, generic HTML structure for the invoice.
-    // You can make this much more elaborate if you desire a more complex invoice layout.
-    let invoiceHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
+      window.closeCustomAlert = function() {
+        const overlay = document.querySelector('.custom-alert-overlay');
+        if (overlay) {
+          overlay.remove();
+        }
+      }
+
+      // --- Invoice Download (defined outside mainAppLogic as it's an independent function) ---
+      function generateAndDownloadInvoice() {
+        const orderRef = document.getElementById("orderref").textContent;
+        const deliveryDate = document.getElementById("deliveryDate").textContent;
+        const productName = document.getElementById("productName").textContent;
+        const productSize = document.getElementById("productSize").textContent;
+        const productPersistence = document.getElementById("productPersistence").textContent;
+        const firstOSValue = document.getElementById("firstOSValue")?.textContent || "N/A";
+        const secondOSValue = document.getElementById("secondOSValue")?.textContent || "N/A";
+        const selectedVersionValue = document.getElementById("selectedVersionValue")?.textContent || "N/A";
+        const displayAddressHtml = document.getElementById("displayAddress").innerHTML;
+        const itemPrice = document.getElementById("itemPrice").textContent;
+        const deliveryFeeDisplay = document.getElementById("deliveryFeeDisplay").textContent;
+        const totalPrice = document.getElementById("totalPrice").textContent;
+        const paymentMethodDisplay = document.getElementById("paymentMethodDisplay").textContent;
+
+        let invoiceHtml = `
+          <!DOCTYPE html>
+          <html>
+          <head>
             <title>Invoice - Order #${orderRef}</title>
             <style>
-                body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
-                .container { max-width: 800px; margin: auto; border: 1px solid #eee; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-                h1, h2 { text-align: center; color: #0e6c5f; }
-                .header, .footer { text-align: center; margin-bottom: 20px; }
-                .details-section { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-                .details-section h3 { color: #0e6c5f; margin-bottom: 10px; }
-                .item-row { display: flex; justify-content: space-between; padding: 5px 0; }
-                .total-row { border-top: 1px solid #eee; font-weight: bold; padding-top: 10px; margin-top: 10px; font-size: 1.1em; }
-                .address p { margin: 2px 0; }
-                .note { font-size: 0.9em; color: #666; margin-top: 20px; }
+              body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+              .container { max-width: 800px; margin: auto; border: 1px solid #eee; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+              h1, h2 { text-align: center; color: #0e6c5f; }
+              .header, .footer { text-align: center; margin-bottom: 20px; }
+              .details-section { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+              .details-section h3 { color: #0e6c5f; margin-bottom: 10px; }
+              .item-row { display: flex; justify-content: space-between; padding: 5px 0; }
+              .total-row { border-top: 1px solid #eee; font-weight: bold; padding-top: 10px; margin-top: 10px; font-size: 1.1em; }
+              .address p { margin: 2px 0; }
+              .note { font-size: 0.9em; color: #666; margin-top: 20px; }
             </style>
-        </head>
-        <body>
+          </head>
+          <body>
             <div class="container">
-                <div class="header">
-                    <h2>VoltEdge Shop</h2>
-                    <p>Your trusted tech partner</p>
-                </div>
-                <h1>INVOICE</h1>
-                
-                <div class="details-section">
-                    <h3>Order Information</h3>
-                    <div class="item-row"><span>Order Reference:</span><span>#${orderRef}</span></div>
-                    <div class="item-row"><span>Order Date:</span><span>${new Date().toLocaleDateString()}</span></div>
-                    <div class="item-row"><span>Estimated Delivery:</span><span>${deliveryDate}</span></div>
-                </div>
+              <div class="header">
+                <h2>VoltEdge Shop</h2>
+                <p>Your trusted tech partner</p>
+              </div>
+              <h1>INVOICE</h1>
+              <div class="details-section">
+                <h3>Order Information</h3>
+                <div class="item-row"><span>Order Reference:</span><span>#${orderRef}</span></div>
+                <div class="item-row"><span>Order Date:</span><span>${new Date().toLocaleDateString()}</span></div>
+                <div class="item-row"><span>Estimated Delivery:</span><span>${deliveryDate}</span></div>
+              </div>
+              <div class="details-section">
+                <h3>Product Details</h3>
+                <div class="item-row"><span>Product Name:</span><span>${productName}</span></div>
+                <div class="item-row"><span>Size:</span><span>${productSize}</span></div>
+                <div class="item-row"><span>Persistence:</span><span>${productPersistence}</span></div>
+        `;
 
-                <div class="details-section">
-                    <h3>Product Details</h3>
-                    <div class="item-row"><span>Product Name:</span><span>${productName}</span></div>
-                    <div class="item-row"><span>Size:</span><span>${productSize}</span></div>
-                    <div class="item-row"><span>Persistence:</span><span>${productPersistence}</span></div>
-    `;
+        if (selectedVersionValue !== "N/A") {
+          invoiceHtml += `<div class="item-row"><span>Selected Version:</span><span>${selectedVersionValue}</span></div>`;
+        }
+        if (firstOSValue !== "N/A" && firstOSValue !== "") {
+          invoiceHtml += `<div class="item-row"><span>First OS:</span><span>${firstOSValue}</span></div>`;
+        }
+        if (secondOSValue !== "N/A" && secondOSValue !== "") {
+          invoiceHtml += `<div class="item-row"><span>Second OS:</span><span>${secondOSValue}</span></div>`;
+        }
 
-    // Conditionally add OS details
-    if (selectedVersionValue !== "N/A") {
-        invoiceHtml += `<div class="item-row"><span>Selected Version:</span><span>${selectedVersionValue}</span></div>`;
-    }
-    if (firstOSValue !== "N/A" && firstOSValue !== "") {
-        invoiceHtml += `<div class="item-row"><span>First OS:</span><span>${firstOSValue}</span></div>`;
-    }
-    if (secondOSValue !== "N/A" && secondOSValue !== "") {
-        invoiceHtml += `<div class="item-row"><span>Second OS:</span><span>${secondOSValue}</span></div>`;
-    }
-
-    invoiceHtml += `
-                </div>
-                <div class="details-section">
-                    <h3>Shipping Address</h3>
-                    <div class="address">
-                        ${displayAddressHtml}
-                    </div>
-                </div>
-                <div class="details-section">
-                    <h3>Payment Summary</h3>
-                    <div class="item-row"><span>Items Price:</span><span>${itemPrice}</span></div>
-                    <div class="item-row"><span>Delivery Fee:</span><span>${deliveryFeeDisplay}</span></div>
-                    <div class="item-row total"><span>Payable Amount:</span><span>${totalPrice}</span></div>
-                    <div class="item-row"><span>Payment Method:</span><span>${paymentMethodDisplay}</span></div>
-                </div>
-                <p class="note">This is a system-generated invoice and does not require a signature.</p>
-                <div class="footer">
-                    <p>Thank you for your order!</p>
-                </div>
+        invoiceHtml += `
+              </div>
+              <div class="details-section">
+                <h3>Shipping Address</h3>
+                <div class="address">${displayAddressHtml}</div>
+              </div>
+              <div class="details-section">
+                <h3>Payment Summary</h3>
+                <div class="item-row"><span>Items Price:</span><span>${itemPrice}</span></div>
+                <div class="item-row"><span>Delivery Fee:</span><span>${deliveryFeeDisplay}</span></div>
+                <div class="item-row total"><span>Payable Amount:</span><span>${totalPrice}</span></div>
+                <div class="item-row"><span>Payment Method:</span><span>${paymentMethodDisplay}</span></div>
+              </div>
+              <p class="note">This is a system-generated invoice and does not require a signature.</p>
+              <div class="footer"><p>Thank you for your order!</p></div>
             </div>
-        </body>
-        </html>
-    `;
+          </body>
+          </html>
+        `;
 
-    // Create a Blob from the HTML string
-    const blob = new Blob([invoiceHtml], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
+        const blob = new Blob([invoiceHtml], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `VoltEdge_Invoice_Order_${orderRef}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
 
-    // Create a temporary anchor element
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `VoltEdge_Invoice_Order_${orderRef}.html`; // File name
-    document.body.appendChild(a); // Append to body to make it clickable
-    a.click(); // Programmatically click the link to trigger download
-    document.body.removeChild(a); // Clean up the temporary element
-    URL.revokeObjectURL(url); // Clean up the object URL
-}
+      // Event listeners for Invoice Download. These do not depend on Supabase initialization.
+      document.getElementById('downloadInvoiceLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        generateAndDownloadInvoice();
+      });
 
-// Add event listener to the "Invoice" link
-document.getElementById('downloadInvoiceLink').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent default link behavior
-    generateAndDownloadInvoice();
-});
+      const invoiceDownloadSection = document.getElementById('invoiceDownloadSection');
+      invoiceDownloadSection.classList.remove('hidden');
 
+    }; // Closing bracket for window.onload
+</script>
 
-// Add this logic inside your existing DOMContentLoaded listener function
-// This code snippet should go where you handle other UI updates based on theme/data.
-// Make sure it runs AFTER the `currentTheme` is determined and applied to the body.
-const invoiceDownloadSection = document.getElementById('invoiceDownloadSection');
-if (document.body.classList.contains('dark-mode')) {
-    invoiceDownloadSection.classList.remove('hidden');
-} else {
-    invoiceDownloadSection.classList.remove('hidden');
-}
-  </script>
   </body>
 </html>
-        
-
-
 
 
