@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Product Details - VoltEdge</title>
+    <title>Product Details - VoltNexis</title>
 
-    <meta name="description" content="Detailed information and purchase options for VoltEdge USB products.">
-    <meta name="keywords" content="product details, bootable USB, live USB, VoltEdge">
+    <meta name="description" content="Detailed information and purchase options for VoltNexis USB products.">
+    <meta name="keywords" content="product details, bootable USB, live USB, VoltNexis">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -614,7 +614,7 @@
 <body>
     <header>
         <div class="container navbar">
-            <a href="index.html" class="brand">VoltEdge</a>
+            <a href="index.html" class="brand">VoltNexis</a>
             <div class="hamburger" onclick="toggleMenu()">
                 <i class="fas fa-bars"></i>
             </div>
@@ -724,7 +724,7 @@
     <footer>
         <div class="container footer-grid">
             <div class="footer-section">
-                <h3>About VoltEdge</h3>
+                <h3>About VoltNexis</h3>
                 <p>Your trusted partner for high-quality tech tools and custom builds. We make technology accessible and exciting for everyone.</p>
             </div>
             <div class="footer-section">
@@ -742,14 +742,14 @@
             <div class="footer-section">
                 <h3>Follow Us</h3>
                 <div class="social-links">
-                    <a href="https://youtube.com/@voltedgebuilds" target="_blank"><i class="fab fa-youtube"></i></a>
-                    <a href="https://www.instagram.com/voltedgebuilds/profilecard/?igsh=MXJ2YnBvbzMzeXV6dA=="><i class="fab fa-instagram"></i></a>
+                    <a href="https://youtube.com/@voltnexis" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/voltnexis"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.facebook.com/share/1Ea1o2Hj3Z/"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
         </div>
         <div class="copyright container">
-            &copy; 2025 VoltEdge Shop. All rights reserved.
+            &copy; 2025 VoltNexis Shop. All rights reserved.
         </div>
     </footer>
 
@@ -930,7 +930,7 @@
             const productsWithFixedOrNoPersistence = [
                 "installer only", // General installer USBs
                 "kali-basic-kit", // Kali Basic Kit
-                "voltedge-max-kit", // VoltEdge Max Kit (persistence included)
+                "voltnexis-max-kit", // VoltNexis Max Kit (persistence included)
                 "kali-pro-kit", // Kali Pro Kit (persistence included)
                 "dual-os-kit", // Dual OS Kit (persistence handled by dual boot)
                 "tails-os-live-only", // Tails OS (designed for no persistence)
@@ -993,7 +993,7 @@
                 }
             } 
             // Automatically add persistence price for specific kits where it's always included
-            else if (["voltedge max kit", "dual os kit", "kali pro kit"].some(keyword => nameLower.includes(keyword))) {
+            else if (["voltNexis max kit", "dual os kit", "kali pro kit"].some(keyword => nameLower.includes(keyword))) {
                 currentPrice += 20; // This handles the kits where persistence is built-in
             }
             // For other products in productsWithFixedOrNoPersistencePrice, no price is added.
@@ -1019,14 +1019,14 @@
 
             // Determine and store persistence status
             const productsWithFixedOrNoPersistence = [
-                "installer only", "kali-basic-kit", "voltedge-max-kit", "kali-pro-kit", "dual-os-kit", 
+                "installer only", "kali-basic-kit", "voltnexis-max-kit", "kali-pro-kit", "dual-os-kit", 
                 "tails-os-live-only", "exam-boot-usb", "school-lab-os", "hack-in-a-box", 
                 "offline-survival-box", "mini-cyber-kit"
             ];
 
             if (productsWithFixedOrNoPersistence.some(id => productData.name.toLowerCase().includes(id))) {
                 // For products in this list, decide if persistence is 'Included' or 'Not Applicable'
-                if (["voltedge max kit", "dual os kit", "kali pro kit"].some(keyword => nameLower.includes(keyword))) {
+                if (["voltnexis max kit", "dual os kit", "kali pro kit"].some(keyword => nameLower.includes(keyword))) {
                     sessionStorage.setItem("persistence", "Included");
                 } else {
                     sessionStorage.setItem("persistence", "Not Applicable");
@@ -1071,3 +1071,4 @@
     </script>
 </body>
 </html>
+
